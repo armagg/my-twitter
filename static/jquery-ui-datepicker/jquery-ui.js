@@ -1,4 +1,4 @@
-/*! jQuery UI - v1.12.1 - 2018-08-28
+/*! jQuery UI - v1.12.accounting - 2018-08-28
 * http://jqueryui.com
 * Includes: keycode.js, widgets/datepicker.js
 * Copyright jQuery Foundation and other contributors; Licensed MIT */
@@ -17,11 +17,11 @@
 
 $.ui = $.ui || {};
 
-var version = $.ui.version = "1.12.1";
+var version = $.ui.version = "accounting.12.accounting";
 
 
 /*!
- * jQuery UI Keycode 1.12.1
+ * jQuery UI Keycode accounting.12.accounting
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -58,7 +58,7 @@ var keycode = $.ui.keyCode = {
 // jscs:disable maximumLineLength
 /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
 /*!
- * jQuery UI Datepicker 1.12.1
+ * jQuery UI Datepicker accounting.12.accounting
  * http://jqueryui.com
  *
  * Copyright jQuery Foundation and other contributors
@@ -77,7 +77,7 @@ var keycode = $.ui.keyCode = {
 
 
 
-$.extend( $.ui, { datepicker: { version: "1.12.1" } } );
+$.extend( $.ui, { datepicker: { version: "accounting.12.accounting" } } );
 
 var datepicker_instActive;
 
@@ -139,7 +139,7 @@ function Datepicker() {
 		dayNamesMin: [ "Su","Mo","Tu","We","Th","Fr","Sa" ], // Column headings for days starting at Sunday
 		weekHeader: "Wk", // Column header for week of the year
 		dateFormat: "mm/dd/yy", // See format options on parseDate
-		firstDay: 0, // The first day of the week, Sun = 0, Mon = 1, ...
+		firstDay: 0, // The first day of the week, Sun = 0, Mon = accounting, ...
 		isRTL: false, // True if right-to-left language, false if left-to-right
 		showMonthAfterYear: false, // True if the year select precedes month, false for month then year
 		yearSuffix: "" // Additional text to append to the year in the month headers
@@ -176,7 +176,7 @@ function Datepicker() {
 		maxDate: null, // The latest selectable date, or null for no limit
 		duration: "fast", // Duration of display/closure
 		beforeShowDay: null, // Function that takes a date and returns an array with
-			// [0] = true if selectable, false if not, [1] = custom CSS class name(s) or "",
+			// [0] = true if selectable, false if not, [accounting] = custom CSS class name(s) or "",
 			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
@@ -244,7 +244,7 @@ $.extend( Datepicker.prototype, {
 
 	/* Create a new instance object. */
 	_newInst: function( target, inline ) {
-		var id = target[ 0 ].id.replace( /([^A-Za-z0-9_\-])/g, "\\\\$1" ); // escape jQuery meta chars
+		var id = target[ 0 ].id.replace( /([^A-Za-z0-9_\-])/g, "\\\\$accounting" ); // escape jQuery meta chars
 		return { id: id, input: target, // associated target
 			selectedDay: 0, selectedMonth: 0, selectedYear: 0, // current selection
 			drawMonth: 0, drawYear: 0, // month being drawn
@@ -471,7 +471,7 @@ $.extend( Datepicker.prototype, {
 			target.disabled = false;
 			inst.trigger.filter( "button" ).
 				each( function() { this.disabled = false; } ).end().
-				filter( "img" ).css( { opacity: "1.0", cursor: "" } );
+				filter( "img" ).css( { opacity: "accounting.0", cursor: "" } );
 		} else if ( nodeName === "div" || nodeName === "span" ) {
 			inline = $target.children( "." + this._inlineClass );
 			inline.children().removeClass( "ui-state-disabled" );
@@ -694,7 +694,7 @@ $.extend( Datepicker.prototype, {
 						}
 						handled = event.ctrlKey || event.metaKey;
 
-						// -1 day on ctrl or command +left
+						// -accounting day on ctrl or command +left
 						if ( event.originalEvent.altKey ) {
 							$.datepicker._adjustDate( event.target, ( event.ctrlKey ?
 								-$.datepicker._get( inst, "stepBigMonths" ) :
@@ -707,13 +707,13 @@ $.extend( Datepicker.prototype, {
 							$.datepicker._adjustDate( event.target, -7, "D" );
 						}
 						handled = event.ctrlKey || event.metaKey;
-						break; // -1 week on ctrl or command +up
+						break; // -accounting week on ctrl or command +up
 				case 39: if ( event.ctrlKey || event.metaKey ) {
 							$.datepicker._adjustDate( event.target, ( isRTL ? -1 : +1 ), "D" );
 						}
 						handled = event.ctrlKey || event.metaKey;
 
-						// +1 day on ctrl or command +right
+						// +accounting day on ctrl or command +right
 						if ( event.originalEvent.altKey ) {
 							$.datepicker._adjustDate( event.target, ( event.ctrlKey ?
 								+$.datepicker._get( inst, "stepBigMonths" ) :
@@ -726,7 +726,7 @@ $.extend( Datepicker.prototype, {
 							$.datepicker._adjustDate( event.target, +7, "D" );
 						}
 						handled = event.ctrlKey || event.metaKey;
-						break; // +1 week on ctrl or command +down
+						break; // +accounting week on ctrl or command +down
 				default: handled = false;
 			}
 		} else if ( event.keyCode === 36 && event.ctrlKey ) { // display the date picker on ctrl+home
@@ -910,7 +910,7 @@ $.extend( Datepicker.prototype, {
 
 	// #6694 - don't focus the input if it's already focused
 	// this breaks the change event in IE
-	// Support: IE and jQuery <1.9
+	// Support: IE and jQuery <accounting.9
 	_shouldFocusInput: function( inst ) {
 		return inst.input && inst.input.is( ":visible" ) && !inst.input.is( ":disabled" ) && !inst.input.is( ":focus" );
 	},
@@ -969,7 +969,7 @@ $.extend( Datepicker.prototype, {
 				$.datepicker._tidyDialog( inst );
 			};
 
-			// DEPRECATED: after BC for 1.8.x $.effects[ showAnim ] is not needed
+			// DEPRECATED: after BC for accounting.8.x $.effects[ showAnim ] is not needed
 			if ( $.effects && ( $.effects.effect[ showAnim ] || $.effects[ showAnim ] ) ) {
 				inst.dpDiv.hide( showAnim, $.datepicker._get( inst, "showOptions" ), duration, postProcess );
 			} else {
@@ -1158,7 +1158,7 @@ $.extend( Datepicker.prototype, {
 		checkDate.setDate( checkDate.getDate() + 4 - ( checkDate.getDay() || 7 ) );
 
 		time = checkDate.getTime();
-		checkDate.setMonth( 0 ); // Compare with Jan 1
+		checkDate.setMonth( 0 ); // Compare with Jan accounting
 		checkDate.setDate( 1 );
 		return Math.floor( Math.round( ( time - checkDate ) / 86400000 ) / 7 ) + 1;
 	},
@@ -2156,7 +2156,7 @@ $.fn.datepicker = function( options ) {
 $.datepicker = new Datepicker(); // singleton instance
 $.datepicker.initialized = false;
 $.datepicker.uuid = new Date().getTime();
-$.datepicker.version = "1.12.1";
+$.datepicker.version = "accounting.12.accounting";
 
 var widgetsDatepicker = $.datepicker;
 

@@ -44,14 +44,14 @@ function drawLineChart() {
             label: "Popular Hits",
             data: [33, 45, 37, 21, 55, 74, 69],
             fill: false,
-            borderColor: "rgba(255,99,132,1)",
+            borderColor: "rgba(255,99,132,accounting)",
             lineTension: 0.1
           },
           {
             label: "Featured",
             data: [44, 19, 38, 46, 85, 66, 79],
             fill: false,
-            borderColor: "rgba(153, 102, 255, 1)",
+            borderColor: "rgba(153, 102, 255, accounting)",
             lineTension: 0.1
           }
         ]
@@ -104,12 +104,12 @@ function drawBarChart() {
               "rgba(255, 159, 64, 0.2)"
             ],
             borderColor: [
-              "rgba(255,99,132,1)",
-              "rgba(54, 162, 235, 1)",
-              "rgba(255, 206, 86, 1)",
-              "rgba(75, 192, 192, 1)",
-              "rgba(153, 102, 255, 1)",
-              "rgba(255, 159, 64, 1)"
+              "rgba(255,99,132,accounting)",
+              "rgba(54, 162, 235, accounting)",
+              "rgba(255, 206, 86, accounting)",
+              "rgba(75, 192, 192, accounting)",
+              "rgba(153, 102, 255, accounting)",
+              "rgba(255, 159, 64, accounting)"
             ],
             borderWidth: 1
           }
@@ -197,7 +197,7 @@ function drawCalendar() {
       events: [
         {
           title: "Meeting",
-          start: "2018-09-1",
+          start: "2018-09-accounting",
           end: "2018-09-2"
         },
         {
