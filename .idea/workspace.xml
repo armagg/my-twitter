@@ -2,45 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="614e11be-8a08-49b3-8b77-5fa2d8f22913" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounting/forms.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounting/m.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/accounting/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/account/base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/account/index.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/account/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/account/registration.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/accounting/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Main.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/account/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/bootstrap.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/bootstrap.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/css/fontawesome.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/css/fontawesome.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/external/jquery/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/external/jquery/jquery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.structure.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.structure.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.structure.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.structure.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.theme.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.theme.min.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/jquery-ui-datepicker/jquery-ui.theme.min.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/Chart.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/Chart.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/bootstrap.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/bootstrap.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/fullcalendar.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/fullcalendar.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/jquery-3.3.1.min.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/jquery-3.3.1.min.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/js/tooplate-scripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/js/tooplate-scripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/accounting/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/accounting/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/sign_up.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/accounting/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webproject/webproject/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/webproject/webproject/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/activate" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/activate.csh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/activate.fish" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/django-admin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/django-admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/easy_install" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/easy_install-3.7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/pip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/pip3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/pip3.7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/python" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/python3" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/python3.7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/bin/sqlformat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/lib64" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/venv/pyvenv.cfg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,7 +66,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates/accounting" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -189,6 +167,7 @@
       <updated>1579095083252</updated>
       <workItem from="1579095095813" duration="12609000" />
       <workItem from="1579180106455" duration="9704000" />
+      <workItem from="1579351910764" duration="264000" />
     </task>
     <servers />
   </component>
@@ -196,6 +175,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="667" y="159" width="642" height="787" key="#m" timestamp="1579352023291">
+      <screen x="67" y="27" width="1853" height="1053" />
+    </state>
+    <state x="667" y="159" width="642" height="787" key="#m/67.27.1853.1053@67.27.1853.1053" timestamp="1579352023291" />
     <state x="482" y="187" key="SettingsEditor" timestamp="1579189729269">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
