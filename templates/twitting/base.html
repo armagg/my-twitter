@@ -1,0 +1,52 @@
+{% extends 'accounting/../base.html' %}
+{% block head %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>Kapella Admin Dashboard</title>
+
+    <meta charset="utf-8">
+
+    {% load static %}
+    <link rel="stylesheet" href={% static 'twitting/materialdesignicons.min.css' %}>
+    <link rel="stylesheet" href="{% static 'twitting/vendor.bundle.base.css' %}">
+    <link rel="stylesheet" href={% static 'twitting/twittPage.css' %}>
+
+    {# froala #}
+    <!-- Include Editor style. -->
+    <link href='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/css/froala_editor.pkgd.min.css' rel='stylesheet'
+          type='text/css'/>
+
+    <!-- Include JS file. -->
+    <script type='text/javascript'
+            src='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/js/froala_editor.pkgd.min.js'></script>
+    <link rel="stylesheet" type="text/css"
+          href="https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.0/css/froala_editor.css">
+    <script src="require.js"></script>
+    <script>
+        require.config({
+            packages: [{
+                name: 'froala-editor',
+                main: 'js/froala_editor.min'
+            }],
+            paths: {
+                // Change this to your server if you do not wish to use our CDN.
+                'froala-editor': 'https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.0'
+            }
+        });
+    </script>
+
+
+
+
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- endinject -->
+    <link rel="shortcut icon" href="../images/favicon.png"/>
+
+
+{% endblock %}
+
+{% block body %}
+    {% block docPage %}
+    {% endblock %}
+{% endblock %}

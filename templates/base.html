@@ -8,9 +8,14 @@
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
 
-    <meta charset="UTF-8">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
     {% block head %}
     {% endblock %}
+
+
 </head>
 <body>
 {% block body %}
