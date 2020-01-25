@@ -8,6 +8,7 @@ class Account(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pics', blank=True)
     location = models.TextField(max_length=60, default='iran!', )
     bio = models.TextField(max_length=120, default='nothing until now')
+    is_private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
