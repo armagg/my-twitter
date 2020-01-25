@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'following',
     'alerting',
     'twitting',
+    'channelling'
 ]
 
 MIDDLEWARE = [

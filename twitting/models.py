@@ -1,17 +1,17 @@
 from django.db import models
-
 from django.db.models import PROTECT
 
 from accounting.models import Account
 
 
 class Tweet(models.Model):
-    owner = models.ForeignKey(Account, verbose_name='نویسنده', blank=False, on_delete=PROTECT, related_name='owner_of_tweet')
+    owner = models.ForeignKey(Account, verbose_name='نویسنده', blank=False, on_delete=PROTECT,
+                              related_name='owner_of_tweet')
     contributors = models.ManyToManyField(Account, related_name='contributors_for_tweet')
     title = models.CharField(max_length=140, verbose_name='عنوان', blank=False)
     date_published = models.DateTimeField(auto_now=True, blank=False)
     is_root = models.BooleanField()
-    parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='parent_of_tweet')
+    parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='comment')
     document = models.TextField(verbose_name='متن', name='document')
 
     tweet_followers = models.ManyToManyField(Account, related_name='follower_of_tweet')
@@ -22,3 +22,7 @@ class Tweet(models.Model):
         for obj in self.contributors.all():
             objects.append(obj)
         return objects
+
+    def get_comments(self):
+        # todo: get comment form children
+        pass
