@@ -1,0 +1,114 @@
+{% extends 'twitting/base.html' %}
+{% block docPage %}
+    <div class="container-scroller">
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="main-panel w-100  documentation">
+                <div class="content-wrapper">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 doc-header">
+                                <a class="btn btn-success" href="../index.html"><i class="mdi mdi-home mr-2"></i>Back to
+                                    home</a>
+                                <h1 class="text-primary mt-4">
+                                    {{ tittle }}
+                                </h1>
+                            </div>
+                        </div>
+
+                        <div class="comments-container">
+                            <h1>{{ tittle }} <a href="http://creaticode.com">creaticode.com</a></h1>
+
+                            <ul id="comments-list" class="comments-list">
+
+                                {% for comment in comments %}
+
+                                    <li>
+
+                                        <div class="comment-main-level">
+                                            <!-- Avatar -->
+                                            <div class="comment-avatar"><img
+                                                    src="{{ comment.author.avatar }}" alt="">
+                                            </div>
+
+                                            <div class="comment-box">
+                                                <div class="comment-head">
+                                                    <h6 class="comment-name by-author"><a
+                                                            href="http://creaticode.com/blog">{{ comment.author.name }}</a>
+                                                    </h6>
+                                                    <div class="state">
+                                                        {{ comment.author.state }}
+                                                    </div>
+                                                    <span>{{ comment.time }}</span>
+                                                    <i class="fa fa-reply"></i>
+                                                    <i class="fa fa-heart"></i>
+                                                </div>
+                                                <div class="comment-content">
+                                                    {{ comment.content }}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <ul class="comments-list reply-list">
+                                            {% for reply in comment.replys %}
+                                                <li>
+                                                    <!-- Avatar -->
+                                                    <div class="comment-avatar"><img
+                                                            src="{{ reply.author.avatar }}"
+                                                            alt="">
+                                                    </div>
+                                                    <!-- Contenedor del Comentario -->
+                                                    <div class="comment-box">
+                                                        <div class="comment-head">
+                                                            <h6 class="comment-name"><a
+                                                                    href="http://creaticode.com/blog">{{ reply.author.name }}</a>
+                                                            </h6>
+                                                            <span>{{ reply.time }}</span>
+                                                            <i class="fa fa-reply"></i>
+                                                            <i class="fa fa-heart"></i>
+                                                        </div>
+                                                        <div class="comment-content">
+                                                            {{ reply.content }}
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            {% endfor %}
+
+                                        </ul>
+                                    </li>
+
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- partial:../partials/_footer.html -->
+                <footer class="footer">
+                    <div class="footer-wrap">
+                        <div class="w-100 clearfix">
+                        <span class="d-block text-center text-sm-left d-sm-inline-block">Copyright © 2018 <a
+                                href="https://www.templatewatch.com/" target="_blank">templatewatch</a>. All rights reserved.</span>
+                            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i
+                                    class="mdi mdi-heart-outline"></i></span>
+                        </div>
+                    </div>
+                    <div id="edit">
+                    </div>
+                    <script>
+                        require([
+                            'froala-editor',
+                            'froala-editor/js/plugins/align.min'
+                        ], function (FroalaEditor) {
+                            new FroalaEditor('#edit')
+                        });
+                    </script>
+                </footer>
+                <!-- partial -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{#   #afd2f2   dark  #}
+{#   #d7e9fa   light #}

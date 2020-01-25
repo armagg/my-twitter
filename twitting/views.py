@@ -8,6 +8,8 @@ def comments(request):
         'avatar': 'http://i9.photobucket.com/albums/a88/creaticode/avatar_1_zps8e1c80cd.jpg',
         'state': 'noobe sag',
     }
+    # extra avatar
+    # http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg
     comment1 = {
         'author': author,
         'content':

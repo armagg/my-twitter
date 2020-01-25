@@ -26,12 +26,3 @@ urlpatterns = [
     url(r'^twitting/', include('twitting.urls')),
     url(r'^logout/$', views.logout, name='logout'),
 ]
-# from django.contrib import admin
-# from django.urls import path
-#
-# from accounting import views
-#
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('', views.register, name='sign_up'),
-# ]
