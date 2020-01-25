@@ -25,4 +25,5 @@ class Tweet(models.Model):
 
     def get_comments(self):
         # todo: get comment form children
-        pass
+        children = Tweet.objects.get(parent_tweet=self)
+        return children
