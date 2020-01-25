@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'accounting',
     'following',
     'alerting',
-    'twitting',
+    'twitting.apps.TwittingConfig',
     'channelling'
 ]
 
