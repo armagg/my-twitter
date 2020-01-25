@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'accounting',
     'following',
     'alerting',
-    'tweeting',
+    'twitting',
 ]
 
 MIDDLEWARE = [

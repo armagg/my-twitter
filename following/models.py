@@ -2,7 +2,6 @@ from django.db import models
 from django.db.models import CASCADE
 
 from accounting.models import Account
-from tweeting.models import Tweet
 
 
 class Follow(models.Model):
