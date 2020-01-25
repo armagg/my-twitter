@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class TweetingConfig(AppConfig):
-    name = 'tweeting'
+    name = 'twitting'

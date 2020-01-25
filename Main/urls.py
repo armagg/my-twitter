@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^index/$', views.index, name='index'),
     url(r'^special/', views.special, name='special'),
     url(r'^accounting/', include('accounting.urls')),
+    url(r'^twitting/', include('twitting.urls')),
     url(r'^logout/$', views.logout, name='logout'),
 ]
 # from django.contrib import admin
