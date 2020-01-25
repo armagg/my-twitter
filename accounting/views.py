@@ -41,12 +41,13 @@ def signup(request):
     else:
         user_form = UserForm()
         account_form = AccountForm()
-    return render(request, 'accounting/signup.html',
+    return render(request, 'accounting/signup2.html',
                   {'user_form': user_form,
                    # 'account_form': account_form,
                    'registered': registered})
 
 
+##TODO
 def login(request):
     print(request.POST)
     if request.method == 'POST':
@@ -66,4 +67,4 @@ def login(request):
             print("They used username: {} and password: {}".format(username, password))
             return HttpResponse("Invalid login details given")
     else:
-        return render(request, 'accounting/login.html', {})
+        return render(request, 'accounting/login2.html', {})
