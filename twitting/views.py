@@ -1,3 +1,6 @@
+import copy
+import json
+
 from django.shortcuts import render
 
 
@@ -5,7 +8,7 @@ from django.shortcuts import render
 def comments(request):
     author = {
         'name': 'mmd',
-        'avatar': 'http://i9.photobucket.com/albums/a88/creaticode/avatar_1_zps8e1c80cd.jpg',
+        'avatar': 'https://avatars2.githubusercontent.com/u/45905632?s=460&v=4',
         'state': 'noobe sag',
     }
     # extra avatar
@@ -15,14 +18,27 @@ def comments(request):
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
         'time': 'hace 20 minutos',
-        'replys': []
+        'replys': [],
+        'id': 1,
     }
     comment2 = {
         'author': author,
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
         'time': 'hace 20 minutos',
-        'replys': [comment1]
+        'replys': [comment1],
+        'id': 2
     }
-    comments = [comment2] * 10
-    return render(request, './twitting/commentsPage.html', {'comments': comments, 'tittle': 'mmd pge'})
+
+    comments = list()
+    for i in range(3):
+        comments.append(copy.deepcopy(comment2))
+    i = 0
+    for comment in comments:
+        comment['id'] = 'a' + str(i)
+        i += 1
+        for reply in comment['replys']:
+            reply['id'] = 'a' + str(i)
+            i += 1
+    return render(request, './twitting/commentsPage.html',
+                  {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge'})

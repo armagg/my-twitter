@@ -1,5 +1,5 @@
-{% extends 'twitting/base.html' %}
-{% block docPage %}
+{% extends 'twitting/comments_base.html' %}
+{% block comments %}
     <div class="container-scroller">
         <div class="container-fluid page-body-wrapper full-page-wrapper">
             <div class="main-panel w-100  documentation">
@@ -21,9 +21,9 @@
                             <ul id="comments-list" class="comments-list">
 
                                 {% for comment in comments %}
-
+                                    {{ comment }}
                                     <li>
-
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
                                         <div class="comment-main-level">
                                             <!-- Avatar -->
                                             <div class="comment-avatar"><img
@@ -112,3 +112,4 @@
 
 {#   #afd2f2   dark  #}
 {#   #d7e9fa   light #}
+
