@@ -1,21 +1,44 @@
 <head>
+    <!-- semantic -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+
+
     {% load static %}
     <link rel="stylesheet" href="{% static 'twitting/twittPage.css' %}">
     <link rel="script" href="{% static 'twitting/Comment.js' %}">
 
 
+    <!-- forala -->
     <!-- Include Editor style. -->
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/css/froala_editor.pkgd.min.css' rel='stylesheet'
           type='text/css'/>
-
     <!-- Include JS file. -->
-    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/js/froala_editor.pkgd.min.js'>
-    </script>
+    <script type='text/javascript'
+            src='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/js/froala_editor.pkgd.min.js'></script>
 
 
     <style>
         body {
             background-color: #d7e9fa69;
+        }
+
+        .like-pack {
+            display: inline-block;
+            float: right;
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .like-counter {
+            font-weight: bold;
+            display: inline-block;
+            float: right;
+            margin: 0px;
+            margin-left: -2px;
+            margin-right: -11px;
+            padding: 0px;
         }
     </style>
 </head>
@@ -37,21 +60,30 @@
                             src="{{ comment.author.avatar }}" alt="">
                     </div>
 
-                    <div class="comment-box">
-                        <div class="comment-head">
-                            <h6 class="comment-name by-author"><a
-                                    href="http://creaticode.com/blog">{{ comment.author.name }}</a>
-                            </h6>
-                            <div class="state">
-                                {{ comment.author.state }}
-                            </div>
-                            <span>{{ comment.time }}</span>
-                            <i class="fa fa-reply"></i>
-                            <i class="fa fa-heart"></i>
-                        </div>
-                        <div class="comment-content" id="{{ comment.id }}">
-                            {{ comment.content }}
-                        </div>
+                    <div class="comment-box" id="{{ comment.id }}">
+                        {#                        <div class="comment-head">#}
+                        {#                            <h6 class="comment-name by-author"><a#}
+                        {#                                    href="http://creaticode.com/blog">{{ comment.author.name }}</a>#}
+                        {#                            </h6>#}
+                        {#                            <div class="state">#}
+                        {#                                {{ comment.author.state }}#}
+                        {#                            </div>#}
+                        {#                            <span>{{ comment.time }}</span>#}
+                        {#                            <div class="icons-pack"></div>#}
+                        {##}
+                        {#                            <i class="thumbs down red icon" title="like"></i>#}
+                        {#                            <i class="thumbs up green icon" title="dislike"></i>#}
+                        {##}
+                        {#                            <i class="edit icon" title="edit"></i>#}
+                        {#                            <i class="trash alternate icon" title="delete"></i>#}
+                        {#                            <i class="check green icon" title="submit"></i>#}
+                        {#                            <i class="close red icon" title="cancel"></i>#}
+                        {##}
+                        {#                            <i class="fa fa-reply"></i>#}
+                        {#                            <i class="fa fa-heart"></i>#}
+                        {#                        </div>#}
+                        {#                        <div class="comment-content" id="{{ comment.id }}">#}
+                        {#                        </div>#}
 
                     </div>
                 </div>
@@ -64,7 +96,7 @@
                             <!-- Avatar -->
                             <div class="comment-avatar"><img
                                     src="{{ reply.author.avatar }}"
-                                    alt="">
+                                    alt={{ reply.author.name }}>
                             </div>
                             <!-- Contenedor del Comentario -->
                             <div class="comment-box">
@@ -90,11 +122,12 @@
 
     </ul>
 </div>
+
 <script>
-    class Comment {
+    class Comment1 {
         constructor(comment) {
             // let container = document.getElementById(comment.id);
-            var editor = new FroalaEditor('#' + comment, {
+            let editor = new FroalaEditor('#' + comment, {
                 attribution: false,
                 charCounterCount: false,
                 toolbarInline: true,
@@ -102,18 +135,84 @@
         }
     }
 
+    var dict = {};
 
     {% for comment in comments %}
-        console.log('{{ comment.id }}')
-        new Comment('{{ comment.id }}');
-        {% for reply in comment.replys %}
-            console.log('{{ reply.id }}')
-            new Comment('{{ reply.id }}');
-        {% endfor %}
+
+        object = {};
+        object.comment_box = document.getElementById('{{ comment.id }}');
+
+        object.comment_head = document.createElement('div');
+        object.comment_content = document.createElement('div');
+        object.comment_content.className = 'comment-content';
+        object.comment_head.className = 'comment-head';
+        object.comment_box.appendChild(object.comment_head);
+        object.comment_box.appendChild(object.comment_content);
+        object.author_name = document.createElement('h6');
+        object.author_name.className = "comment-name by-author";
+        object.author_name.innerText = '{{ comment.author.name }}';
+        object.comment_head.appendChild(object.author_name);
+        object.time = document.createElement('span');
+        object.time.innerText = '{{ comment.time }}';
+        object.comment_head.appendChild(object.time);
+        object.icons_pack = document.createElement('div');
+        object.icons_pack.className = 'icons-pack';
+        object.comment_head.appendChild(object.icons_pack);
+        object.comment_content.innerText = '{{ comment.content }}';
+
+        object.like = document.createElement('i');
+        object.like.className = 'thumbs up green icon';
+        object.like.title = 'like';
+        object.dislike = document.createElement('i');
+        object.dislike.className = 'thumbs down red icon';
+        object.dislike.title = 'dislike';
+        object.like_counter = document.createElement('h4');
+        object.like_counter.className = 'like-counter';
+        object.like_counter.style.color ={{comment.like_counter}} >= 0 ? 'green' : 'red';
+        object.like_counter.innerText = {{ comment.like_counter }};
+        object.like_pack = document.createElement('div');
+        object.like_pack.className = 'like-pack';
+        object.like_pack.appendChild(object.like);
+        object.like_pack.appendChild(object.like_counter);
+        object.like_pack.appendChild(object.dislike);
+        object.comment_head.appendChild(object.like_pack);
+
+
+        {% if comment.edit %}
+            object.edit = document.createElement('i');
+            object.edit.className = 'edit icon mini-icon';
+            object.edit.title = 'edit';
+            object.comment_head.appendChild(object.edit);
+
+            object.delete = document.createElement('i');
+            object.delete.title = 'delete';
+            object.delete.className = 'trash alternate icon mini-icon';
+            object.comment_head.appendChild(object.delete);
+
+            object.cancel = document.createElement('i');
+            object.cancel.title = 'cancel';
+            object.cancel.className = 'close red icon mini-icon';
+
+            object.submit = document.createElement('i');
+            object.submit.title = 'submit';
+            object.submit.className = 'check icon green mini-icon';
+        {% endif %}
+
+
+
+
+
+
 
     {% endfor %}
+
+
 </script>
 
 </body>
 
 
+#                            <i class="edit icon" title="edit"></i>#}
+{#                            <i class="trash alternate icon" title="delete"></i>#}
+{#                            <i class="check green icon" title="submit"></i>#}
+{#                            <i class="close red icon" title="cancel"></i>#}

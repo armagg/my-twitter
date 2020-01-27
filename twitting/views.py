@@ -14,6 +14,8 @@ def comments(request):
     # extra avatar
     # http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg
     comment1 = {
+        'edit': False,
+        'like_counter': 10,
         'author': author,
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
@@ -22,6 +24,9 @@ def comments(request):
         'id': 1,
     }
     comment2 = {
+        'edit': True,
+        'like_counter': -7,
+
         'author': author,
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
