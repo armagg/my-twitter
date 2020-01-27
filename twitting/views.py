@@ -14,7 +14,7 @@ def comments(request):
     # extra avatar
     # http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg
     comment1 = {
-        'edit': False,
+        'edit': True,
         'like_counter': 10,
         'author': author,
         'content':
@@ -36,7 +36,7 @@ def comments(request):
     }
 
     comments = list()
-    for i in range(3):
+    for i in range(1):
         comments.append(copy.deepcopy(comment2))
     i = 0
     for comment in comments:

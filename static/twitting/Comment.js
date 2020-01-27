@@ -4,11 +4,11 @@ class Comment2 {
         this.comment = comment;
         // // let container = document.getElementById(comment.id);
         // alert("");
-        // let editor = new FroalaEditor('#' + comment.id, {
-        //     attribution: false,
-        //     charCounterCount: false,
-        //     toolbarInline: true,
-        // });
+        let editor = new FroalaEditor('#' + comment.id, {
+            attribution: false,
+            charCounterCount: false,
+            toolbarInline: true,
+        });
         alert('');
         this.create();
 
