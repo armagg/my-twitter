@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from twitting.models import Tweet
+
+
+class TweetAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Tweet)
