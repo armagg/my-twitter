@@ -4,11 +4,10 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
-
+    <!-- mmd sources -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'twitting/css/twittPage.css' %}">
     <script src="{% static 'twitting/js/TwittingManager.js' %}"></script>
-
 
     <!-- forala -->
     <!-- Include Editor style. -->
@@ -19,7 +18,9 @@
             src='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/js/froala_editor.pkgd.min.js'></script>
 
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <style>
+
         body {
             background-color: #d7e9fa69;
         }
@@ -40,77 +41,61 @@
             margin-right: -11px;
             padding: 0px;
         }
-    </style>
-</head>
 
+        .footer {
+            height: 10%;
+            overflow: hidden;
+            background-color: blue;
+            position: fixed;
+            bottom: 0px;
+            width: 100%;
+        }
+
+        .footer-editor {
+            width: 60%;
+            height: 100%;
+            margin: auto;
+            background-color: red;
+        }
+    </style>
+
+</head>
 
 <body>
 <div class="comments-container">
     <h1>{{ tittle }} <a href="http://creaticode.com">creaticode.com</a></h1>
-
     <ul id="comments-list" class="comments-list">
-
         {% for comment in comments %}
             {{ comment.id }}
             <li>
-
                 <div class="comment-main-level">
-                    <!-- Avatar -->
                     <div class="comment-avatar"><img
                             src="{{ comment.author.avatar }}" alt="">
                     </div>
-
                     <div class="comment-box" id="{{ comment.id }}">
-                        {#                        <div class="comment-head">#}
-                        {#                            <h6 class="comment-name by-author"><a#}
-                        {#                                    href="http://creaticode.com/blog">{{ comment.author.name }}</a>#}
-                        {#                            </h6>#}
-                        {#                            <div class="state">#}
-                        {#                                {{ comment.author.state }}#}
-                        {#                            </div>#}
-                        {#                            <span>{{ comment.time }}</span>#}
-                        {#                            <div class="icons-pack"></div>#}
-                        {##}
-                        {#                            <i class="thumbs down red icon" title="like"></i>#}
-                        {#                            <i class="thumbs up green icon" title="dislike"></i>#}
-                        {##}
-                        {#                            <i class="edit icon" title="edit"></i>#}
-                        {#                            <i class="trash alternate icon" title="delete"></i>#}
-                        {#                            <i class="check green icon" title="submit"></i>#}
-                        {#                            <i class="close red icon" title="cancel"></i>#}
-                        {##}
-                        {#                            <i class="fa fa-reply"></i>#}
-                        {#                            <i class="fa fa-heart"></i>#}
-                        {#                        </div>#}
-                        {#                        <div class="comment-content" id="{{ comment.id }}">#}
-                        {#                        </div>#}
-
                     </div>
                 </div>
-
                 <ul class="comments-list reply-list">
                     {% for reply in comment.replys %}
                         {{ reply.id }}
-
                         <li>
-                            <!-- Avatar -->
                             <div class="comment-avatar"><img
                                     src="{{ reply.author.avatar }}"
                                     alt={{ reply.author.name }}>
                             </div>
-                            <!-- Contenedor del Comentario -->
                             <div class="comment-box" id="{{ reply.id }}">
-
                             </div>
                         </li>
                     {% endfor %}
-
                 </ul>
             </li>
-
         {% endfor %}
-
     </ul>
+</div>
+<div class="footer">
+    <div class="footer-editor">
+
+    </div>
 </div>
 
 <script>

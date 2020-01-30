@@ -38,10 +38,10 @@ class CommentManager {
     init_head() {
         this.author_name = document.createElement('h6');
         this.author_name.className = "comment-name by-author";
-        this.author_name.innerText = '{{ reply.author.name }}';
+        this.author_name.innerText = this.comment.author.name;
         this.comment_head.appendChild(this.author_name);
         this.time = document.createElement('span');
-        this.time.innerText = '{{ reply.time }}';
+        this.time.innerText = this.comment.time;
         this.comment_head.appendChild(this.time);
         this.icons_container = document.createElement('div');
         this.icons_container.className = 'icons-pack';
@@ -56,18 +56,19 @@ class CommentManager {
             attribution: false,
             charCounterCount: false,
             toolbarInline: true,
-        },function () {
+        }, function () {
             this.edit.off();
         });
+        window.e = this.editor;
     }
 
     init_editing_rules() {
         this.iconsManager.add_listener(function () {
-            this.last_content = clone(this.comment_content.innerHTML);
+            this.last_content = clone(this.editor.html.get());
         }.bind(this), 'edit');
 
         this.iconsManager.add_listener(function () {
-            this.comment_content.innerHTML = this.last_content;
+            this.editor.html.set(this.last_content);
         }.bind(this), 'cancel');
         this.iconsManager.set_validation_of_submit(function () {
             return this.editor.html.get() !== '';
@@ -101,8 +102,8 @@ class IconsManager {
         this.likeManager = new LikeManager(this.like_container, like_pack);
 
         if (editable) {
-            this.init_edit();
             this.init_delete();
+            this.init_edit();
             this.init_cancel();
             this.init_submit();
             this.container.appendChild(this.delete);
@@ -169,9 +170,14 @@ class IconsManager {
     }
 
     submit_click() {
-        if (this.validation_of_submit !== undefined){
-            if (this.validation_of_submit() === false){
+        if (this.validation_of_submit !== undefined) {
+            let validation = this.validation_of_submit();
+            if (validation === false) {
                 this.cancel_click();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Empty text ...!',
+                });
                 return;
             }
         }
@@ -183,8 +189,8 @@ class IconsManager {
     normal_mode() {
         this.container.removeChild(this.submit);
         this.container.removeChild(this.cancel);
-        this.container.appendChild(this.edit);
         this.container.appendChild(this.delete);
+        this.container.appendChild(this.edit);
         this.in_edit_mode = false;
     }
 
@@ -215,7 +221,7 @@ class IconsManager {
         list.push(f);
     }
 
-    set_validation_of_submit(f){
+    set_validation_of_submit(f) {
         this.validation_of_submit = f;
     }
 }
