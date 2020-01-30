@@ -38,7 +38,7 @@ def comments(request):
     }
 
     comments = list()
-    for i in range(1):
+    for i in range(10):
         comments.append(copy.deepcopy(comment2))
     i = 0
     for comment in comments:
@@ -48,4 +48,5 @@ def comments(request):
             reply['id'] = 'a' + str(i)
             i += 1
     return render(request, './twitting/commentsPage.html',
-                  {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge'})
+                  {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge',
+                   'can_write': True})

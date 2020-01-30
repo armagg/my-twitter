@@ -43,25 +43,23 @@
         }
 
         .footer {
-            height: 10%;
-            overflow: hidden;
-            background-color: blue;
+            z-index: 999999;
             position: fixed;
-            bottom: 0px;
+            left: 0;
+            bottom: 0;
             width: 100%;
+            height: auto;
+            color: white;
+            text-align: center;
         }
 
-        .footer-editor {
-            width: 60%;
-            height: 100%;
-            margin: auto;
-            background-color: red;
-        }
     </style>
 
 </head>
 
 <body>
+
+
 <div class="comments-container">
     <h1>{{ tittle }} <a href="http://creaticode.com">creaticode.com</a></h1>
     <ul id="comments-list" class="comments-list">
@@ -93,13 +91,15 @@
     </ul>
 </div>
 <div class="footer">
-    <div class="footer-editor">
-
+    <div style="width: 60%;height: auto;margin: auto;">
+        <div class="ui blue bottom attached button" tabindex="0" id="new-post-button">send new post</div>
     </div>
 </div>
 
+
 <script>
-    var jsonObject = JSON.parse('{{ j | escapejs }}');
-    new TwittingManager(jsonObject);
+    let jsonObject = JSON.parse('{{ j | escapejs }}');
+    new TwittingManager(jsonObject, '{{ can_write }}', id = 97110071);
+
 </script>
 </body>
