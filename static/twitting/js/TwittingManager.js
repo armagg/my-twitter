@@ -26,6 +26,7 @@ class TwittingManager {
         comment_box.add_listener(this.edit_post.bind(this), 'submit');
         comment_box.add_listener(this.like_post.bind(this), 'like');
         comment_box.add_listener(this.dislike_post.bind(this), 'dislike');
+        comment_box.add_listener(this.delete_post.bind(this), 'delete');
     }
 
     send_new_post(content) {
@@ -36,6 +37,10 @@ class TwittingManager {
         alert('edit post\n' + post_id + '\n' + content);
     }
 
+    delete_post(content, post_id){
+        alert(post_id + ' was deleted');
+    }
+
     like_post(post_id) {
         alert(post_id + ' was liked');
     }
@@ -43,6 +48,8 @@ class TwittingManager {
     dislike_post(post_id) {
         alert(post_id + ' was disliked');
     }
+
+
 
 }
 
