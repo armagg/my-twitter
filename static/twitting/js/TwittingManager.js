@@ -30,14 +30,15 @@ class TwittingManager {
     }
 
     send_new_post(content) {
-        alert('new post' +' \n' + content);
+        alert('new post' + ' \n' + content);
     }
 
     edit_post(content, post_id) {
         alert('edit post\n' + post_id + '\n' + content);
     }
 
-    delete_post(content, post_id){
+    delete_post(content, post_id) {
+
         alert(post_id + ' was deleted');
     }
 
@@ -50,19 +51,7 @@ class TwittingManager {
     }
 
 
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 class CommentManager {
@@ -221,9 +210,27 @@ class IconsManager {
     }
 
     delete_click() {
-        Array.from(this.funcs_on_delete).forEach(func => {
-            func();
-        })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Deleted!',
+                    'Your post has been deleted.',
+                    'success'
+                );
+                Array.from(this.funcs_on_delete).forEach(func => {
+                    func();
+                });
+            }
+        });
+
     }
 
     init_cancel() {
