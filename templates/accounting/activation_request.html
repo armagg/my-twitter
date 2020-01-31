@@ -1,0 +1,7 @@
+{% autoescape off %}
+    Hi {{ user.username }},
+
+    Please click the following link to confirm your registration:
+
+    <a href="/accounting/activate/{{ user.username }}/{{ token }}">Activate!</a>
+{% endautoescape %}

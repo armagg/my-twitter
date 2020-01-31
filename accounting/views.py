@@ -1,70 +1,136 @@
+import json
+
+from django.conf import settings
+from django.contrib.auth import login, authenticate
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_text
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
-from accounting.forms import UserForm, AccountForm
-from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
-from django.urls import reverse
-from django.contrib.auth.decorators import login_required
+from django.db import IntegrityError
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from django.template.loader import render_to_string
+
+from .forms import SignUpForm
+from .models import Token, create_new_token
 
 
-def index(request):
-    return render(request, 'accounting/index.html')
-
-
-@login_required
-def special(request):
-    return HttpResponse("You are logged in !")
-
-
-@login_required
-def logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('index'))
-
-
-def signup(request):
-    registered = False
-    if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
-        # account_form = AccountForm(data=request.POST)
-        if user_form.is_valid():
-            user = user_form.save()
-            user.set_password(user.password)
-            user.save()
-            # account = account_form.save(commit=False)
-            # account.user = user
-            # account.save()
-            registered = True
-            # redirect('index')
-        else:
-            print(user_form.errors)
-    else:
-        user_form = UserForm()
-        account_form = AccountForm()
-    return render(request, 'accounting/signup2.html',
-                  {'user_form': user_form,
-                   # 'account_form': account_form,
-                   'registered': registered})
-
-
-##TODO
-def login(request):
-    print(request.POST)
+def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
+
+        user = User.objects.filter(username=username).first()
         print(user)
-        if user:
-            return HttpResponseRedirect(reverse('index'))
-            # if user.is_active:
-            #     login(request, user)
-            #     return HttpResponseRedirect(reverse('index'))
-            # else:
-            #     return HttpResponse("Your account was inactive.")
+
+        if user is not None:
+            if user.is_active:
+                if user.password is password:
+                    login(request, user)
+                    return render(request, 'twitting/commentsPage.html')
+                else:
+                    errors = {
+                        'password': 'incorrect password'
+                    }
+            else:
+                errors = {
+                    'authentication': 'check your email to activate your account!'
+                }
         else:
-            print("Someone tried to login and failed.")
-            print("They used username: {} and password: {}".format(username, password))
-            return HttpResponse("Invalid login details given")
+            errors = {
+                'invalid_user': "Invalid login details given"
+            }
     else:
-        return render(request, 'accounting/login2.html', {})
+        errors = {}
+    return render(request, 'accounting/login2.html', {'errors': json.dumps(errors)})
+
+
+def activate(request, username, code):
+    token = Token.objects.filter(username=username, code=code).first()
+    if token is not None:
+        user = User.objects.filter(username=username).first()
+        user.is_active = True
+        user.save()
+        token.delete()
+        return render(request, 'accounting/login2.html')
+    else:
+        errors = {
+            'token': 'invalid token code for activation'
+        }
+        return render(request, 'accounting/login2.html', {'errors': errors})
+
+
+def signup_view(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.refresh_from_db()
+            user.is_active = False
+            user.save()
+            redirect('accounting:login')
+
+            current_site = get_current_site(request)
+
+            mail_subject = 'Activate your account.'
+            token = create_new_token(username=user.username)
+            token.save()
+            data = {
+                'user': user,
+                'domain': current_site.domain,
+                'token': token.code,
+            }
+            message = render_to_string('accounting/activation_page.html', data)
+            to_email = form.cleaned_data.get('email')
+
+            # send_mail(mail_subject, message, 'heidary13794@gmail.com', [to_email])
+            return render(request, 'accounting/activation_page.html', data)
+
+        else:
+            return render(request, 'accounting/signup2.html', {'form': form, 'errors': json.dumps(form.errors)})
+    else:
+        form = SignUpForm()
+        return render(request, 'accounting/signup2.html', {'form': form})
+
+
+def activate_page(request):
+    data = {
+        'domain': 'localhost:8000',
+        'token': 'jbvahsvxasbxkbasxljabx',
+    }
+    return render(request, 'accounting/activation_page.html', data)
+
+
+def email(request):
+    send_mail(
+        'subject',
+        'message',
+        'heidary13794@gmail.com',
+        ['jojebabr@gmail.com']
+    )
+    return HttpResponse('send')
+
+
+import smtplib
+import ssl
+
+def email2(request):
+    port = settings.EMAIL_PORT
+    smtp_server = settings.EMAIL_HOST
+    sender_email = settings.EMAIL_HOST_USER
+    password = settings.EMAIL_HOST_PASSWORD
+    receiver_email = 'jojebabr@gmail.com'
+    subject = 'Website registration'
+    body = 'Activate your account.'
+    message = 'Subject: {}\n\n{}'.format(subject, body)
+    context = ssl.create_default_context()
+    with smtplib.SMTP(smtp_server, port) as server:
+        server.ehlo()  # Can be omitted
+        server.starttls(context=context)
+        server.ehlo()  # Can be omitted
+        server.login(sender_email, password)
+        server.sendmail(sender_email, receiver_email, message)
+    return HttpResponse('send')

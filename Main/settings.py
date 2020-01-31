@@ -70,7 +70,6 @@ TEMPLATES = [
     },
 ]
 
-
 WSGI_APPLICATION = 'Main.wsgi.application'
 
 # Database
@@ -119,9 +118,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-STATIC_DIR = os.path.join(BASE_DIR,'static')
-MEDIA_DIR = os.path.join(BASE_DIR,'media')
-STATICFILES_DIRS = [STATIC_DIR,]
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 LOGIN_URL = '/account/user_login/'
@@ -131,4 +130,9 @@ LOGIN_URL = '/account/user_login/'
 #     '/var/www/static/',
 # ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'heidary13794@gmail.com'
+EMAIL_HOST_PASSWORD = '14813790'
+EMAIL_USE_TLS = True
