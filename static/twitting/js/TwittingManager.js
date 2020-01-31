@@ -10,16 +10,9 @@ class TwittingManager {
             })
         });
 
-        if (can_write === 'True') {
-            this.init_new_posting();
-        }
-
+        this.init_new_posting();
     }
 
-    init_new_posting() {
-        this.newPosting = new NewPosting();
-        this.newPosting.set_sending_function(this.send_new_post.bind(this));
-    }
 
     create_a_comment_box(comment) {
         let comment_box = new CommentManager(comment);
@@ -27,11 +20,20 @@ class TwittingManager {
         comment_box.add_listener(this.like_post.bind(this), 'like');
         comment_box.add_listener(this.dislike_post.bind(this), 'dislike');
         comment_box.add_listener(this.delete_post.bind(this), 'delete');
+        comment_box.add_listener(this.reply_post.bind(this), 'reply');
+        comment_box.add_listener(this.edit_post.bind(this), 'heavy edit');
     }
 
-    send_new_post(content) {
-        alert('new post' + ' \n' + content);
+
+    init_new_posting() {
+        let button = document.getElementById('new-post');
+        button.onclick = create_a_function_to_call_on_editor_result(this.new_post);
     }
+
+    new_post(post_content) {
+        alert('new post: ' + post_content);
+    }
+
 
     edit_post(content, post_id) {
         alert('edit post\n' + post_id + '\n' + content);
@@ -50,7 +52,9 @@ class TwittingManager {
         alert(post_id + ' was disliked');
     }
 
-
+    reply_post(post_id, post_content) {
+        alert(post_id + ' was replyed by text :' + post_content);
+    }
 }
 
 
@@ -135,6 +139,24 @@ class CommentManager {
 
     add_listener(f, func_name) {
 
+        if (func_name === 'reply') {
+            let get_text_from_editor = function (editor_text) {
+                f(this.comment.id, editor_text);
+            }.bind(this);
+            let func = create_a_function_to_call_on_editor_result(get_text_from_editor);
+            this.iconsManager.add_listener(func, 'reply');
+            return;
+        }
+
+        if (func_name === 'heavy edit') {
+            let get_text_from_editor = function (editor_text) {
+                f(this.comment.id, editor_text);
+            }.bind(this);
+            let func = create_a_function_to_call_on_editor_result(get_text_from_editor, this.editor);
+            this.iconsManager.add_listener(func, 'heavy edit');
+            return;
+        }
+
         if (func_name === 'like') {
             this.iconsManager.likeManager.add_listener_on_like(function () {
                 f(this.comment.id);
@@ -172,14 +194,21 @@ class IconsManager {
             this.init_edit();
             this.init_cancel();
             this.init_submit();
+            this.init_reply();
+            this.init_heavy_edit();
+            this.container.appendChild(this.reply);
+            this.container.appendChild(this.heavy_edit);
+            this.container.appendChild(this.inline_edit);
             this.container.appendChild(this.delete);
-            this.container.appendChild(this.edit);
+
         }
 
         this.funcs_on_edit = [];
         this.funcs_on_submit = [];
         this.funcs_on_cancel = [];
         this.funcs_on_delete = [];
+        this.funcs_on_reply = [];
+        this.funcs_on_heavy_edit = [];
         this.validation_of_submit = undefined;
 
         this.add_listener(this.edit_mode.bind(this), 'edit');
@@ -188,12 +217,25 @@ class IconsManager {
 
     }
 
+    init_heavy_edit() {
+        this.heavy_edit = document.createElement('i');
+        this.heavy_edit.className = 'pen square icon';
+        this.heavy_edit.title = 'heavy edit';
+        this.heavy_edit.onclick = this.heavy_edit_click.bind(this);
+    }
+
+    heavy_edit_click() {
+        Array.from(this.funcs_on_heavy_edit).forEach(func => {
+            func();
+        })
+    }
+
     init_edit() {
-        this.edit = document.createElement('i');
-        this.edit.className = 'edit icon mini-icon';
-        this.edit.title = 'edit';
-        this.container.appendChild(this.edit);
-        this.edit.onclick = this.edit_click.bind(this);
+        this.inline_edit = document.createElement('i');
+        this.inline_edit.className = 'edit icon mini-icon';
+        this.inline_edit.title = 'inline edit';
+        this.container.appendChild(this.inline_edit);
+        this.inline_edit.onclick = this.edit_click.bind(this);
     }
 
     edit_click() {
@@ -246,6 +288,19 @@ class IconsManager {
         })
     }
 
+    init_reply() {
+        this.reply = document.createElement('i');
+        this.reply.className = 'reply icon';
+        this.reply.title = 'reply';
+        this.reply.onclick = this.reply_click.bind(this);
+    }
+
+    reply_click() {
+        Array.from(this.funcs_on_reply).forEach(func => {
+            func();
+        })
+    }
+
     init_submit() {
         this.submit = document.createElement('i');
         this.submit.title = 'submit';
@@ -273,13 +328,13 @@ class IconsManager {
     normal_mode() {
         this.container.removeChild(this.submit);
         this.container.removeChild(this.cancel);
+        this.container.appendChild(this.inline_edit);
         this.container.appendChild(this.delete);
-        this.container.appendChild(this.edit);
         this.in_edit_mode = false;
     }
 
     edit_mode() {
-        this.container.removeChild(this.edit);
+        this.container.removeChild(this.inline_edit);
         this.container.removeChild(this.delete);
         this.container.appendChild(this.submit);
         this.container.appendChild(this.cancel);
@@ -301,6 +356,12 @@ class IconsManager {
             case 'cancel':
                 list = this.funcs_on_cancel;
                 break;
+            case 'reply':
+                list = this.funcs_on_reply;
+                break;
+            case 'heavy edit':
+                list = this.funcs_on_heavy_edit;
+                break;
         }
         list.push(f);
     }
@@ -320,6 +381,7 @@ class LikeManager {
     }
 
     init_icons() {
+
         this.like = document.createElement('i');
         this.like.className = 'thumbs up green icon';
         this.like.title = 'like';
@@ -333,6 +395,7 @@ class LikeManager {
         this.container.appendChild(this.like);
         this.container.appendChild(this.like_counter);
         this.container.appendChild(this.dislike);
+
     }
 
 
@@ -373,45 +436,6 @@ class LikeManager {
 }
 
 
-class NewPosting {
-    constructor() {
-        this.button = document.getElementById('new-post-button');
-        this.init_button_action();
-    }
-
-    init_button_action() {
-        this.button.onclick = function () {
-            (async () => {
-                const {value: formValues} = await Swal.fire({
-                    width: '60%',
-                    confirmButtonText: 'send',
-                    showCancelButton: true,
-                    html: '<div id = "swal-editor" ></div>',
-                    onOpen: function () {
-                        window.new_post_editor = new FroalaEditor('#swal-editor', {
-                            attribution: false,
-                            charCounterCount: false,
-                        });
-                    },
-                    focusConfirm: false,
-                    preConfirm: () => {
-                        return window.new_post_editor.html.get();
-                    }
-                });
-                if (formValues) {
-                    this.send_new_post(JSON.stringify(formValues));
-                }
-            })();
-        }.bind(this);
-    }
-
-    set_sending_function(f) {
-        this.send_new_post = f;
-    }
-
-}
-
-
 function clone(obj) {
     if (null == obj || "object" != typeof obj) return obj;
     var copy = obj.constructor();
@@ -419,4 +443,38 @@ function clone(obj) {
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
     }
     return copy;
+}
+
+
+function create_a_function_to_call_on_editor_result(func, inline_editor = undefined) {
+    //this method get a function like func and return a function like f such that when you call f then
+    // a text editor run and when text editor closed and was accept we call func by parameter of editor inner text
+    return function () {
+        (async () => {
+            const {value: formValues} = await Swal.fire({
+                width: '60%',
+                confirmButtonText: 'send',
+                showCancelButton: true,
+                html: '<div id = "swal-editor" ></div>',
+                onOpen: function () {
+                    window.reply_post_editor = new FroalaEditor('#swal-editor', {
+                        attribution: false,
+                        charCounterCount: false,
+                    }, function () {
+                        if (inline_editor !== undefined) {
+                            window.reply_post_editor.html.set(inline_editor.html.get());
+                        }
+                    });
+                },
+                focusConfirm: false,
+                preConfirm: () => {
+
+                }
+            });
+            if (formValues) {
+                inline_editor.html.set(window.reply_post_editor.html.get());
+                func(JSON.stringify(formValues));
+            }
+        })();
+    };
 }
