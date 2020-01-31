@@ -1,25 +1,17 @@
-<head>
-    <!-- semantic -->
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+{% extends 'base.html' %}
 
+{% block head %}
     <!-- mmd sources -->
     {% load static %}
     <link rel="stylesheet" href="{% static 'twitting/css/twittPage.css' %}">
     <script src="{% static 'twitting/js/TwittingManager.js' %}"></script>
 
     <!-- forala -->
-    <!-- Include Editor style. -->
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/css/froala_editor.pkgd.min.css' rel='stylesheet'
           type='text/css'/>
-    <!-- Include JS file. -->
     <script type='text/javascript'
             src='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/js/froala_editor.pkgd.min.js'></script>
 
-
-    <!-- sweet alert -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <style>
 
         body {
@@ -54,51 +46,72 @@
             text-align: center;
         }
 
+        .background-image {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: -999999;
+            background-image: url("{% static '9401.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
     </style>
 
-</head>
+{% endblock %}
 
-<body>
+{% block body %}
 
-
-<div class="comments-container">
-    <h1>{{ tittle }} <a href="http://creaticode.com">creaticode.com</a></h1>
-    <ul id="comments-list" class="comments-list">
-        {% for comment in comments %}
-            <li>
-                <div class="comment-main-level">
-                    <div class="comment-avatar"><img
-                            src="{{ comment.author.avatar }}" alt="">
-                    </div>
-                    <div class="comment-box" id="{{ comment.id }}">
-                    </div>
-                </div>
-                <ul class="comments-list reply-list">
-                    {% for reply in comment.replys %}
-                        <li>
-                            <div class="comment-avatar"><img
-                                    src="{{ reply.author.avatar }}"
-                                    alt={{ reply.author.name }}>
-                            </div>
-                            <div class="comment-box" id="{{ reply.id }}">
-                            </div>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
-<div class="footer">
-    <div style="width: 60%;height: auto;margin: auto;">
-        <div class="ui blue bottom attached button" tabindex="0" id="new-post-button">send new post to this page</div>
+    <div class="background-image">
     </div>
-</div>
 
 
-<script>
-    let jsonObject = JSON.parse('{{ j | escapejs }}');
-    new TwittingManager(jsonObject, '{{ can_write }}', id = 97110071);
+    <div class="comments-container">
+        <h1>{{ tittle }} <a href="http://127.0.0.1:8000/paging/mypage/">http://127.0.0.1:8000/paging/mypage/</a></h1>
+        <ul id="comments-list" class="comments-list">
+            {% for comment in comments %}
+                <li>
+                    <div class="comment-main-level">
+                        <div class="comment-avatar"><img
+                                src="{{ comment.author.avatar }}" alt="">
+                        </div>
+                        <div class="comment-box" id="{{ comment.id }}">
+                        </div>
+                    </div>
+                    <ul class="comments-list reply-list">
+                        {% for reply in comment.replys %}
+                            <li>
+                                <div class="comment-avatar"><img
+                                        src="{{ reply.author.avatar }}"
+                                        alt={{ reply.author.name }}>
+                                </div>
+                                <div class="comment-box" id="{{ reply.id }}">
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{#    <div class="footer">#}
+{#        <div style="width: 60%;height: auto;margin: auto;">#}
+{#            <div class="ui blue bottom attached button" tabindex="0" id="new-post-button">send new post to this page#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
 
-</script>
-</body>
+
+    <script>
+
+        let jsonObject = JSON.parse('{{ j | escapejs }}');
+        new TwittingManager(jsonObject, '{{ can_write }}', id = '{{ request.user.username }}');
+
+    </script>
+
+
+{% endblock %}

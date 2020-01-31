@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+    <style>
+        .new-account {
+            color: #59608b;
+            font-size: 20px;
+            margin-top: 50px;
+        }
+
+        .new-account:hover {
+            color: #bac6ff;
+        }
+
+
+        .background-image {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: -999999;
+            background-image: url("{% static '3811.jpg' %}");
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .top-content {
+            display: flex;
+            height: 100%;
+        }
+
+        .description {
+            color: #9dbbd2;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            float: bottom;
+            width: 100%;
+            background: rgb(0, 0, 0); /* Fallback color */
+            background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
+        }
+
+
+        .big-name {
+            font-weight: bold;
+            font-size: 50px;
+            color: #9dbbd2;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 30vh;
+            display: table;
+        }
+    </style>
+
+{% endblock %}
+
+
+
+{% block body %}
+
+    <div class="background-image">
+    </div>
+
+    <div class="top-content">
+        <div class="big-name">
+            Twigger
+            <br>
+            <br>
+            <br>
+            <a class="new-account" href="{% url 'accounting:signup' %}">Create New Account</a>
+        </div>
+        <div class="description">
+            <h1 style="font-size: 40px">Twigger</h1>
+            <h2 style="line-height: 2">
+                Twigger is a cloud-based instant messaging and voice over IP service. Twigger client apps are available
+                for
+                Android, iOS, Windows Phone, Windows NT, macOS and Linux. Users can send messages and exchange photos,
+                videos, stickers, audio and files of any type.
+            </h2>
+        </div>
+
+    </div>
+
+{#    repeated div. it most be deleted.#}
+    <div class="top-content">
+        <div class="big-name">
+            Twigger
+            <br>
+            <br>
+            <br>
+            <a class="new-account" href="{% url 'accounting:signup' %}">Create New Account</a>
+        </div>
+        <div class="description">
+            <h1 style="font-size: 40px">Twigger</h1>
+            <h2 style="line-height: 2">
+                Twigger is a cloud-based instant messaging and voice over IP service. Twigger client apps are available
+                for
+                Android, iOS, Windows Phone, Windows NT, macOS and Linux. Users can send messages and exchange photos,
+                videos, stickers, audio and files of any type.
+            </h2>
+        </div>
+
+    </div>
+{% endblock %}

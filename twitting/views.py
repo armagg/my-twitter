@@ -50,3 +50,7 @@ def comments(request):
     return render(request, './twitting/commentsPage.html',
                   {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge',
                    'can_write': True})
+
+
+def my_page(request):
+    return render(request, 'twitting/commentsPage.html')

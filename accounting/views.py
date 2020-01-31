@@ -95,10 +95,3 @@ def signup_view(request):
         form = SignUpForm()
         return render(request, 'accounting/signup2.html', {'form': form})
 
-
-def activate_page(request):
-    data = {
-        'domain': 'localhost:8000',
-        'token': 'jbvahsvxasbxkbasxljabx',
-    }
-    return render(request, 'accounting/activation_page.html', data)

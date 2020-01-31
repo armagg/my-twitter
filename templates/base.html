@@ -1,17 +1,17 @@
 <!DOCTYPE>
 <html>
-
-
 <head>
 
-
+    <!-- semantic -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 
 
-    <style>
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
 
+    <style>
 
         .fixed-top-bar {
             margin: 0;
@@ -28,25 +28,6 @@
 
         {% load static %}
 
-        .image-container {
-            height: 100%;
-            background-image: url("{% static '3811.jpg' %}");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-        .description {
-            color: #9dbbd2;
-            padding: 20px;
-            position: absolute;
-            bottom: 0;
-            float: bottom;
-            height: auto;
-            width: 100%;
-            background: rgb(0, 0, 0); /* Fallback color */
-            background: rgba(0, 0, 0, 0.5); /* Black background with 0.5 opacity */
-        }
 
         .top-bar-right {
             float: right;
@@ -85,6 +66,10 @@
 
     </style>
 
+    {% block head %}
+
+    {% endblock %}
+
 </head>
 
 <body>
@@ -102,20 +87,20 @@
 
         <div class="icon-container">
             {% if request.user.is_authenticated %}
-                <i class="link blue user icon large" title="Login"></i>
+                <a><i class="link blue user icon large" title="Profile"></i></a>
             {% endif %}
 
             {% if not request.user.is_authenticated %}
-                <i class="link blue cog icon large" title="Login"></i>
+                <a href="{% url 'accounting:login' %}"><i class="link blue cog icon large" title="Login"></i></a>
             {% endif %}
         </div>
 
         <div class="icon-container">
-            <i class="link blue home icon large" title="Home"></i>
+            <a href="{% url 'home' %}"><i class="link blue home icon large" title="Home"></i></a>
         </div>
 
         <div class="icon-container">
-            <i class="link blue dochub icon large" title="My page"></i>
+            <a href="{% url 'mypage' %}"><i class="link blue dochub icon large" title="My page"></i></a>
         </div>
 
     </div>
@@ -123,12 +108,12 @@
 
     <div class="top-bar-left top-bar-child">
         <div class="icon-container">
-            <i class="link blue bell icon large"></i>
+            <i class="link blue bell outline icon large"></i>
         </div>
 
 
         <div class="icon-container">
-            <i class="link blue envelope open icon large"></i>
+            <i class="link blue envelope open outline icon large"></i>
         </div>
 
 
@@ -144,16 +129,8 @@
     </div>
 </nav>
 
-<div class="image-container">
-    <div class="description">
-        <h1 style="font-size: 40px">Twigger</h1>
-        <h2 style="line-height: 2">
-            Twigger is a cloud-based instant messaging and voice over IP service. Twigger client apps are available for
-            Android, iOS, Windows Phone, Windows NT, macOS and Linux. Users can send messages and exchange photos,
-            videos, stickers, audio and files of any type.
-        </h2>
-    </div>
+{% block body %}
 
-</div>
+{% endblock %}
 </body>
 </html>

@@ -24,6 +24,6 @@ urlpatterns = [
     # url(r'^special/', views.special, name='special'),
     url(r'^accounting/', include('accounting.urls')),
     url(r'^twitting/', include('twitting.urls')),
-    # url(r'^logout/$', views.logout, name='logout'),
-    url('', include('homeservice.urls'))
+    url(r'^paging/', include('paging.urls')),
+    url('', include('homeservice.urls')),
 ]
