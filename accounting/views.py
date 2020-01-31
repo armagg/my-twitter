@@ -6,16 +6,12 @@ from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
-from django.utils.encoding import force_text
 from django.contrib.auth.models import User
-from django.db import IntegrityError
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
+from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 
 from .forms import SignUpForm
-from .models import Token, create_new_token
+from .models import Token, create_new_token, Account
 
 
 def login_view(request):
@@ -24,11 +20,11 @@ def login_view(request):
         password = request.POST.get('password')
 
         user = User.objects.filter(username=username).first()
-        print(user)
 
         if user is not None:
             if user.is_active:
-                if user.password is password:
+                user = authenticate(request, username=username, password=password)
+                if user is not None:
                     login(request, user)
                     return render(request, 'twitting/commentsPage.html')
                 else:
@@ -54,13 +50,16 @@ def activate(request, username, code):
         user = User.objects.filter(username=username).first()
         user.is_active = True
         user.save()
+        account = Account(user= user)
+        Account.user = user
+        account.save()
         token.delete()
-        return render(request, 'accounting/login2.html')
+        return render(request, 'accounting/activate_done.html')
     else:
         errors = {
             'token': 'invalid token code for activation'
         }
-        return render(request, 'accounting/login2.html', {'errors': errors})
+        return render(request, 'accounting/login2.html', {'errors': json.dumps(errors)})
 
 
 def signup_view(request):
@@ -84,11 +83,12 @@ def signup_view(request):
                 'token': token.code,
             }
             message = render_to_string('accounting/activation_page.html', data)
+            text_content = strip_tags(message)
             to_email = form.cleaned_data.get('email')
 
-            # send_mail(mail_subject, message, 'heidary13794@gmail.com', [to_email])
-            return render(request, 'accounting/activation_page.html', data)
+            send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
 
+            return render(request, 'accounting/activation_sent.html')
         else:
             return render(request, 'accounting/signup2.html', {'form': form, 'errors': json.dumps(form.errors)})
     else:
@@ -116,6 +116,7 @@ def email(request):
 
 import smtplib
 import ssl
+
 
 def email2(request):
     port = settings.EMAIL_PORT

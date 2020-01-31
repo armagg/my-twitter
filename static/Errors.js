@@ -18,9 +18,42 @@ function show_errors(errors) {
         error_text += '\n';
     });
 
-    Toast.fire({
-        icon: 'error',
-        title: error_text,
+    if (error_text !== '') {
+        Toast.fire({
+            icon: 'error',
+            title: error_text,
+        });
+    }
+}
+
+
+function show_alerts(alerts) {
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        onOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+        }
     });
+
+    let alert_text = '';
+    Array.from(Object.values(alerts)).forEach(alert => {
+        alert_text += alert;
+        alert_text += '\n';
+    });
+
+    console.log(alert_text);
+    if (alert_text !== '') {
+        Toast.fire({
+            icon: 'success',
+            title: alert_text,
+        });
+    }
+
 
 }

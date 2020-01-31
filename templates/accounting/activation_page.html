@@ -1,60 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-{##}
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Kapella Bootstrap Admin Dashboard Template</title>
-    <!-- base:css -->
-    {% load static %}
-
-    <link rel="stylesheet" href="{% static 'vendors/mdi/css/materialdesignicons.min.css' %}">
-    <link rel="stylesheet" href='{% static "vendors/base/vendor.bundle.base.css" %}'>
-    <link rel="stylesheet" href='{% static 'css/style.css' %}'/>
-
-    <style>
-
-        .bg {
-            /* The image used */
-            background-image: url('https://image.freepik.com/free-photo/identification-scanning-system_53876-89015.jpg');
-
-            /* Full height */
-            height: 100%;
-
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-    </style>
-</head>
-
-<body>
-<div class=" container-scroller bg">
-    <div class="container-fluid page-body-wrapper full-page-wrapper">
-        <div class="content-wrapper d-flex align-items-center auth lock-full-bg">
-            <div class="row w-100">
-                <div class="col-lg-4 mx-auto">
-                    <div class="auth-form-transparent text-left p-5 text-center">
-
-                        <a class="btn btn-block btn-success btn-lg font-weight-medium"
-                           href="/accounting/activate/{{ user.username }}/{{ token }}">Activate</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- content-wrapper ends -->
-    </div>
-    <!-- page-body-wrapper ends -->
-</div>
-<!-- container-scroller -->
-<!-- base:js -->
-<script src="../../vendors/base/vendor.bundle.base.js"></script>
-<!-- endinject -->
-<!-- inject:js -->
-<script src="../../js/template.js"></script>
-<!-- endinject -->
-</body>
-
-</html>
+<h4>welcome to Twigger!</h4>
+<p>Hi {{ user.username }}</p>
+<h6 style="color: #a94442">click this to activate your account.</h6>
+<a class="btn btn-block btn-success btn-lg font-weight-medium"
+   href="/accounting/activate/{{ user.username }}/{{ token }}"><h1
+        style="color: red">{{ domain }}/accounting/activate/{{ user.username }}/{{ token }}</h1></a>
