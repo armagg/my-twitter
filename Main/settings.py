@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'following',
     'alerting',
     'twitting.apps.TwittingConfig',
-    'channelling'
+    'channelling',
+    'homeservice'
 ]
 
 MIDDLEWARE = [

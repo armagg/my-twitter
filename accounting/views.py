@@ -102,36 +102,3 @@ def activate_page(request):
         'token': 'jbvahsvxasbxkbasxljabx',
     }
     return render(request, 'accounting/activation_page.html', data)
-
-
-def email(request):
-    send_mail(
-        'subject',
-        'message',
-        'heidary13794@gmail.com',
-        ['jojebabr@gmail.com']
-    )
-    return HttpResponse('send')
-
-
-import smtplib
-import ssl
-
-
-def email2(request):
-    port = settings.EMAIL_PORT
-    smtp_server = settings.EMAIL_HOST
-    sender_email = settings.EMAIL_HOST_USER
-    password = settings.EMAIL_HOST_PASSWORD
-    receiver_email = 'jojebabr@gmail.com'
-    subject = 'Website registration'
-    body = 'Activate your account.'
-    message = 'Subject: {}\n\n{}'.format(subject, body)
-    context = ssl.create_default_context()
-    with smtplib.SMTP(smtp_server, port) as server:
-        server.ehlo()  # Can be omitted
-        server.starttls(context=context)
-        server.ehlo()  # Can be omitted
-        server.login(sender_email, password)
-        server.sendmail(sender_email, receiver_email, message)
-    return HttpResponse('send')
