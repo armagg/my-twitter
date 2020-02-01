@@ -41,7 +41,7 @@ def login_view(request):
             }
     else:
         errors = {}
-    return render(request, 'accounting/login2.html', {'errors': json.dumps(errors)})
+    return render(request, 'accounting/login.html', {'errors': json.dumps(errors)})
 
 
 def activate(request, username, code):
@@ -59,7 +59,7 @@ def activate(request, username, code):
         errors = {
             'token': 'invalid token code for activation'
         }
-        return render(request, 'accounting/login2.html', {'errors': json.dumps(errors)})
+        return render(request, 'accounting/login.html', {'errors': json.dumps(errors)})
 
 
 def signup_view(request):
@@ -90,8 +90,8 @@ def signup_view(request):
 
             return render(request, 'accounting/activation_sent.html')
         else:
-            return render(request, 'accounting/signup2.html', {'form': form, 'errors': json.dumps(form.errors)})
+            return render(request, 'accounting/signup.html', {'form': form, 'errors': json.dumps(form.errors)})
     else:
         form = SignUpForm()
-        return render(request, 'accounting/signup2.html', {'form': form})
+        return render(request, 'accounting/signup.html', {'form': form})
 
