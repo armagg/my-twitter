@@ -14,6 +14,7 @@ def comments(request):
     # extra avatar
     # http://i9.photobucket.com/albums/a88/creaticode/avatar_2_zps7de12f8b.jpg
     comment1 = {
+        'bookmark_state': True,
         'editable': True,
         'like_pack': {
             'like_numbers': 10
@@ -25,6 +26,7 @@ def comments(request):
         'id': 1,
     }
     comment2 = {
+        'bookmark_state': False,
         'like_pack': {
             'like_numbers': 10
         },
@@ -33,7 +35,7 @@ def comments(request):
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
         'time': 'hace 20 minutos',
-        'replys': [comment1],
+        'replys': [comment1, copy.deepcopy(comment1)],
         'id': 2
     }
 

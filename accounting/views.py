@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
 
+from paging.models import Page
 from .forms import SignUpForm
 from .models import Token, create_new_token, Account
 
@@ -50,7 +51,9 @@ def activate(request, username, code):
         user = User.objects.filter(username=username).first()
         user.is_active = True
         user.save()
-        account = Account(user= user)
+        personal_page = Page(personal_page=True)
+        personal_page.save()
+        account = Account(user=user, personal_page=personal_page)
         Account.user = user
         account.save()
         token.delete()
@@ -68,12 +71,10 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
-            user.is_active = False
+            user.is_active = True
             user.save()
-            redirect('accounting:login')
 
             current_site = get_current_site(request)
-
             mail_subject = 'Activate your account.'
             token = create_new_token(username=user.username)
             token.save()
@@ -85,8 +86,8 @@ def signup_view(request):
             message = render_to_string('accounting/activation_page.html', data)
             text_content = strip_tags(message)
             to_email = form.cleaned_data.get('email')
-
-            send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
+            # send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
+            return render(request, 'accounting/activation_page.html', data)
 
             return render(request, 'accounting/activation_sent.html')
         else:
@@ -94,4 +95,3 @@ def signup_view(request):
     else:
         form = SignUpForm()
         return render(request, 'accounting/signup.html', {'form': form})
-

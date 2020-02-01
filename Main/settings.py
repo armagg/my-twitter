@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'channelling',
     'homeservice',
     'paging',
+    'bookmarking',
 ]
 
 MIDDLEWARE = [

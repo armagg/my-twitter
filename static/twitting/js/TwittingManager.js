@@ -1,6 +1,6 @@
 class TwittingManager {
-    constructor(comments, can_write, user_id) {
-        this.user_id = user_id;
+    constructor(comments, can_write, username) {
+        window.user_username = username;
         this.comments = comments;
 
         Array.from(this.comments).forEach(comment => {
@@ -22,6 +22,7 @@ class TwittingManager {
         comment_box.add_listener(this.delete_post.bind(this), 'delete');
         comment_box.add_listener(this.reply_post.bind(this), 'reply');
         comment_box.add_listener(this.edit_post.bind(this), 'heavy edit');
+        comment_box.add_listener(this.bookmark_post.bind(this), 'bookmark');
         comment_box.set_click_func(this.comment_content_click.bind(this));
     }
 
@@ -30,25 +31,73 @@ class TwittingManager {
         let data = JSON.stringify(post_id);
         console.log(url);
         console.log(data);
-        $.ajax({
-            url: url,
-            data: data,
-            dataType: 'json',
-            success: function (data) {
-                alert('success');
-            }
-        });
-        // alert(post_id + ' was clicked');
+
+        // $.post(url);
+
+        console.log(csrf);
+
+        // $.ajax({
+        //     type: 'POST',
+        //     url: url,
+        //     data: {
+        //         csrfmiddlewaretoken: csrf,
+        //     },
+        //     success: function (json) {
+        //     },
+        //     error: function (xhr, errmsg, err) {
+        //         alert('error');
+        //     }
+        // });
+
+        // $.ajax({
+        //     type: 'POST',
+        //     url: url,
+        //     data: data,
+        //     dataType: 'data',
+        //     success: function (data) {
+        //         alert('success');
+        //     }
+        // });
+
+        alert(post_id + ' was clicked');
     }
 
 
     init_new_posting() {
         let button = document.getElementById('new-post');
-        button.onclick = create_a_function_to_call_on_editor_result(this.new_post);
+        button.onclick = create_a_function_to_call_on_editor_result(this.new_post.bind(this)).bind(this);
     }
 
     new_post(post_content) {
-        alert('new post: ' + post_content);
+        let url = location.origin + '/new';
+        let data = JSON.stringify({username: window.user_username, content: post_content});
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                csrfmiddlewaretoken: csrf,
+                data: data,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'your new post was sent.',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'your new post was not sent.',
+                    'error'
+                );
+            }
+        });
+        // alert('new post: ' + post_content);
+    }
+
+    bookmark_post(bookmark_state, post_id) {
+        alert(bookmark_state + ' ' + post_id)
     }
 
 
@@ -108,7 +157,7 @@ class CommentManager {
         this.icons_container = document.createElement('div');
         this.icons_container.className = 'icons-pack';
         this.comment_head.appendChild(this.icons_container);
-        this.iconsManager = new IconsManager(this.icons_container, this.comment.editable, this.comment.like_pack);
+        this.iconsManager = new IconsManager(this.icons_container, this.comment.editable, this.comment.like_pack, this.comment.bookmark_state);
     }
 
     init_content() {
@@ -177,6 +226,13 @@ class CommentManager {
 
     add_listener(f, func_name) {
 
+        if (func_name === 'bookmark') {
+            let func = function (bookmark_state) {
+                f(bookmark_state, this.comment.id);
+            }.bind(this);
+            this.iconsManager.add_listener(func, 'bookmark');
+        }
+
         if (func_name === 'reply') {
             let get_text_from_editor = function (editor_text) {
                 f(this.comment.id, editor_text);
@@ -218,8 +274,9 @@ class CommentManager {
 
 
 class IconsManager {
-    constructor(container, editable, like_pack) {
+    constructor(container, editable, like_pack, bookmark_state) {
         this.in_edit_mode = false;
+        this.bookmark_state = bookmark_state;
         this.container = container;
 
         this.like_container = document.createElement('div');
@@ -234,6 +291,8 @@ class IconsManager {
             this.init_submit();
             this.init_reply();
             this.init_heavy_edit();
+            this.init_bookmark();
+            this.container.appendChild(this.bookmark);
             this.container.appendChild(this.reply);
             this.container.appendChild(this.heavy_edit);
             this.container.appendChild(this.inline_edit);
@@ -247,12 +306,39 @@ class IconsManager {
         this.funcs_on_delete = [];
         this.funcs_on_reply = [];
         this.funcs_on_heavy_edit = [];
+        this.funcs_on_bookmark = [];
         this.validation_of_submit = undefined;
 
         this.add_listener(this.edit_mode.bind(this), 'edit');
         this.add_listener(this.normal_mode.bind(this), 'cancel');
         this.add_listener(this.normal_mode.bind(this), 'submit');
 
+    }
+
+    init_bookmark() {
+        this.bookmark = document.createElement('i');
+        this.bookmark.title = 'bookmark';
+        this.bookmark.classList = 'yellow bookmark outline icon';
+        if (this.bookmark_state) {
+            this.bookmark.title = 'unbookmark';
+            this.bookmark.classList.remove('outline');
+        }
+        this.bookmark.onclick = this.bookmark_click.bind(this);
+    }
+
+    bookmark_click() {
+        if (this.bookmark_state) {
+            this.bookmark.title = 'bookmark';
+            this.bookmark_state = false;
+            this.bookmark.classList.add('outline');
+        } else {
+            this.bookmark.title = 'unbookmark';
+            this.bookmark.classList.remove('outline');
+            this.bookmark_state = true;
+        }
+        Array.from(this.funcs_on_bookmark).forEach(func => {
+            func(this.bookmark_state);
+        });
     }
 
     init_heavy_edit() {
@@ -272,7 +358,6 @@ class IconsManager {
         this.inline_edit = document.createElement('i');
         this.inline_edit.className = 'edit icon mini-icon';
         this.inline_edit.title = 'inline edit';
-        this.container.appendChild(this.inline_edit);
         this.inline_edit.onclick = this.edit_click.bind(this);
     }
 
@@ -400,6 +485,9 @@ class IconsManager {
             case 'heavy edit':
                 list = this.funcs_on_heavy_edit;
                 break;
+            case 'bookmark':
+                list = this.funcs_on_bookmark;
+                break;
         }
         list.push(f);
     }
@@ -517,8 +605,10 @@ function create_a_function_to_call_on_editor_result(func, inline_editor = undefi
                         title: 'Empty text ...!',
                     });
                 } else {
-                    inline_editor.html.set(text);
-                    func(JSON.stringify(formValues));
+                    if (inline_editor !== undefined) {
+                        inline_editor.html.set(text);
+                    }
+                    func(JSON.stringify(text));
                 }
             }
         })();

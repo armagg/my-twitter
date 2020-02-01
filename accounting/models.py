@@ -4,6 +4,8 @@ import string
 from django.contrib.auth.models import User
 from django.db import models
 
+from paging.models import Page
+
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
@@ -12,6 +14,7 @@ class Account(models.Model):
     location = models.TextField(max_length=60, default='iran!', null=True)
     bio = models.TextField(max_length=120, default='nothing until now')
     is_private = models.BooleanField(default=False)
+    personal_page = models.ForeignKey(Page, on_delete=models.PROTECT)
 
     def __str__(self):
         return 'account of user by username: ' + self.user.username

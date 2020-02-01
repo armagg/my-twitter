@@ -7,7 +7,7 @@ def homepage(request):
 
 
 def new(request):
-    print(request.POST)
+    print(request.POST.get('data'))
     if request.POST:
         print(request.POST)
     return render(request, 'home.html')
