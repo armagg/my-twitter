@@ -32,17 +32,6 @@
             padding: 0px;
         }
 
-        .footer {
-            z-index: 999999;
-            position: fixed;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: auto;
-            color: white;
-            text-align: center;
-        }
-
         .background-image {
             position: fixed;
             top: 0;
@@ -57,6 +46,20 @@
             background-size: cover;
         }
 
+        .comment-hoverable {
+            cursor: pointer;
+            -webkit-transition-property: background; /* Safari */
+            -webkit-transition-duration: 5s; /* Safari */
+            -webkit-transition-delay: 10s; /* Safari */
+            transition-property: background;
+            transition-duration: 1s;
+            transition-delay: 0s;
+        }
+
+        .comment-hoverable:hover {
+            background: #bcd8ed;
+        }
+
     </style>
 
 {% endblock %}
@@ -69,7 +72,9 @@
 
     <div class="comments-container" style="margin-top: 90px;">
         {% if can_write %}
-            <button class="ui inverted green button" style="float: right" title="new post" id="new-post"><i class="plus icon"></i>New</button>
+            <button class="ui inverted green button" style="float: right" title="new post" id="new-post"><i
+                    class="plus icon"></i>New
+            </button>
         {% endif %}
         <h1>{{ tittle }} <a href="http://127.0.0.1:8000/paging/mypage/">http://127.0.0.1:8000/paging/mypage/</a></h1>
         <ul id="comments-list" class="comments-list">

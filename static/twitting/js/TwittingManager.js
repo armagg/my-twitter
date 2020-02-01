@@ -22,6 +22,23 @@ class TwittingManager {
         comment_box.add_listener(this.delete_post.bind(this), 'delete');
         comment_box.add_listener(this.reply_post.bind(this), 'reply');
         comment_box.add_listener(this.edit_post.bind(this), 'heavy edit');
+        comment_box.set_click_func(this.comment_content_click.bind(this));
+    }
+
+    comment_content_click(post_id) {
+        let url = location.origin + '/new';
+        let data = JSON.stringify(post_id);
+        console.log(url);
+        console.log(data);
+        $.ajax({
+            url: url,
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                alert('success');
+            }
+        });
+        // alert(post_id + ' was clicked');
     }
 
 
@@ -60,12 +77,13 @@ class TwittingManager {
 
 class CommentManager {
     constructor(comment) {
+        this.edit_mod = false;
         this.comment = comment;
         this.comment_box = document.getElementById(comment.id);
 
         this.comment_head = document.createElement('div');
         this.comment_content = document.createElement('div');
-        this.comment_content.className = 'comment-content';
+        this.comment_content.className = 'comment-content comment-hoverable';
         this.comment_head.className = 'comment-head';
         this.comment_box.appendChild(this.comment_head);
         this.comment_box.appendChild(this.comment_content);
@@ -96,6 +114,7 @@ class CommentManager {
     init_content() {
         this.comment_content.innerText = this.comment.content;
         this.comment_content.id = this.comment.id + '-content';
+        this.comment_content.onclick = this.click_comment_content.bind(this);
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
             charCounterCount: false,
@@ -110,14 +129,33 @@ class CommentManager {
     init_editing_rules() {
         this.iconsManager.add_listener(function () {
             this.last_content = clone(this.editor.html.get());
+            this.comment_content.classList.remove('comment-hoverable');
+            this.edit_mod = true;
         }.bind(this), 'edit');
 
         this.iconsManager.add_listener(function () {
             this.editor.html.set(this.last_content);
+            this.edit_mod = false;
+            this.comment_content.classList.add('comment-hoverable');
         }.bind(this), 'cancel');
+
+        this.iconsManager.add_listener(function () {
+            this.edit_mod = false;
+            this.comment_content.classList.add('comment-hoverable');
+        }.bind(this), 'submit');
         this.iconsManager.set_validation_of_submit(function () {
             return this.editor.html.get() !== '';
-        }.bind(this), 'submit')
+        }.bind(this), 'submit');
+    }
+
+    click_comment_content() {
+        if (!this.edit_mod) {
+            this.comment_content_click(this.comment.id);
+        }
+    }
+
+    set_click_func(f) {
+        this.comment_content_click = f;
     }
 
 
@@ -472,8 +510,16 @@ function create_a_function_to_call_on_editor_result(func, inline_editor = undefi
                 }
             });
             if (formValues) {
-                inline_editor.html.set(window.reply_post_editor.html.get());
-                func(JSON.stringify(formValues));
+                let text = window.reply_post_editor.html.get();
+                if (text === '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Empty text ...!',
+                    });
+                } else {
+                    inline_editor.html.set(text);
+                    func(JSON.stringify(formValues));
+                }
             }
         })();
     };
