@@ -51,18 +51,19 @@ class Tweet(models.Model):
 
         return 10
 
-    def get_tweet_front(self, editable: bool):
-        author = self.author
+    def get_tweet_front(self, editable: bool, with_replies):
+        replies = []
+        if with_replies:
+            for reply in Tweet.objects.filter(parent_tweet=self):
+                replies.append(reply.get_tweet_front(False, False))
         return {
             'bookmark_state': False,
-            'like_pack': {
-                'like_numbers': self.get_like_number()
-            },
+            'like_number': self.get_like_number(),
             'editable': editable,
-            'name': author.name,
+            'name': self.author.name,
             'avatar': '',
             'content': self.document,
             'time': self.date_published.isoformat(),
-            'replies': [],
+            'replies': replies,
             'id': 'tweet' + str(self.id)
         }

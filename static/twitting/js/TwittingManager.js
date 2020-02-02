@@ -8,8 +8,9 @@ class TwittingManager {
                 this.create_a_comment_box(reply);
             })
         });
-
-        this.init_new_posting();
+        if(can_write === 'True'){
+            this.init_new_posting();
+        }
     }
 
 
@@ -217,7 +218,7 @@ class CommentManager {
     init_head() {
         this.author_name = document.createElement('h6');
         this.author_name.className = "comment-name by-author";
-        this.author_name.innerText = this.comment.author.name;
+        this.author_name.innerText = this.comment.name;
         this.comment_head.appendChild(this.author_name);
         this.time = document.createElement('span');
         this.time.innerText = this.comment.time;
@@ -225,7 +226,7 @@ class CommentManager {
         this.icons_container = document.createElement('div');
         this.icons_container.className = 'icons-pack';
         this.comment_head.appendChild(this.icons_container);
-        this.iconsManager = new IconsManager(this.icons_container, this.comment.editable, this.comment.like_pack, this.comment.bookmark_state);
+        this.iconsManager = new IconsManager(this.icons_container, this.comment.editable, this.comment.like_number, this.comment.bookmark_state);
     }
 
     init_content() {
@@ -347,7 +348,7 @@ class CommentManager {
 
 
 class IconsManager {
-    constructor(container, editable, like_pack, bookmark_state) {
+    constructor(container, editable, like_number, bookmark_state) {
         this.in_edit_mode = false;
         this.bookmark_state = bookmark_state;
         this.container = container;
@@ -355,7 +356,7 @@ class IconsManager {
         this.like_container = document.createElement('div');
         this.like_container.className = 'like-pack';
         this.container.appendChild(this.like_container);
-        this.likeManager = new LikeManager(this.like_container, like_pack);
+        this.likeManager = new LikeManager(this.like_container, like_number);
 
         if (editable) {
             this.init_delete();
@@ -572,8 +573,8 @@ class IconsManager {
 
 
 class LikeManager {
-    constructor(container, like_pack) {
-        this.like_pack = like_pack;
+    constructor(container, like_number) {
+        this.like_number = like_number;
         this.container = container;
         this.init_icons();
         this.init_funcs();
@@ -589,8 +590,8 @@ class LikeManager {
         this.dislike.title = 'dislike';
         this.like_counter = document.createElement('h4');
         this.like_counter.className = 'like-counter';
-        this.like_counter.style.color = this.like_pack.like_numbers >= 0 ? 'green' : 'red';
-        this.like_counter.innerText = this.like_pack.like_numbers;
+        this.like_counter.style.color = this.like_number >= 0 ? 'green' : 'red';
+        this.like_counter.innerText = this.like_number;
         this.container.appendChild(this.like);
         this.container.appendChild(this.like_counter);
         this.container.appendChild(this.dislike);
@@ -598,8 +599,8 @@ class LikeManager {
     }
 
 
-    update(like_pack) {
-        this.like_counter.innerText = like_pack.like_counter;
+    update(like_number) {
+        this.like_counter.innerText = like_number;
     }
 
 
