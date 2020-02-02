@@ -18,14 +18,31 @@ def get_page(request, page):
     user = request.user
     comments = []
     for tweet in tweets:
-        editable = (user.username == tweet.get_username())  # todo: channeling model should add
-        comments.append(tweet.get_tweet_front(editable))
-    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
-            'can_write': user in page.get_all_admins()}  # todo: check this shit!!!!
-    return render(request, './twitting/commentsPage.html', data)
+        editable = (user.account == tweet.author)  # todo: channeling model should add
+        comments.append(tweet.get_tweet_front(editable, True))
 
+    can_write = user.account in page.get_all_admins()
+    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
+            'can_write': can_write}  # todo: check this shit!!!!
+    return render(request, './twitting/commentsPage.html', data)
 
 @login_required
 def my_page(request):
     page = Page.objects.get(page_id=request.user.username)
     return get_page(request, page)
+
+
+def get_tweet_page(request, tweet_id):
+    print('tweet')
+    tweet = Tweet.objects.get(id=tweet_id)
+    print(tweet)
+    user = request.user
+    comments = [tweet.get_tweet_front(user.account == tweet.author, True)]
+    print(comments)
+    if user:
+        can_write = user.account in page.get_all_admins()
+    else:
+        can_write = False
+    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
+            'can_write': can_write}  # todo: check this shit!!!!
+    return render(request, './twitting/commentsPage.html', data)
