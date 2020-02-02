@@ -39,7 +39,6 @@ class Tweet(models.Model):
     parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='comment', null=True,
                                      default=None)
     date_published = models.DateTimeField(auto_now=True, blank=False)
-    is_root = models.BooleanField()
 
     class Meta:
         verbose_name = 'توییت'
