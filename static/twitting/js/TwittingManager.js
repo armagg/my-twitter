@@ -8,7 +8,7 @@ class TwittingManager {
                 this.create_a_comment_box(reply);
             })
         });
-        if(can_write === 'True'){
+        if (can_write === 'True') {
             this.init_new_posting();
         }
     }
@@ -27,7 +27,7 @@ class TwittingManager {
     }
 
     comment_content_click(post_id) {
-        let url = location.origin + '/paging/tweet/' + post_id.substr(5,post_id.length);
+        let url = location.origin + '/paging/tweet/' + post_id.substr(5, post_id.length);
         location.replace(url);
     }
 
@@ -199,12 +199,12 @@ class CommentManager {
     }
 
     init_content() {
-        let content = this.comment.content.substr(1,this.comment.content.length-2);
+        let content = this.comment.content.substr(1, this.comment.content.length - 2);
         // this.comment_content.innerHTML = content;
         this.comment_content.id = this.comment.id + '-content';
         this.comment_content.onclick = this.click_comment_content.bind(this);
         window.content = content;
-        console.log('salam'.substr(1,-1));
+        console.log('salam'.substr(1, -1));
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
             charCounterCount: false,
@@ -327,16 +327,17 @@ class IconsManager {
         this.container.appendChild(this.like_container);
         this.likeManager = new LikeManager(this.like_container, like_number);
 
+        this.init_reply();
+        this.init_bookmark();
+        this.container.appendChild(this.bookmark);
+        this.container.appendChild(this.reply);
+
         if (editable) {
             this.init_delete();
             this.init_edit();
             this.init_cancel();
             this.init_submit();
-            this.init_reply();
             this.init_heavy_edit();
-            this.init_bookmark();
-            this.container.appendChild(this.bookmark);
-            this.container.appendChild(this.reply);
             this.container.appendChild(this.heavy_edit);
             this.container.appendChild(this.inline_edit);
             this.container.appendChild(this.delete);
