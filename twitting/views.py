@@ -7,6 +7,9 @@ from django.shortcuts import render
 
 
 # Create your views here.
+from paging.models import Page
+
+
 def comments(request):
     author = {
         'name': 'mmd',
@@ -51,7 +54,7 @@ def comments(request):
         for reply in comment['replys']:
             reply['id'] = 'a' + str(i)
             i += 1
-    data = {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge',
+    data = {'comments': comments, 'comments_json': json.dumps(comments), 'tittle': 'mmd pge',
             'can_write': True}
     return render(request, './twitting/commentsPage.html', data)
 
@@ -64,8 +67,10 @@ def my_page(request):
 @login_required
 def new_post(request):
     if request.POST:
-        username = request.POST.get('username')
+        username = request.user.username
         content = request.POST.get('content')
+        personal_page = Page.objects.filter(creator=request.user)
+        tweet =
         print(username, content)
     return HttpResponse('success', status=200)
 

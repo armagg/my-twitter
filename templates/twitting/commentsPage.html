@@ -109,7 +109,7 @@
     <script>
 
         window.user_username = '97110071';
-        let jsonObject = JSON.parse('{{ j | escapejs }}');
+        let jsonObject = JSON.parse('{{ comments_json | escapejs }}');
         new TwittingManager(jsonObject, '{{ can_write }}');
 
     </script>
