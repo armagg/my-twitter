@@ -60,6 +60,7 @@ def activate(request, username, code):
 
         account = Account(user=user)
         account.user = user
+        account.name = str(user.username)
         account.save()
 
         personal_page = Page(personal_page=True, title=user.username + ' page', creator=account,
@@ -123,9 +124,17 @@ def edit_view(request):
             form.save()
             return redirect('/home')
     else:
-        args = {'user' : request.user}
+        args = {'user': request.user}
         return render(request, 'accounting/profileedit.html', args)
 
 
 def profile(request):
     return render(request, 'accounting/profile.html')
+
+
+def forget_password_view(request):
+    return render(request, 'accounting/forgot_password.html')
+
+
+def reset_password_view(request):
+    return render(request, 'accounting/reset_password.html')

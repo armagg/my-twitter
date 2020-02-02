@@ -3,7 +3,7 @@
 {% block head %}
     {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Signup</title>
+    <title>Edit Profile</title>
     <link rel="stylesheet" href={% static 'vendors/mdi/css/materialdesignicons.min.css' %}>
     <link rel="stylesheet" href={% static 'vendors/base/vendor.bundle.base.css' %}>
     <link rel="stylesheet" href={% static 'css/style.css' %}>
@@ -41,9 +41,8 @@
                             <div class="auth-form-transparent text-left p-3">
                                 <div class="brand-logo">
                                 </div>
-                                <h4> Edit your profile here {{ user.email }}</h4>
-                                <h6 class="font-weight-light">Join us today! It takes only few steps</h6>
-                                <form class="pt-3" method="post" action="{% url 'accounting:signup' %}">
+                                <h4> Edit your profile here</h4>
+                                <form class="pt-3" method="post" action="{% url 'accounting:edit' %}">
                                     {% csrf_token %}
                                     <div class="form-group">
                                         <label>Username</label>
@@ -80,9 +79,9 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                                             </div>
-                                            <input type="text" name="username"
+                                            <input type="text" name="location"
                                                    class="form-control form-control-lg border-left-0"
-                                                   placeholder="Username"
+                                                   placeholder="Location"
                                                    value="{{ user.account.location }}">
                                         </div>
                                     </div>
@@ -94,9 +93,9 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                                             </div>
-                                            <input type="text" name="username"
+                                            <input type="text" name="bio"
                                                    class="form-control form-control-lg border-left-0"
-                                                   placeholder="Username"
+                                                   placeholder="Bio"
                                                    value="{{ user.account.bio }}">
                                         </div>
                                     </div>
@@ -108,24 +107,19 @@
                         <i class="mdi mdi-account-outline text-primary"></i>
                       </span>
                                             </div>
-                                            <input type="text" name="username"
+                                            <input type="text" name="name"
                                                    class="form-control form-control-lg border-left-0"
-                                                   placeholder="Username"
+                                                   placeholder="Name"
                                                    value="{{ user.account.name }}">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label>Do you want to protect your tweegs?</label>
-                                        <div class="input-group">
+                                        <br class="input-group">
                                             <div class="input-group-prepend bg-transparent">
-                      <span class="input-group-text bg-transparent border-right-0">
-                        <i class="mdi mdi-account-outline text-primary"></i>
-                      </span>
                                             </div>
-                                            <input type="text" name="username"
-                                                   class="form-control form-control-lg border-left-0"
-                                                   placeholder="Username"
-                                                   value="No">
+                                            <input type="radio" name="q1" VALUE="True" {% if user.account.is_private %} checked {% endif %}>&nbsp;Yes (your page will be accessible just <b>by your followers</b>)</br></br>
+                                            <input type="radio" name="q1" VALUE="False" {% if not user.account.is_private %} checked {% endif %}>&nbsp;No &nbsp;(your page will be accessible <b>by all twigger users</b>)
                                         </div>
                                     </div>
                                     <div class="mt-3">
