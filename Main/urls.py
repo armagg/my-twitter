@@ -25,5 +25,5 @@ urlpatterns = [
     url(r'^accounting/', include('accounting.urls')),
     url(r'^twitting/', include('twitting.urls')),
     url(r'^paging/', include('paging.urls')),
-    url('', include('homeservice.urls')),
+    url(r'^home/', include('homeservice.urls')),
 ]

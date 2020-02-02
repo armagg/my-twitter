@@ -108,33 +108,9 @@
 
     <script>
 
-        var csrf = '{% csrf_token %}';
-        let j = 1;
-        let a, b;
-        for (let i = 0; i < csrf.length; i++) {
-            if (csrf[i] === '=') {
-                if (j < 3) {
-                    j++;
-                } else {
-                    a = i + 1;
-                }
-            }
-        }
-        for (i = a + 1; i < csrf.length; i++) {
-            if (csrf[i] === '"') {
-                b = i;
-            }
-        }
-        let str = [];
-        for(let i = a+1; i< b; i++){
-            str.push(csrf[i]);
-        }
-        csrf = str.join('');
-
-
-
+        window.user_username = '97110071';
         let jsonObject = JSON.parse('{{ j | escapejs }}');
-        new TwittingManager(jsonObject, '{{ can_write }}', id = '97110071');
+        new TwittingManager(jsonObject, '{{ can_write }}');
 
     </script>
 

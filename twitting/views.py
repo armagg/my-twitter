@@ -1,6 +1,8 @@
 import copy
 import json
 
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render
 
 
@@ -49,10 +51,40 @@ def comments(request):
         for reply in comment['replys']:
             reply['id'] = 'a' + str(i)
             i += 1
-    return render(request, './twitting/commentsPage.html',
-                  {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge',
-                   'can_write': True})
+    data = {'comments': comments, 'j': json.dumps(comments), 'tittle': 'mmd pge',
+            'can_write': True}
+    return render(request, './twitting/commentsPage.html', data)
 
-
+@login_required
 def my_page(request):
+    print('mypage')
     return render(request, 'twitting/commentsPage.html')
+
+
+@login_required
+def new_post(request):
+    if request.POST:
+        username = request.POST.get('username')
+        content = request.POST.get('content')
+        print(username, content)
+    return HttpResponse('success', status=200)
+
+
+@login_required
+def reply(request):
+    if request.POST:
+        username = request.POST.get('username')
+        content = request.POST.get('content')
+        post_id = request.POST.get('post_id')
+        print(username, content, post_id)
+    return HttpResponse('success', status=200)
+
+
+@login_required
+def edit(request):
+    if request.POST:
+        username = request.POST.get('username')
+        content = request.POST.get('content')
+        post_id = request.POST.get('post_id')
+        print(username, content, post_id)
+    return HttpResponse('success', status=200)

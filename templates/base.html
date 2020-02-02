@@ -103,9 +103,15 @@
             <a href="{% url 'home' %}"><i class="link blue home icon large" title="Home"></i></a>
         </div>
 
-        <div class="icon-container">
-            <a href="{% url 'mypage' %}"><i class="link blue dochub icon large" title="My page"></i></a>
-        </div>
+        {% if request.user.is_authenticated %}
+            <div class="icon-container">
+                <a href="{% url 'mypage' %}"><i class="link blue dochub icon large" title="My page"></i></a>
+            </div>
+            <div class="icon-container">
+                <a href="{% url 'accounting:logout' %}"><i class="link blue external alternate icon large" title="Logout"></i></a>
+            </div>
+        {% endif %}
+
 
     </div>
 
@@ -132,6 +138,31 @@
 
     </div>
 </nav>
+
+<script>
+    var csrf = '{% csrf_token %}';
+    let j = 1;
+    let a, b;
+    for (let i = 0; i < csrf.length; i++) {
+        if (csrf[i] === '=') {
+            if (j < 3) {
+                j++;
+            } else {
+                a = i + 1;
+            }
+        }
+    }
+    for (i = a + 1; i < csrf.length; i++) {
+        if (csrf[i] === '"') {
+            b = i;
+        }
+    }
+    let str = [];
+    for (let i = a + 1; i < b; i++) {
+        str.push(csrf[i]);
+    }
+    window.csrf = str.join('');
+</script>
 
 {% block body %}
 

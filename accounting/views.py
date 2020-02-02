@@ -1,7 +1,7 @@
 import json
 
 from django.conf import settings
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.core.mail import send_mail
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
@@ -51,11 +51,14 @@ def activate(request, username, code):
         user = User.objects.filter(username=username).first()
         user.is_active = True
         user.save()
-        personal_page = Page(personal_page=True)
-        personal_page.save()
-        account = Account(user=user, personal_page=personal_page)
-        Account.user = user
+
+        account = Account(user=user)
+        account.user = user
         account.save()
+
+        personal_page = Page(personal_page=True, title=user.username + ' page', creator=account)
+        personal_page.save()
+
         token.delete()
         return render(request, 'accounting/activate_done.html')
     else:
@@ -71,7 +74,7 @@ def signup_view(request):
         if form.is_valid():
             user = form.save()
             user.refresh_from_db()
-            user.is_active = True
+            user.is_active = False
             user.save()
 
             current_site = get_current_site(request)
@@ -95,3 +98,8 @@ def signup_view(request):
     else:
         form = SignUpForm()
         return render(request, 'accounting/signup.html', {'form': form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('home')

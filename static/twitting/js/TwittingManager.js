@@ -1,6 +1,5 @@
 class TwittingManager {
-    constructor(comments, can_write, username) {
-        window.user_username = username;
+    constructor(comments, can_write) {
         this.comments = comments;
 
         Array.from(this.comments).forEach(comment => {
@@ -40,7 +39,7 @@ class TwittingManager {
         //     type: 'POST',
         //     url: url,
         //     data: {
-        //         csrfmiddlewaretoken: csrf,
+        //         csrfmiddlewaretoken: window.csrf,
         //     },
         //     success: function (json) {
         //     },
@@ -69,14 +68,16 @@ class TwittingManager {
     }
 
     new_post(post_content) {
-        let url = location.origin + '/new';
-        let data = JSON.stringify({username: window.user_username, content: post_content});
+        let url = location.origin + '/twitting/newpost/';
+        console.log(url);
+        // let data = JSON.stringify({username: window.user_username, content: post_content});
         $.ajax({
             type: 'POST',
             url: url,
             data: {
+                username: window.user_username,
+                content: post_content,
                 csrfmiddlewaretoken: csrf,
-                data: data,
             },
             success: function (json) {
                 Swal.fire(
@@ -102,7 +103,32 @@ class TwittingManager {
 
 
     edit_post(content, post_id) {
-        alert('edit post\n' + post_id + '\n' + content);
+        let url = location.origin + '/twitting/edit/';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                post_id: post_id,
+                username: window.user_username,
+                content: content,
+                csrfmiddlewaretoken: csrf,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'your reply was sent.',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'your reply was not sent.',
+                    'error'
+                );
+            }
+        });
+        // alert('edit post\n' + post_id + '\n' + content);
     }
 
     delete_post(content, post_id) {
@@ -119,7 +145,32 @@ class TwittingManager {
     }
 
     reply_post(post_id, post_content) {
-        alert(post_id + ' was replyed by text :' + post_content);
+        let url = location.origin + '/twitting/reply/';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                post_id: post_id,
+                username: window.user_username,
+                content: post_content,
+                csrfmiddlewaretoken: csrf,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'your reply was sent.',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'your reply was not sent.',
+                    'error'
+                );
+            }
+        });
+        // alert(post_id + ' was replyed by text :' + post_content);
     }
 }
 

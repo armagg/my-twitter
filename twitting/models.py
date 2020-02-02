@@ -29,11 +29,12 @@ from accounting.models import Account
 #
 #         children = Tweet.objects.get(parent_tweet=self)
 #         return children
+# from paging.models import Page
 from paging.models import Page
 
 
 class Tweet(models.Model):
     author = models.ForeignKey(Account, verbose_name='author', on_delete=PROTECT, related_name='author', default=None)
     document = models.TextField(verbose_name='متن', name='document')
-    page = models.ForeignKey(Page, null=True, on_delete=models.CASCADE)
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, default=None)
     parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='comment', null=True)
