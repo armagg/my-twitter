@@ -1,9 +1,10 @@
-from django.contrib import admin
-from django.urls import path
 from django.conf.urls import url, include
+from django.urls import path
 
 from paging import views
 
 urlpatterns = [
-    url(r'^mypage/$', views.my_page, name='mypage')
+    path('page/<str:page_id>', views.page, name='view_page'),
+    path('tweet/<str:tweet_id>', views.get_tweet_page, name='view_tweet'),
+    path('my-page', views.my_page, name='my_page'),
 ]

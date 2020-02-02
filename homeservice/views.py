@@ -11,3 +11,7 @@ def new(request):
     if request.POST:
         print(request.POST)
     return render(request, 'home.html')
+
+
+def list(request):
+    return render(request, 'commentList/list.html', {'numbers': [None] * 10})

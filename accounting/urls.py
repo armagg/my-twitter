@@ -4,7 +4,7 @@ from django.urls import path
 
 from accounting import views
 
-# SET THE NAMESPACE!
+
 app_name = 'accounting'
 # Be careful setting the name to just /login use userlogin instead!
 urlpatterns = [

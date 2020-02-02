@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'following',
     'alerting',
     'twitting.apps.TwittingConfig',
-    'channelling',
     'homeservice',
     'paging',
     'bookmarking',

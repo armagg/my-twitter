@@ -4,12 +4,13 @@ class TwittingManager {
 
         Array.from(this.comments).forEach(comment => {
             this.create_a_comment_box(comment);
-            Array.from(comment.replys).forEach(reply => {
+            Array.from(comment.replies).forEach(reply => {
                 this.create_a_comment_box(reply);
             })
         });
-
-        this.init_new_posting();
+        if(can_write === 'True'){
+            this.init_new_posting();
+        }
     }
 
 
@@ -26,39 +27,32 @@ class TwittingManager {
     }
 
     comment_content_click(post_id) {
-        let url = location.origin + '/new';
-        let data = JSON.stringify(post_id);
+        let url = location.origin + '/paging/tweet/' + post_id.substr(5,post_id.length);
         console.log(url);
-        console.log(data);
+        console.log(url);
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                csrfmiddlewaretoken: csrf,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'your new post was sent.',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'your new post was not sent.',
+                    'error'
+                );
+            }
+        });
 
-        // $.post(url);
-
-        console.log(csrf);
-
-        // $.ajax({
-        //     type: 'POST',
-        //     url: url,
-        //     data: {
-        //         csrfmiddlewaretoken: window.csrf,
-        //     },
-        //     success: function (json) {
-        //     },
-        //     error: function (xhr, errmsg, err) {
-        //         alert('error');
-        //     }
-        // });
-
-        // $.ajax({
-        //     type: 'POST',
-        //     url: url,
-        //     data: data,
-        //     dataType: 'data',
-        //     success: function (data) {
-        //         alert('success');
-        //     }
-        // });
-
-        alert(post_id + ' was clicked');
+        // alert(post_id + ' was clicked');
     }
 
 
@@ -217,7 +211,7 @@ class CommentManager {
     init_head() {
         this.author_name = document.createElement('h6');
         this.author_name.className = "comment-name by-author";
-        this.author_name.innerText = this.comment.author.name;
+        this.author_name.innerText = this.comment.name;
         this.comment_head.appendChild(this.author_name);
         this.time = document.createElement('span');
         this.time.innerText = this.comment.time;
@@ -225,7 +219,7 @@ class CommentManager {
         this.icons_container = document.createElement('div');
         this.icons_container.className = 'icons-pack';
         this.comment_head.appendChild(this.icons_container);
-        this.iconsManager = new IconsManager(this.icons_container, this.comment.editable, this.comment.like_pack, this.comment.bookmark_state);
+        this.iconsManager = new IconsManager(this.icons_container, this.comment.editable, this.comment.like_number, this.comment.bookmark_state);
     }
 
     init_content() {
@@ -347,7 +341,7 @@ class CommentManager {
 
 
 class IconsManager {
-    constructor(container, editable, like_pack, bookmark_state) {
+    constructor(container, editable, like_number, bookmark_state) {
         this.in_edit_mode = false;
         this.bookmark_state = bookmark_state;
         this.container = container;
@@ -355,7 +349,7 @@ class IconsManager {
         this.like_container = document.createElement('div');
         this.like_container.className = 'like-pack';
         this.container.appendChild(this.like_container);
-        this.likeManager = new LikeManager(this.like_container, like_pack);
+        this.likeManager = new LikeManager(this.like_container, like_number);
 
         if (editable) {
             this.init_delete();
@@ -572,8 +566,8 @@ class IconsManager {
 
 
 class LikeManager {
-    constructor(container, like_pack) {
-        this.like_pack = like_pack;
+    constructor(container, like_number) {
+        this.like_number = like_number;
         this.container = container;
         this.init_icons();
         this.init_funcs();
@@ -589,8 +583,8 @@ class LikeManager {
         this.dislike.title = 'dislike';
         this.like_counter = document.createElement('h4');
         this.like_counter.className = 'like-counter';
-        this.like_counter.style.color = this.like_pack.like_numbers >= 0 ? 'green' : 'red';
-        this.like_counter.innerText = this.like_pack.like_numbers;
+        this.like_counter.style.color = this.like_number >= 0 ? 'green' : 'red';
+        this.like_counter.innerText = this.like_number;
         this.container.appendChild(this.like);
         this.container.appendChild(this.like_counter);
         this.container.appendChild(this.dislike);
@@ -598,8 +592,8 @@ class LikeManager {
     }
 
 
-    update(like_pack) {
-        this.like_counter.innerText = like_pack.like_counter;
+    update(like_number) {
+        this.like_counter.innerText = like_number;
     }
 
 
