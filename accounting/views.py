@@ -9,10 +9,14 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.models import User
 from django.utils.html import strip_tags
 from django.template.loader import render_to_string
+from django.urls import reverse
+from django.contrib.auth.forms import UserChangeForm
 
+from .forms import SignUpForm, ProfileEditForm
 from paging.models import Page
 from .forms import SignUpForm
 from .models import Token, create_new_token, Account
+from homeservice.views import homepage
 
 
 def login_view(request):
@@ -102,11 +106,21 @@ def signup_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('/home')
 
 
 def edit_view(request):
-    return render(request, 'accounting/edit2.html')
+    if not request.user.is_authenticated:
+        return redirect('/home')
+    if request.method == 'POST':
+        form = ProfileEditForm(request, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/home')
+    else:
+        form = ProfileEditForm(instance=request.user)
+        args = {'form' : form}
+        return render(request, 'accounting/profileedit.html', args)
 
 
 def profile(request):
