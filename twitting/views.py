@@ -65,7 +65,6 @@ def comments(request):
 def new_post(request):
     if request.POST:
         content = request.POST.get('content')
-        print(content)
         personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()
         tweet = Tweet(document=content, author=request.user.account, parent_tweet=None, page=personal_page)
         tweet.save()
@@ -113,3 +112,30 @@ def delete(request):
         tweet = Tweet.objects.filter(id=post_id).first()
         print(post_id)
     return HttpResponse('success', status=200)
+
+
+@login_required
+def mypage(request):
+    personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()
+    tweets = Tweet.objects.filter(page=personal_page, parent_tweet=None)
+    author = {
+        'name': request.user.username,
+        'avatar': 'https://avatars2.githubusercontent.com/u/45905632?s=460&v=4',
+    }
+    comments = []
+    for tweet in tweets:
+        comments.append({
+            'bookmark_state': False,
+            'like_pack': {
+                'like_numbers': 10
+            },
+            'editable': True,
+            'author': author,
+            'content': tweet.document,
+            'time': 'hace 20 minutos',
+            'replys': [],
+            'id': 'tweet' + str(tweet.id)
+        })
+    data = {'comments': comments, 'comments_json': json.dumps(comments), 'tittle': request.user.username + ' pge',
+            'can_write': True}
+    return render(request, './twitting/commentsPage.html', data)

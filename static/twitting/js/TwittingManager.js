@@ -233,9 +233,13 @@ class CommentManager {
     }
 
     init_content() {
-        this.comment_content.innerText = this.comment.content;
+        window.content = this.comment.content.substr(1,this.comment.content.length-1);
+        console.log(window.content);
         this.comment_content.id = this.comment.id + '-content';
         this.comment_content.onclick = this.click_comment_content.bind(this);
+        window.content = this.comment.content;
+        console.log(window.content);
+        console.log('salam'.substr(1,-1));
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
             charCounterCount: false,
@@ -243,8 +247,8 @@ class CommentManager {
         }, function () {
             this.edit.off();
             this.toolbar.hide();
+            this.html.set(window.content)
         });
-        window.e = this.editor;
     }
 
     init_editing_rules() {
