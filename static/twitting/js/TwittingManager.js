@@ -28,31 +28,7 @@ class TwittingManager {
 
     comment_content_click(post_id) {
         let url = location.origin + '/paging/tweet/' + post_id.substr(5,post_id.length);
-        console.log(url);
-        console.log(url);
-        $.ajax({
-            type: 'POST',
-            url: url,
-            data: {
-                csrfmiddlewaretoken: csrf,
-            },
-            success: function (json) {
-                Swal.fire(
-                    'Send!',
-                    'your new post was sent.',
-                    'success'
-                );
-            },
-            error: function (xhr, errmsg, err) {
-                Swal.fire(
-                    'Error!',
-                    'your new post was not sent.',
-                    'error'
-                );
-            }
-        });
-
-        // alert(post_id + ' was clicked');
+        location.replace(url);
     }
 
 

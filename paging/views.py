@@ -26,6 +26,7 @@ def get_page(request, page):
             'can_write': can_write}  # todo: check this shit!!!!
     return render(request, './twitting/commentsPage.html', data)
 
+
 @login_required
 def my_page(request):
     page = Page.objects.get(page_id=request.user.username)
@@ -33,16 +34,10 @@ def my_page(request):
 
 
 def get_tweet_page(request, tweet_id):
-    print('tweet')
     tweet = Tweet.objects.get(id=tweet_id)
-    print(tweet)
     user = request.user
     comments = [tweet.get_tweet_front(user.account == tweet.author, True)]
-    print(comments)
-    if user:
-        can_write = user.account in page.get_all_admins()
-    else:
-        can_write = False
-    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
-            'can_write': can_write}  # todo: check this shit!!!!
+    data = {'comments': comments, 'comments_json': json.dumps(comments),
+            'title': 'replies of ' + tweet.author.name + 'posts',
+            'can_write': False}  # todo: check this shit!!!!
     return render(request, './twitting/commentsPage.html', data)
