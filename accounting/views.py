@@ -1,14 +1,11 @@
 import json
 
-from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.models import User
-from django.utils.html import strip_tags
+from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
 from paging.models import Page
 from .forms import SignUpForm
@@ -56,7 +53,8 @@ def activate(request, username, code):
         account.user = user
         account.save()
 
-        personal_page = Page(personal_page=True, title=user.username + ' page', creator=account)
+        personal_page = Page(personal_page=True, title=user.username + ' page', creator=account,
+                             id=account.user.username)
         personal_page.save()
 
         token.delete()
