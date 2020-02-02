@@ -63,7 +63,9 @@ def activate(request, username, code):
         account.save()
 
         personal_page = Page(personal_page=True, title=user.username + ' page', creator=account,
-                             id=account.user.username)
+                             page_id=account.user.username)
+        personal_page.save()
+        personal_page.admins.add(Account=account)
         personal_page.save()
 
         token.delete()

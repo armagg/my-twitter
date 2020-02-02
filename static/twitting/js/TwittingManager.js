@@ -4,7 +4,7 @@ class TwittingManager {
 
         Array.from(this.comments).forEach(comment => {
             this.create_a_comment_box(comment);
-            Array.from(comment.replys).forEach(reply => {
+            Array.from(comment.replies).forEach(reply => {
                 this.create_a_comment_box(reply);
             })
         });

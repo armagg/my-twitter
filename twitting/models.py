@@ -46,3 +46,23 @@ class Tweet(models.Model):
 
     def get_username(self):
         return self.author.user.username
+
+    def get_like_number(self):
+
+        return 10
+
+    def get_tweet_front(self, editable: bool):
+        author = self.author
+        return {
+            'bookmark_state': False,
+            'like_pack': {
+                'like_numbers': self.get_like_number()
+            },
+            'editable': editable,
+            'name': author.name,
+            'avatar': '',
+            'content': self.document,
+            'time': self.date_published.isoformat(),
+            'replies': [],
+            'id': 'tweet' + str(self.id)
+        }

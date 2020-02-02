@@ -29,7 +29,7 @@ def comments(request):
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
         'time': 'hace 20 minutos',
-        'replys': [],
+        'replies': [],
         'id': 1,
     }
     comment2 = {
@@ -42,7 +42,7 @@ def comments(request):
         'content':
             'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit omnis animi et iure. laudantium vitae, praesentium optio, sapiente distinctio illo?',
         'time': 'hace 20 minutos',
-        'replys': [comment1, copy.deepcopy(comment1)],
+        'replies': [comment1, copy.deepcopy(comment1)],
         'id': 2
     }
 
@@ -53,10 +53,10 @@ def comments(request):
     for comment in comments:
         comment['id'] = 'tweet' + str(i)
         i += 1
-        for reply in comment['replys']:
+        for reply in comment['replies']:
             reply['id'] = 'tweet' + str(i)
             i += 1
-    data = {'comments': comments, 'comments_json': json.dumps(comments), 'tittle': 'mmd pge',
+    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': 'salam',
             'can_write': True}
     return render(request, './twitting/commentsPage.html', data)
 

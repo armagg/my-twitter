@@ -4,6 +4,7 @@ import string
 from django.contrib.auth.models import User
 from django.db import models
 
+
 # from paging.models import Page
 
 
@@ -18,6 +19,7 @@ class Account(models.Model):
 
     def __str__(self):
         return 'account of user by username: ' + self.user.username
+
 
 
 class Token(models.Model):
@@ -37,4 +39,3 @@ def create_new_token(username):
 def get_random_code():
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(20))
-

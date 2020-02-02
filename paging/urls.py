@@ -1,9 +1,9 @@
-from django.contrib import admin
-from django.urls import path
 from django.conf.urls import url, include
+from django.urls import path
 
 from paging import views
 
 urlpatterns = [
-    url(r'^page/<str:page_id>$', views, name='view_page')
+    path('page/<str:page_id>', views.page, name='view_page'),
+    path('my-page', views.my_page, name='my_page')
 ]
