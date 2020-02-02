@@ -6,7 +6,9 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 
+
 # Create your views here.
+from accounting.models import Account
 from paging.models import Page
 from twitting.models import Tweet
 
@@ -84,9 +86,12 @@ def reply(request):
 @login_required
 def edit(request):
     if request.POST:
-        username = request.POST.get('username')
+        username = request.user.username
         content = request.POST.get('content')
-        post_id = request.POST.get('post_id')
+        post_id = int(request.POST.get('post_id')[5:])
+        acc = Account.objects.get(user__username=username)
+        tweet = Tweet().objects.get(Q(author=acc) & Q(id=post_id))
+        print(tweet)
         print(username, content, post_id)
     return HttpResponse('success', status=200)
 
