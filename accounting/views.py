@@ -90,7 +90,6 @@ def signup_view(request):
             # send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
             return render(request, 'accounting/activation_page.html', data)
 
-            return render(request, 'accounting/activation_sent.html')
         else:
             return render(request, 'accounting/signup.html', {'form': form, 'errors': json.dumps(form.errors)})
     else:

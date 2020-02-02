@@ -5,5 +5,5 @@ from django.conf.urls import url, include
 from paging import views
 
 urlpatterns = [
-    url(r'^mypage/$', views.my_page, name='mypage')
+    url(r'^page/<str:page_id>$', views, name='view_page')
 ]

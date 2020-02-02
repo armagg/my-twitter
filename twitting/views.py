@@ -80,11 +80,12 @@ def reply(request):
             post_id = int(request.POST.get('post_id')[5:])
             parent_tweet = Tweet.objects.get(id=post_id)
             acc = Account.objects.get(user__username=username)
-            tweet = Tweet(author=acc, document=content, parent_tweet=parent_tweet, is_root=False,
+            tweet = Tweet(author=acc, document=content, parent_tweet=parent_tweet,
                           page=parent_tweet.page)
             tweet.save()
             return HttpResponse('success', status=200)
-        except:
+        except Exception as e:
+            print(e)
             return HttpResponse('failed', status=400)
 
 
@@ -94,48 +95,28 @@ def edit(request):
         try:
             username = request.user.username
             document = request.POST.get('content')
-            post_id = int(request.POST.get('post_id')[1:])
+            post_id = int(request.POST.get('post_id')[5:])
             acc = Account.objects.get(user__username=username)
-            tweet = Tweet.objects.get(Q(author=acc) & Q(id=post_id))
+            tweet = Tweet.objects.get(Q(id=post_id))
+            if acc.user.username != username:
+                return HttpResponse('access denied', status=403)
             tweet.document = document
             tweet.save()
             return HttpResponse('success', status=200)
         except Exception as e:
+            print(e)
             return HttpResponse('failed', status=400)
 
 
 @login_required
 def delete(request):
     if request.POST:
-        post_id = request.POST.get('post_id')
-        post_id = post_id[5:]
-        tweet = Tweet.objects.filter(id=post_id).first()
-        print(post_id)
+        username = request.user.username
+        post_id = int(request.POST.get('post_id')[5:])
+        tweet = Tweet.objects.get(Q(id=post_id))
+        if tweet.get_username() != username:
+            return HttpResponse('access denied', status=403)
+        tweet.delete()
+
     return HttpResponse('success', status=200)
 
-
-@login_required
-def mypage(request):
-    personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()
-    tweets = Tweet.objects.filter(page=personal_page, parent_tweet=None)
-    author = {
-        'name': request.user.username,
-        'avatar': 'https://avatars2.githubusercontent.com/u/45905632?s=460&v=4',
-    }
-    comments = []
-    for tweet in tweets:
-        comments.append({
-            'bookmark_state': False,
-            'like_pack': {
-                'like_numbers': 10
-            },
-            'editable': True,
-            'author': author,
-            'content': tweet.document,
-            'time': 'hace 20 minutos',
-            'replys': [],
-            'id': 'tweet' + str(tweet.id)
-        })
-    data = {'comments': comments, 'comments_json': json.dumps(comments), 'tittle': request.user.username + ' pge',
-            'can_write': True}
-    return render(request, './twitting/commentsPage.html', data)

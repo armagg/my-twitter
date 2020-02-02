@@ -11,5 +11,4 @@ urlpatterns = [
     url(r'^reply/$', views.reply, name='newpost'),
     url(r'^edit/$', views.edit, name='newpost'),
     url(r'^delete/$', views.delete, name='delete'),
-    url(r'^my/$', views.mypage, name='my'),
 ]
