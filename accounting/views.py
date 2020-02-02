@@ -103,3 +103,7 @@ def signup_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+
+def edit_view(request):
+    return render(request, 'accounting/edit2.html')
