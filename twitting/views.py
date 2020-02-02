@@ -75,11 +75,18 @@ def new_post(request):
 @login_required
 def reply(request):
     if request.POST:
-        username = request.POST.get('username')
-        content = request.POST.get('content')
-        post_id = request.POST.get('post_id')
-        print(username, content, post_id)
-    return HttpResponse('success', status=200)
+        try:
+            username = request.user.username
+            content = request.POST.get('content')
+            post_id = int(request.POST.get('post_id')[5:])
+            parent_tweet = Tweet.objects.get(id=post_id)
+            acc = Account.objects.get(user__username=username)
+            tweet = Tweet(author=acc, document=content, parent_tweet=parent_tweet, is_root=False,
+                          page=parent_tweet.page)
+            tweet.save()
+            return HttpResponse('success', status=200)
+        except:
+            return HttpResponse('failed', status=400)
 
 
 @login_required
@@ -95,7 +102,7 @@ def edit(request):
             tweet.save()
             return HttpResponse('success', status=200)
         except Exception as e:
-            return HttpResponse('failed', 400)
+            return HttpResponse('failed', status=400)
 
 
 @login_required
