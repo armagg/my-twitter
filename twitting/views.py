@@ -6,7 +6,6 @@ from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 
-
 # Create your views here.
 from accounting.models import Account
 from paging.models import Page
@@ -86,14 +85,17 @@ def reply(request):
 @login_required
 def edit(request):
     if request.POST:
-        username = request.user.username
-        document = request.POST.get('content')
-        post_id = int(request.POST.get('post_id')[1:])
-        acc = Account.objects.get(user__username=username)
-        tweet = Tweet.objects.get(Q(author=acc) & Q(id=post_id))
-        tweet.document = document
-        tweet.save()
-    return HttpResponse('success', status=200)
+        try:
+            username = request.user.username
+            document = request.POST.get('content')
+            post_id = int(request.POST.get('post_id')[1:])
+            acc = Account.objects.get(user__username=username)
+            tweet = Tweet.objects.get(Q(author=acc) & Q(id=post_id))
+            tweet.document = document
+            tweet.save()
+            return HttpResponse('success', status=200)
+        except Exception as e:
+            return HttpResponse('failed', 400)
 
 
 @login_required
