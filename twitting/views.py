@@ -63,6 +63,7 @@ def comments(request):
 
 @login_required
 def new_post(request):
+    print('new post')
     if request.POST:
         content = request.POST.get('content')
         personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()

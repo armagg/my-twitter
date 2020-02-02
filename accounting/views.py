@@ -107,3 +107,7 @@ def logout_view(request):
 
 def edit_view(request):
     return render(request, 'accounting/edit2.html')
+
+
+def profile(request):
+    return render(request, 'accounting/profile.html')
