@@ -118,8 +118,7 @@ def edit_view(request):
             form.save()
             return redirect('/home')
     else:
-        form = ProfileEditForm(instance=request.user)
-        args = {'form' : form}
+        args = {'user' : request.user}
         return render(request, 'accounting/profileedit.html', args)
 
 
