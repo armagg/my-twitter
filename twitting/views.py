@@ -87,12 +87,12 @@ def reply(request):
 def edit(request):
     if request.POST:
         username = request.user.username
-        content = request.POST.get('content')
-        post_id = int(request.POST.get('post_id')[5:])
+        document = request.POST.get('content')
+        post_id = int(request.POST.get('post_id')[1:])
         acc = Account.objects.get(user__username=username)
-        tweet = Tweet().objects.get(Q(author=acc) & Q(id=post_id))
-        print(tweet)
-        print(username, content, post_id)
+        tweet = Tweet.objects.get(Q(author=acc) & Q(id=post_id))
+        tweet.document = document
+        tweet.save()
     return HttpResponse('success', status=200)
 
 
