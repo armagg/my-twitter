@@ -70,7 +70,6 @@ class TwittingManager {
     new_post(post_content) {
         let url = location.origin + '/twitting/newpost/';
         console.log(url);
-        // let data = JSON.stringify({username: window.user_username, content: post_content});
         $.ajax({
             type: 'POST',
             url: url,
@@ -114,14 +113,14 @@ class TwittingManager {
             success: function (json) {
                 Swal.fire(
                     'Send!',
-                    'your reply was sent.',
+                    'your edit was done successfully.',
                     'success'
                 );
             },
             error: function (xhr, errmsg, err) {
                 Swal.fire(
                     'Error!',
-                    'your reply was not sent.',
+                    'your edit was not done successfully.',
                     'error'
                 );
             }
@@ -230,12 +229,11 @@ class CommentManager {
     }
 
     init_content() {
-        window.content = this.comment.content.substr(1,this.comment.content.length-2);
-        console.log(window.content);
-        this.comment_content.innerHTML = window.content;
+        let content = this.comment.content.substr(1,this.comment.content.length-2);
+        // this.comment_content.innerHTML = content;
         this.comment_content.id = this.comment.id + '-content';
         this.comment_content.onclick = this.click_comment_content.bind(this);
-        window.content = this.comment.content;
+        window.content = content;
         console.log('salam'.substr(1,-1));
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
@@ -244,7 +242,9 @@ class CommentManager {
         }, function () {
             this.edit.off();
             this.toolbar.hide();
+            this.html.set(content);
         });
+        // this.editor.html.set(content);
     }
 
     init_editing_rules() {
@@ -303,6 +303,7 @@ class CommentManager {
                 f(bookmark_state, this.comment.id);
             }.bind(this);
             this.iconsManager.add_listener(func, 'bookmark');
+            return;
         }
 
         if (func_name === 'reply') {
@@ -656,8 +657,10 @@ function create_a_function_to_call_on_editor_result(func, inline_editor = undefi
                 html: '<div id = "swal-editor" ></div>',
                 onOpen: function () {
                     window.reply_post_editor = new FroalaEditor('#swal-editor', {
+                        height: 500,
                         attribution: false,
                         charCounterCount: false,
+                        documentReady: true
                     }, function () {
                         if (inline_editor !== undefined) {
                             window.reply_post_editor.html.set(inline_editor.html.get());

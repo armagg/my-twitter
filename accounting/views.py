@@ -1,15 +1,24 @@
 import json
 
+from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
+from django.core.mail import send_mail
+from django.http import HttpResponse
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
+from django.urls import reverse
+from django.contrib.auth.forms import UserChangeForm
 from django.utils.html import strip_tags
 
+from .forms import SignUpForm, ProfileEditForm
 from paging.models import Page
 from .forms import SignUpForm
 from .models import Token, create_new_token, Account
+from homeservice.views import homepage
 
 
 def login_view(request):
@@ -90,6 +99,7 @@ def signup_view(request):
             # send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
             return render(request, 'accounting/activation_page.html', data)
 
+            return render(request, 'accounting/activation_sent.html')
         else:
             return render(request, 'accounting/signup.html', {'form': form, 'errors': json.dumps(form.errors)})
     else:
@@ -99,8 +109,21 @@ def signup_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('home')
+    return redirect('/home')
 
 
 def edit_view(request):
-    return render(request, 'accounting/edit2.html')
+    if not request.user.is_authenticated:
+        return redirect('/home')
+    if request.method == 'POST':
+        form = ProfileEditForm(request, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('/home')
+    else:
+        args = {'user' : request.user}
+        return render(request, 'accounting/profileedit.html', args)
+
+
+def profile(request):
+    return render(request, 'accounting/profile.html')
