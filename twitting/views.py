@@ -2,12 +2,13 @@ import copy
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render
 
-
 # Create your views here.
 from paging.models import Page
+from twitting.models import Tweet
 
 
 def comments(request):
@@ -49,29 +50,24 @@ def comments(request):
         comments.append(copy.deepcopy(comment2))
     i = 0
     for comment in comments:
-        comment['id'] = 'a' + str(i)
+        comment['id'] = 'tweet' + str(i)
         i += 1
         for reply in comment['replys']:
-            reply['id'] = 'a' + str(i)
+            reply['id'] = 'tweet' + str(i)
             i += 1
     data = {'comments': comments, 'comments_json': json.dumps(comments), 'tittle': 'mmd pge',
             'can_write': True}
     return render(request, './twitting/commentsPage.html', data)
 
-@login_required
-def my_page(request):
-    print('mypage')
-    return render(request, 'twitting/commentsPage.html')
-
 
 @login_required
 def new_post(request):
     if request.POST:
-        username = request.user.username
         content = request.POST.get('content')
-        personal_page = Page.objects.filter(creator=request.user)
-        tweet =
-        print(username, content)
+        print(content)
+        personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()
+        tweet = Tweet(document=content, author=request.user.account, parent_tweet=None, page=personal_page)
+        tweet.save()
     return HttpResponse('success', status=200)
 
 
@@ -92,4 +88,14 @@ def edit(request):
         content = request.POST.get('content')
         post_id = request.POST.get('post_id')
         print(username, content, post_id)
+    return HttpResponse('success', status=200)
+
+
+@login_required
+def delete(request):
+    if request.POST:
+        post_id = request.POST.get('post_id')
+        post_id = post_id[5:]
+        tweet = Tweet.objects.filter(id=post_id).first()
+        print(post_id)
     return HttpResponse('success', status=200)

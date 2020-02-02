@@ -37,4 +37,4 @@ class Tweet(models.Model):
     author = models.ForeignKey(Account, verbose_name='author', on_delete=PROTECT, related_name='author', default=None)
     document = models.TextField(verbose_name='متن', name='document')
     page = models.ForeignKey(Page, on_delete=models.CASCADE, default=None)
-    parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='comment', null=True)
+    parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='comment', null=True,default=None)

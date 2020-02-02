@@ -37,10 +37,10 @@ def my_page(request):
         comments.append(copy.deepcopy(comment))
     i = 0
     for comment in comments:
-        comment['id'] = 'a' + str(i)
+        comment['id'] = 'tweet' + str(i)
         i += 1
         for reply in comment['replys']:
-            reply['id'] = 'a' + str(i)
+            reply['id'] = 'tweet' + str(i)
             i += 1
     data = {'comments': comments, 'comments_json': json.dumps(comments), 'tittle': 'mmd pge',
             'can_write': True}

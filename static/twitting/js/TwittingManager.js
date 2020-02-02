@@ -132,8 +132,29 @@ class TwittingManager {
     }
 
     delete_post(content, post_id) {
-
-        alert(post_id + ' was deleted');
+        let url = location.origin + '/twitting/delete/';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                post_id: post_id,
+                csrfmiddlewaretoken: csrf,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'your reply was sent.',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'your reply was not sent.',
+                    'error'
+                );
+            }
+        });
     }
 
     like_post(post_id) {
