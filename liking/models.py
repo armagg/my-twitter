@@ -16,7 +16,7 @@ class Like(models.Model):
 
     @staticmethod
     def has_liked(user_id, tweet_id):
-        like = Like.objects.filter(Q(user_id=user_id) & Q(tweet_id=tweet_id))
+        like = Like.objects.filter(Q(liker__user_id=user_id) & Q(tweet_id=tweet_id))
         return like
 
 
