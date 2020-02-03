@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^twitting/', include('twitting.urls')),
     url(r'^paging/', include('paging.urls')),
     url(r'^home/', include('homeservice.urls')),
+    url(r'^liking/', include('liking.urls'))
 ]

@@ -48,8 +48,8 @@ class Tweet(models.Model):
         return self.author.user.username
 
     def get_like_number(self):
-
-        return 10
+        from liking.models import Like
+        return Like.get_number_of_likes(self.id)
 
     def get_tweet_front(self, editable: bool, with_replies):
         replies = []
