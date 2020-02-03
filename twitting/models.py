@@ -2,27 +2,6 @@ from django.db import models
 from django.db.models import PROTECT, CASCADE
 
 from accounting.models import Account
-# class Tweet(models.Model):
-#     owner = models.ForeignKey(Account, verbose_name='نویسنده', blank=False, on_delete=PROTECT,
-#                               related_name='owner')
-#
-#     title = models.CharField(max_length=140, verbose_name='عنوان', blank=False)
-#
-#     parent_tweet = models.ForeignKey("self", blank=True, on_delete=PROTECT, related_name='comment', null=True)
-#     document = models.TextField(verbose_name='متن', name='document')
-#
-#     tweet_followers = models.ManyToManyField(Account, related_name='follower', blank=True)
-#     likers = models.ManyToManyField(Account, related_name='liker', db_index=True, blank=True)
-#
-#     class Meta:
-#         verbose_name = 'توییت!'
-#
-#
-#     def get_comments(self):
-#
-#         children = Tweet.objects.get(parent_tweet=self)
-#         return children
-# from paging.models import Page
 from paging.models import Page
 
 
@@ -34,6 +13,7 @@ class Tweet(models.Model):
                                      default=None)
     date_published = models.DateTimeField(auto_now=True, blank=False)
     contributors = models.ManyToManyField(Account, related_name='contributors', blank=True)
+    last_like_number = models.IntegerField(blank=True, default=0)
 
     class Meta:
         verbose_name = 'توییت'
@@ -49,7 +29,10 @@ class Tweet(models.Model):
 
     def get_like_number(self):
         from liking.models import Like
-        return Like.get_number_of_likes(self.id)
+        like_number = Like.get_number_of_likes(self.id)
+        self.last_like_number = like_number
+        self.save()
+        return like_number
 
     def get_tweet_front(self, editable: bool, with_replies):
         replies = []
