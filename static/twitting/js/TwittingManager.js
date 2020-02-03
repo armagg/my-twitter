@@ -125,7 +125,8 @@ class TwittingManager {
     }
 
     like_post(post_id) {
-        let url = location.origin + 'liking/like/';
+        let url = location.origin + '/liking/like/';
+        console.log('like shod');
         $.ajax({
             type: 'POST',
             url: url,
@@ -143,9 +144,10 @@ class TwittingManager {
             error: function (xhr, errmsg, err) {
                 Swal.fire(
                     'Error!',
-                    'your reply was not sent.',
+                    'your like didnt saved',
                     'error'
                 );
+                console.log('what the fuck!')
             }
         });
 

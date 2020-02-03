@@ -9,9 +9,9 @@ def like(request):
         try:
             account = request.user.account
             tweet_id = int(request.POST.get('post_id')[5:])
-            if Like.has_liked(account.user_id, tweet_id):
+            if Like.has_liked(account.user.id, tweet_id):
                 return HttpResponse('you liked this before!', status=400)
-            like_post = Like(liker=account, tweet=Tweet.objects.get(tweet_id=tweet_id))
+            like_post = Like(liker=account, tweet=Tweet.objects.get(id=tweet_id))
             like_post.save()
             return HttpResponse('liked!', status=200)
         except Exception as e:
