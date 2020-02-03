@@ -125,11 +125,58 @@ class TwittingManager {
     }
 
     like_post(post_id) {
-        alert(post_id + ' was liked');
+        let url = location.origin + 'liking/like/';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                post_id: post_id,
+                csrfmiddlewaretoken: csrf,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'tweet was liked',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'your reply was not sent.',
+                    'error'
+                );
+            }
+        });
+
     }
 
     dislike_post(post_id) {
         alert(post_id + ' was disliked');
+        let url = location.origin + 'liking/dislike/';
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {
+                post_id: post_id,
+                csrfmiddlewaretoken: csrf,
+            },
+            success: function (json) {
+                Swal.fire(
+                    'Send!',
+                    'tweet was disliked',
+                    'success'
+                );
+            },
+            error: function (xhr, errmsg, err) {
+                Swal.fire(
+                    'Error!',
+                    'there is a error',
+                    'error'
+                );
+            }
+        });
+
     }
 
     reply_post(post_id, post_content) {
