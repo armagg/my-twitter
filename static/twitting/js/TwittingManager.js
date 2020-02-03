@@ -39,7 +39,6 @@ class TwittingManager {
 
     new_post(post_content) {
         let url = location.origin + '/twitting/newpost/';
-        console.log(url);
         $.ajax({
             type: 'POST',
             url: url,
@@ -126,7 +125,6 @@ class TwittingManager {
 
     like_post(post_id) {
         let url = location.origin + '/liking/like/';
-        console.log('like shod');
         $.ajax({
             type: 'POST',
             url: url,
@@ -147,7 +145,6 @@ class TwittingManager {
                     'your like didnt saved',
                     'error'
                 );
-                console.log('what the fuck!')
             }
         });
 
@@ -253,17 +250,20 @@ class CommentManager {
         this.comment_content.id = this.comment.id + '-content';
         this.comment_content.onclick = this.click_comment_content.bind(this);
         window.content = content;
-        console.log('salam'.substr(1, -1));
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
             charCounterCount: false,
             toolbarInline: true,
+            imageUploadURL: '/froalaImage/upload_image',
+            imageUploadParams: {
+                id: 'my_editor'
+            },
         }, function () {
             this.edit.off();
             this.toolbar.hide();
             this.html.set(content);
         });
-        // this.editor.html.set(content);
+        window.e = this.editor;
     }
 
     init_editing_rules() {
@@ -680,7 +680,11 @@ function create_a_function_to_call_on_editor_result(func, inline_editor = undefi
                         height: 500,
                         attribution: false,
                         charCounterCount: false,
-                        documentReady: true
+                        documentReady: true,
+                        imageUploadURL: '/froalaImage/upload_image',
+                        imageUploadParams: {
+                            id: 'my_editor'
+                        },
                     }, function () {
                         if (inline_editor !== undefined) {
                             window.reply_post_editor.html.set(inline_editor.html.get());
@@ -703,7 +707,7 @@ function create_a_function_to_call_on_editor_result(func, inline_editor = undefi
                     if (inline_editor !== undefined) {
                         inline_editor.html.set(text);
                     }
-                    func(JSON.stringify(text));
+                    func(text);
                 }
             }
         })();

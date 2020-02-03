@@ -66,6 +66,7 @@ def new_post(request):
     print('new post')
     if request.POST:
         content = request.POST.get('content')
+        print(content)
         personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()
         tweet = Tweet(document=content, author=request.user.account, parent_tweet=None, page=personal_page)
         tweet.save()

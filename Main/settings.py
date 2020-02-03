@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'homeservice',
     'paging',
     'bookmarking',
-    'liking'
+    'liking',
+    'froalaImaging',
 ]
 
 MIDDLEWARE = [
@@ -116,22 +117,19 @@ USE_L10N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_PUBLIC_URL = STATIC_URL
 
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_PUBLIC_DIR = STATIC_DIR
 MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 LOGIN_URL = '/account/user_login/'
 
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-#     '/var/www/static/',
-# ]
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
