@@ -6,7 +6,6 @@ from django.shortcuts import render
 from os.path import isfile, join
 from mimetypes import MimeTypes
 from os import listdir
-
 from django.views.decorators.csrf import csrf_exempt
 from wand.image import Image
 import wand.image

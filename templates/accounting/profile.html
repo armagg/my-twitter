@@ -41,7 +41,7 @@
                 <div class="covwe-inn">
                     <div class="row no-margin">
                         <div class="col-md-3 img-c">
-                            <img src="{% static 'profile-files/images/profile.jpg' %}" alt="">
+                            <img src="{{ request.user.account.profile_photo.url }}" alt="">
                         </div>
                         <div class="col-md-9 tit-det">
                             <h2>Angelina Smith / Web Designer</h2>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <ul class="nav nav-tabs" id="myTab" role="tablist" >
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                        aria-controls="home"
@@ -172,12 +172,15 @@
                                 <div class="row ">
                                     <div class="col-xl-6 col-md-12">
                                         <ul class="btn-link">
-                                            <button class="ui toggle button">View page</button>
+                                            <button class="green ui toggle button">View page</button>
                                             <button class="green ui active button">
-                                                <i class=" user icon"></i>
-                                                Follow
+                                                <i class=" user icon"></i>Follow
                                             </button>
 
+                                            <button class="ui icon button">
+                                                <a href="{% url 'accounting:edit' %}"><i
+                                                        class=" cog white icon"></i></a>
+                                            </button>
                                         </ul>
                                     </div>
                                     <div class="col-xl-6 col-md-12">
@@ -330,33 +333,7 @@
                 </div>
                 <div class="tab-pane fade gallcoo" id="gallery" role="tabpanel" aria-labelledby="contact-tab">
                     <div class="row no-margin gallery">
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_01.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_02.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_03.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_04.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_05.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_06.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_10.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_08.jpg" alt="">
-                        </div>
-                        <div class="col-sm-4">
-                            <img src="profile-files/images/gallery/gallery_09.jpg" alt="">
-                        </div>
+
 
                     </div>
                 </div>

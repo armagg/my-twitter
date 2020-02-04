@@ -12,9 +12,3 @@ class SignUpForm(UserCreationForm):
         fields = ('username', 'email', 'password1', 'password2',)
 
 
-class ProfileEditForm(UserChangeForm):
-    class Meta:
-        model = User
-        fields = (
-            'username',
-        )

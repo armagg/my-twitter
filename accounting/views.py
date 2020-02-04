@@ -2,7 +2,9 @@ import json
 
 from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.db.models import ImageField
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
@@ -14,7 +16,6 @@ from django.urls import reverse
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.html import strip_tags
 
-from .forms import SignUpForm, ProfileEditForm
 from paging.models import Page
 from .forms import SignUpForm
 from .models import Token, create_new_token, Account
@@ -115,21 +116,8 @@ def logout_view(request):
     return redirect('/home')
 
 
-def edit_view(request):
-    if not request.user.is_authenticated:
-        return redirect('/home')
-    if request.method == 'POST':
-        form = ProfileEditForm(request, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return redirect('/home')
-    else:
-        args = {'user': request.user}
-        return render(request, 'accounting/profileedit.html', args)
-
-
 def profile(request):
-    return render(request, 'accounting/profile.html')
+    return render(request, 'accounting/profile.html', {'request': request})
 
 
 def forget_password_view(request):
@@ -138,3 +126,48 @@ def forget_password_view(request):
 
 def reset_password_view(request):
     return render(request, 'accounting/reset_password.html')
+
+
+@login_required
+def edit_profile(request):
+    print(request.user.account.profile_photo.url)
+    errors = []
+    if request.POST:
+        if request.FILES:
+            try:
+                request.user.account.profile_photo = request.FILES.get('profile_photo')
+                request.user.account.save()
+            except:
+                errors.append('cant load image!')
+
+        try:
+            username = request.POST.get('username')
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            location = request.POST.get('location')
+            bio = request.POST.get('bio')
+        except:
+            errors.append('bad format of data')
+        if username:
+            if str(request.user.username) is not str(username):
+                if User.objects.filter(username=username):
+                    errors.append('this username is token by others ...')
+                else:
+                    page = Page.objects.get(page_id=request.user.username)
+                    page.page_id = username
+                    page.save()
+                    request.user.username = username
+                    request.user.save()
+
+        if location:
+            request.user.account.location = location
+        if bio:
+            request.user.account.bio = bio
+        if email:
+            request.user.email = email
+        if name:
+            request.user.account.name = name
+
+        request.user.save()
+        request.user.account.save()
+    return render(request, 'accounting/profile_edit.html', {'errors': json.dumps(errors)})
