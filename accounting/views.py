@@ -1,21 +1,19 @@
 import json
+from http.client import HTTPResponse
 
 from django.conf import settings
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
-from django.db.models import ImageField
-from django.http import HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
-from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.urls import reverse
 from django.contrib.auth.forms import UserChangeForm
 from django.utils.html import strip_tags
 
+from following.models import Follow
 from paging.models import Page
 from .forms import SignUpForm
 from .models import Token, create_new_token, Account
@@ -116,8 +114,25 @@ def logout_view(request):
     return redirect('/home')
 
 
-def profile(request):
-    return render(request, 'accounting/profile.html', {'request': request})
+def get_profile_page(request, owner):
+    setting = request.user == owner
+    followed = False
+    if Follow.objects.filter(followed=owner.account, follower=request.user.account):
+        followed = True
+    return render(request, 'accounting/profile.html', {'owner': owner, 'setting': setting, 'followed': followed})
+
+
+@login_required
+def my_profile(request):
+    return get_profile_page(request, request.user)
+
+@login_required
+def profile(request, username):
+    owner = User.objects.filter(username=username).first()
+    if owner:
+        return get_profile_page(request, owner)
+    else:
+        return HttpResponse(status=404)
 
 
 def forget_password_view(request):

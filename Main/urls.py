@@ -15,6 +15,7 @@ urlpatterns = [
                   url(r'^paging/', include('paging.urls')),
                   url(r'^froalaImage/', include('froalaImaging.urls')),
                   url(r'^home/', include('homeservice.urls')),
-                  url(r'^liking/', include('liking.urls'))
+                  url(r'^liking/', include('liking.urls')),
+                  url(r'^following/', include('following.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

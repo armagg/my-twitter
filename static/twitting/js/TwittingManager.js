@@ -71,6 +71,8 @@ class TwittingManager {
 
     edit_post(content, post_id) {
         let url = location.origin + '/twitting/edit/';
+        console.log(content);
+        console.log(post_id);
         $.ajax({
             type: 'POST',
             url: url,
@@ -245,11 +247,9 @@ class CommentManager {
     }
 
     init_content() {
-        let content = this.comment.content.substr(1, this.comment.content.length - 2);
-        // this.comment_content.innerHTML = content;
         this.comment_content.id = this.comment.id + '-content';
         this.comment_content.onclick = this.click_comment_content.bind(this);
-        window.content = content;
+        window.content = this.comment.content;
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
             charCounterCount: false,
@@ -336,7 +336,7 @@ class CommentManager {
 
         if (func_name === 'heavy edit') {
             let get_text_from_editor = function (editor_text) {
-                f(this.comment.id, editor_text);
+                f(editor_text, this.comment.id);
             }.bind(this);
             let func = create_a_function_to_call_on_editor_result(get_text_from_editor, this.editor);
             this.iconsManager.add_listener(func, 'heavy edit');
