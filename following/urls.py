@@ -5,4 +5,5 @@ from following import views
 
 urlpatterns = [
     path('follow/', views.follow_request, name='follow'),
+    path('follow-page/', views.follow_page_request, name='follow-page'),
 ]

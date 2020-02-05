@@ -153,7 +153,7 @@ class TwittingManager {
     }
 
     dislike_post(post_id) {
-        let url = location.origin + 'liking/dislike/';
+        let url = location.origin + '/liking/dislike/';
         $.ajax({
             type: 'POST',
             url: url,

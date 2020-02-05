@@ -5,6 +5,7 @@ from twitting.models import Tweet
 
 
 def like(request):
+    print('like')
     if request.POST:
         try:
             account = request.user.account
@@ -20,6 +21,7 @@ def like(request):
 
 
 def dislike(request):
+    print('dislike')
     if request.POST:
         try:
             account = request.user.account

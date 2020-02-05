@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from following.models import Follow
+from following.models import Follow, FollowPage
+from paging.models import Page
 
 
 @csrf_exempt
@@ -15,6 +16,20 @@ def follow_request(request):
         if Follow.objects.filter(followed=followed, follower=follower):
             Follow.objects.get(followed=followed, follower=follower).delete()
         else:
-            follow = Follow(follower = follower, followed=followed)
+            follow = Follow(follower=follower, followed=followed)
             follow.save()
     return HttpResponse(status=200)
+
+
+@csrf_exempt
+@login_required
+def follow_page_request(request):
+    if request.POST:
+        page = Page.objects.get(page_id=request.POST.get('page_id'))
+        follower = request.user.account
+        if FollowPage.objects.filter(followed=page, follower=follower):
+            FollowPage.objects.get(followed=page, follower=follower).delete()
+        else:
+            follow = FollowPage(follower=follower, followed=page)
+            follow.save()
+    return HttpResponse(status=404)

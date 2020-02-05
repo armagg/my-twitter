@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
+from following.models import FollowPage
 from paging.models import Page
 
 
@@ -39,8 +40,13 @@ def channel_view(request, page_id):
             if admin.id is request.user.account.id:
                 is_admin = True
                 break
-        data = {'channel': channel, 'admins': admins, 'is_admin': is_admin}
-        print(data)
+
+        followed = False
+        if request.user and request.user.is_authenticated:
+            if FollowPage.objects.filter(follower=request.user.account, followed__page_id=page_id):
+                followed = True
+        data = {'channel': channel, 'admins': admins, 'is_admin': is_admin, 'page_id': channel.page_id,
+                'followed': followed}
         return render(request, 'channelling/channel.html', data)
     else:
         return HttpResponse(status=404)

@@ -3,6 +3,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 
+from following.models import FollowPage
 from paging.models import Page
 from twitting.models import Tweet
 
@@ -20,6 +21,7 @@ def get_page(request, page):
     for tweet in tweets:
         editable = (user.account == tweet.author)
         comments.append(tweet.get_tweet_front(editable, True))
+
 
     can_write = user.account in page.get_all_admins()
     data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,

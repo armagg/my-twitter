@@ -66,14 +66,14 @@
                        aria-selected="false">Members</a>
                 </li>
                 {% if is_admin %}
-                <li class="nav-item">
-                    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#gallery" role="tab"
-                       aria-controls="profile" aria-selected="false">Edit</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                       aria-controls="contact" aria-selected="false">Admin Manager</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#gallery" role="tab"
+                           aria-controls="profile" aria-selected="false">Edit</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
+                           aria-controls="contact" aria-selected="false">Admin Manager</a>
+                    </li>
                 {% endif %}
             </ul>
             <div class="tab-content" id="myTabContent">
@@ -101,6 +101,14 @@
                             <a href="{% url 'view_page' channel.page_id %}">
                                 <button class="green ui toggle button">View page</button>
                             </a>
+                            {% if request.user.is_authenticated %}
+                                <button class="{% if followed %}red{% else %}green{% endif %} ui active button"
+                                        onclick="follow_click()">
+                                    <i class=" user icon"></i>{% if followed %}Unfollow{% else %}
+                                    Follow{% endif %}
+                                </button>
+                            {% endif %}
+
                             <br><br>
                             <h2 class="rit-titl"> Description
                             </h2>
@@ -108,23 +116,6 @@
                             <div class="links">
                                 <div class="row ">
                                     <div class="col-xl-6 col-md-12">
-                                        {#                                        <ul class="btn-link">#}
-
-                                        {#                                            {% if request.user.is_authenticated %}#}
-                                        {#                                                <button class="{% if followed %}red{% else %}green{% endif %} ui active button"#}
-                                        {#                                                        onclick="follow_click()">#}
-                                        {#                                                    <i class=" user icon"></i>{% if followed %}Unfollow{% else %}#}
-                                        {#                                                    Follow{% endif %}#}
-                                        {#                                                </button>#}
-                                        {#                                            {% endif %}#}
-                                        {#                                            {% if setting %}#}
-                                        {#                                                <a href="{% url 'accounting:edit' %}">#}
-                                        {#                                                    <button class="ui icon button">#}
-                                        {#                                                        <i class=" cog white icon"></i>#}
-                                        {#                                                    </button>#}
-                                        {#                                                </a>#}
-                                        {#                                            {% endif %}#}
-                                        {#                                        </ul>#}
                                     </div>
 
                                 </div>
@@ -162,8 +153,6 @@
                             </div>
                         {% endfor %}
                     </div>
-
-
                 </div>
                 {% if is_admin %}
                     <div class="tab-pane fade gallcoo" id="gallery" role="tabpanel" aria-labelledby="contact-tab">
@@ -229,12 +218,13 @@
 
     <script>
         function follow_click() {
-            let url = '{% url 'follow' %}';
+            let url = '{% url 'follow-page' %}';
             $.ajax({
                 type: 'POST',
                 url: url,
                 data: {
-                    username: '{{ owner.username }}',
+                    page_id: '{{ page_id }}',
+                    username: '{{ request.user.username }}',
                     csrfmiddlewaretoken: csrf,
                 },
                 success: function (json) {
