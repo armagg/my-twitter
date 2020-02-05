@@ -32,4 +32,5 @@ def follow_page_request(request):
         else:
             follow = FollowPage(follower=follower, followed=page)
             follow.save()
+        return HttpResponse(status=200)
     return HttpResponse(status=404)
