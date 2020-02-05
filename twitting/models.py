@@ -4,7 +4,6 @@ from django.db import models
 from django.db.models import PROTECT, CASCADE
 
 from accounting.models import Account
-from liking.models import Dislike
 from paging.models import Page
 
 
@@ -34,7 +33,7 @@ class Tweet(models.Model):
         return self.author.user.username
 
     def get_like_number(self):
-        from liking.models import Like
+        from liking.models import Like, Dislike
         like_number = Like.get_number_of_likes(self.id)
         dislike_number = Dislike.get_number_of_dislikes(self.id)
         self.last_like_number = like_number - dislike_number
