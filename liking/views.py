@@ -21,14 +21,13 @@ def like(request):
 
 
 def dislike(request):
-    print('dislike')
     if request.POST:
         try:
             account = request.user.account
             tweet_id = int(request.POST.get('post_id')[5:])
             if Dislike.has_disliked(account.user_id, tweet_id):
                 return HttpResponse('you disliked this before!', status=400)
-            like_post = Like(liker=account, tweet=Tweet.objects.get(tweet_id=tweet_id))
+            like_post = Dislike(disliker=account, tweet=Tweet.objects.get(id=tweet_id))
             like_post.save()
             return HttpResponse('disliked', status=200)
         except Exception as e:
