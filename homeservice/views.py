@@ -11,6 +11,7 @@ from twitting.models import Tweet
 def homepage(request):
     users = User.objects.all()
     channels = Page.objects.filter(personal_page=False)
+
     followings_tweets = []
     if request.user and request.user.is_authenticated:
         follows = Follow.objects.filter(follower=request.user.account)
@@ -22,11 +23,11 @@ def homepage(request):
         most_liked_tweets.append(tweet.get_tweet_front(False, False))
 
     following_pages_tweets = []
-
-    followPages = FollowPage.objects.filter(follower=request.user.account)
-    for follow in followPages:
-        for tweet in Tweet.objects.filter(page=follow.followed):
-            following_pages_tweets.append(tweet.get_tweet_front(False, False))
+    if request.user and request.user.is_authenticated:
+        followPages = FollowPage.objects.filter(follower=request.user.account)
+        for follow in followPages:
+            for tweet in Tweet.objects.filter(page=follow.followed):
+                following_pages_tweets.append(tweet.get_tweet_front(False, False))
 
     return render(request, 'home.html',
                   {'users': users, 'channels': channels, 'followings_tweets': followings_tweets,

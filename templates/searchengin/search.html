@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% load static %}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="shortcut icon" href="{% static 'profile-files/images/fav.jpg' %}">
+    <link rel="stylesheet" href="{% static 'profile-files/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'profile-files/css/fontawsom-all.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'profile-files/css/style.css' %}"/>
+
+    <style>
+        .background-image {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: -999;
+            background-image: url("{% static '9401.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="background-image">
+    </div>
+
+    <form method="post" action="{% url 'searchengin:search' %}" class="ui form">
+        {% csrf_token %}
+        <div class="field">
+            <label>Search</label>
+            <div class="ui selection dropdown">
+                <div class="ui icon input">
+                    <input class="prompt" type="text" placeholder="Search all docs" name="words">
+                    <i class="search icon"></i>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    {% for result in results %}
+        <div class="ui success message">
+            <i class="close icon"></i>
+            {{ result.type }}
+            <br><br>
+            <div class="header">
+                {{ result.key }}
+            </div>
+            <p>
+                {{ result.word }}
+            </p>
+
+            {% if result.type == 'user' %}
+                <a href="{% url 'accounting:profile' result.value %}">click to see</a>
+            {% endif %}
+            {% if result.type == 'tweet' %}
+                <a href="{% url 'view_tweet' result.value %}">click to see</a>
+            {% endif %}
+            {% if result.type == 'page' %}
+                <a href="{% url 'view_page' result.value %}">click to see</a>
+            {% endif %}
+
+        </div>
+    {% endfor %}
+
+    {% load static %}
+
+    <script src="{% static 'profile-files/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'profile-files/js/popper.min.js' %}"></script>
+    <script src="{% static 'profile-files/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'profile-files/js/script.js' %}"></script>
+
+
+{% endblock %}
+
+

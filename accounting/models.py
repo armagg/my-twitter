@@ -1,11 +1,6 @@
-import random
-import string
 
 from django.contrib.auth.models import User
 from django.db import models
-
-
-# from paging.models import Page
 
 
 class Account(models.Model):
@@ -18,23 +13,6 @@ class Account(models.Model):
     is_private = models.BooleanField(default=False)
 
     def __str__(self):
-        return 'account of user by username: ' + self.user.username
+        return self.name
 
 
-class Token(models.Model):
-    username = models.TextField()
-    code = models.TextField()
-
-    def __str__(self):
-        return self.username + ' : ' + self.code
-
-
-def create_new_token(username):
-    code = get_random_code()
-    token = Token(username=username, code=code)
-    return token
-
-
-def get_random_code():
-    letters = string.ascii_lowercase
-    return ''.join(random.choice(letters) for i in range(20))

@@ -19,5 +19,6 @@ urlpatterns = [
                   url(r'^following/', include('following.urls')),
                   url(r'^channeling/', include('channelling.urls')),
                   url(r'^alerting/', include('alerting.urls')),
+                  url(r'^seach/', include('searchengine.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

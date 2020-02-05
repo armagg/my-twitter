@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'liking',
     'froalaImaging',
     'channelling',
+    'searchengine',
 ]
 
 MIDDLEWARE = [
@@ -105,8 +106,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.0/topics/i18n/
+
+
 
 LANGUAGE_CODE = 'en-us'
 
@@ -129,8 +130,6 @@ STATICFILES_DIRS = [STATIC_DIR, ]
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 LOGIN_URL = '/account/user_login/'
-
-
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'

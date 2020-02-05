@@ -11,6 +11,7 @@ from django.shortcuts import render
 from accounting.models import Account
 from paging.models import Page
 from paging.views import page
+from searchengine.models import DocIndex
 from twitting.models import Tweet
 
 
@@ -83,6 +84,9 @@ def new_post(request):
         tweet = Tweet(document=content, plain_text=plain_text, author=request.user.account, parent_tweet=None,
                       page=page)
         tweet.save()
+
+        DocIndex.add_doc(plain_text, tweet.id, 'tweet')
+
         return HttpResponse('success', status=200)
     return HttpResponse(status=404)
 

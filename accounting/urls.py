@@ -12,9 +12,9 @@ urlpatterns = [
     url(r'^login/$', views.login_view, name='login'),
     path('activate/<str:username>/<str:code>', views.activate, name='activate'),
     path('profile/<str:username>', views.profile, name='profile'),
+    path('reset/<str:code>', views.reset_password_view, name='reset-password'),
     url(r'^logout/', views.logout_view, name='logout'),
     url(r'^edit/$', views.edit_profile, name='edit'),
     url(r'^forgot/$', views.forget_password_view, name='forgot'),
-    url(r'^reset/$', views.reset_password_view, name='reset'),
     url(r'^myprofile/$', views.my_profile, name='my-profile')
 ]

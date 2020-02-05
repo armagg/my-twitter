@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 
 from following.models import FollowPage
 from paging.models import Page
+from searchengine.models import DocIndex
 
 
 @login_required
@@ -25,6 +26,10 @@ def new_channel(request):
             page.save()
             page.admins.add(request.user.account)
             page.save()
+
+            DocIndex.add_doc(title, page.page_id, 'page')
+            DocIndex.add_doc(description, page.page_id, 'page')
+
             return redirect('channelling:channel', page.page_id)
     print(errors)
     return render(request, 'channelling/new_channeling.html', {'errors': json.dumps(errors)})
