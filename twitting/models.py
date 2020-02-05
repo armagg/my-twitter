@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.db import models
 from django.db.models import PROTECT, CASCADE
 
@@ -54,3 +56,10 @@ class Tweet(models.Model):
             'plain_text': self.plain_text,
             'origin_id': str(self.id),
         }
+
+    @staticmethod
+    def get_most_view():
+        tweets = Tweet.objects.filter(date_published__gt=datetime.today() - timedelta(days=30)).order_by(
+            '-last_like_number')[:5]
+        return tweets
+
