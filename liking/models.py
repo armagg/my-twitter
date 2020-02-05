@@ -17,7 +17,7 @@ class Like(models.Model):
     @staticmethod
     def has_liked(user_id, tweet_id):
         like = Like.objects.filter(Q(liker__user_id=user_id) & Q(tweet_id=tweet_id))
-        return like
+        return like.count() > 0
 
 
 class Dislike(models.Model):
@@ -26,10 +26,12 @@ class Dislike(models.Model):
 
     @staticmethod
     def get_number_of_dislikes(tweet_id):
-        likes = Like.objects.filter(tweet__id=tweet_id)
-        return likes.count()
+        dislikes = Dislike.objects.filter(tweet__id=tweet_id)
+        return dislikes.count()
 
     @staticmethod
     def has_disliked(user_id, tweet_id):
-        like = Like.objects.filter(Q(user_id=user_id) & Q(tweet_id=tweet_id))
-        return like.count() == 1
+        print('pashm')
+        dislike = Dislike.objects.filter(Q(disliker__user_id=user_id) & Q(tweet_id=tweet_id))
+        print('pashm paeen')
+        return dislike.count() == 1
