@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'twitter/twitter.css' %}">
     <style>
         .new-account {
             color: #59608b;
@@ -86,7 +88,7 @@
     </div>
 
 
-    <h2>All users</h2>
+    <h2 style="color: deepskyblue">All users</h2>
     <div class="ui link cards">
         {% for user in users %}
             <div class="card">
@@ -117,7 +119,7 @@
     </div>
 
 
-    <h2>All Channels</h2>
+    <h2 style="color: deepskyblue">All Channels</h2>
     <div class="ui link cards">
         {% for channel in channels %}
             <div class="card">
@@ -147,5 +149,36 @@
 
     </div>
 
+    <h2 style="color: deepskyblue">Tweets of your followeds</h2>
+    <div class="followings-tweets-list">
+        {% for followings_tweet in followings_tweets %}
+
+            <a href="{% url 'view_tweet' followings_tweet.origin_id %}">
+                <div class="tw-block-parent">
+                    <div class="timeline-TweetList-tweet">
+                        <div class="timeline-Tweet">
+                            <div class="timeline-Tweet-brand">
+                                <div class="Icon Icon--twitter"></div>
+                            </div>
+                            <div class="timeline-Tweet-author">
+                                <div class="TweetAuthor">
+                                    <span class="TweetAuthor-name">{{ followings_tweet.name }}</span>
+                                    <span class="TweetAuthor-screenName">new post </span>
+                                </div>
+                            </div>
+                            <div class="timeline-Tweet-text">
+                                <p>
+                                    {{ followings_tweet.plain_text }}
+                                </p>
+                            </div>
+                            <div class="timeline-Tweet-metadata"><span class="timeline-Tweet-timestamp">9h</span></div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            <br>
+
+        {% endfor %}
+    </div>
 
 {% endblock %}

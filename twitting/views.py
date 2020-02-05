@@ -1,5 +1,6 @@
 import copy
 import json
+import html2text
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -78,10 +79,12 @@ def new_post(request):
                 break
         if not is_admin:
             return HttpResponse(status=404)
-        tweet = Tweet(document=content, author=request.user.account, parent_tweet=None, page=page)
+        plain_text = html2text.html2text(content)
+        tweet = Tweet(document=content, plain_text=plain_text, author=request.user.account, parent_tweet=None,
+                      page=page)
         tweet.save()
         return HttpResponse('success', status=200)
-    return HttpResponse(status= 404)
+    return HttpResponse(status=404)
 
 
 @login_required

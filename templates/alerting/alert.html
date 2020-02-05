@@ -36,15 +36,15 @@
     </div>
 
     {% for alert in alerts %}
-
-    {% endfor %}
-    <div class="ui success message">
-        <i class="close icon"></i>
-        <div class="header">
-            Your user registration was successful.
+        <div class="ui success message">
+            <i class="close icon"></i>
+            <div class="header">
+                Your user registration was successful.
+            </div>
+            <p>{{ alert }}</p>
         </div>
-        <p>{{ alert }}</p>
-    </div>
+    {% endfor %}
+
     {% load static %}
 
     <script src="{% static 'profile-files/js/jquery-3.2.1.min.js' %}"></script>

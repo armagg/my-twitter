@@ -14,6 +14,7 @@ class Tweet(models.Model):
     date_published = models.DateTimeField(auto_now=True, blank=False)
     contributors = models.ManyToManyField(Account, related_name='contributors', blank=True)
     last_like_number = models.IntegerField(blank=True, default=0)
+    plain_text = models.TextField(blank=True, null=True, default='')
 
     class Meta:
         verbose_name = 'توییت'
@@ -50,4 +51,6 @@ class Tweet(models.Model):
             'replies': replies,
             'id': 'tweet' + str(self.id),
             'username': self.author.user.username,
+            'plain_text': self.plain_text,
+            'origin_id': str(self.id),
         }
