@@ -38,9 +38,11 @@
         <div class="ui success message">
             <i class="close icon"></i>
             <div class="header">
-                Your user registration was successful.
+                {{ alert }}
             </div>
-            <p>{{ alert }}</p>
+            <p>
+                <a href="{{ alert.get_link_for_alert }}">click to see</a>
+            </p>
         </div>
     {% endfor %}
 

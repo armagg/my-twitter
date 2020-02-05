@@ -17,9 +17,12 @@ def homepage(request):
         for follow in follows:
             for tweet in Tweet.objects.filter(author=follow.followed):
                 followings_tweets.append(tweet.get_tweet_front(False, False))
-
+    most_liked_tweets = []
+    for tweet in Tweet.get_most_liked_tweets():
+        most_liked_tweets.append(tweet.get_tweet_front(False, False))
     return render(request, 'home.html',
-                  {'users': users, 'channels': channels, 'followings_tweets': followings_tweets})
+                  {'users': users, 'channels': channels, 'followings_tweets': followings_tweets,
+                   'most_liked_tweets': most_liked_tweets})
 
 
 def new(request):

@@ -20,6 +20,8 @@ class Tweet(models.Model):
 
     class Meta:
         verbose_name = 'توییت'
+    def __str__(self):
+        return self.plain_text
 
     def get_contributors(self):
         objects = [self.author]
@@ -58,7 +60,7 @@ class Tweet(models.Model):
         }
 
     @staticmethod
-    def get_most_view():
+    def get_most_liked_tweets():
         tweets = Tweet.objects.filter(date_published__gt=datetime.today() - timedelta(days=30)).order_by(
             '-last_like_number')[:5]
         return tweets

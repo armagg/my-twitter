@@ -35,6 +35,6 @@ class Alert(models.Model):
 
     def get_link_for_alert(self):
         if self.type == self.Type.NEW_FOLLOWER:
-            return '/paging/page/' + self.who.user.username
+            return '/accounting/profile/' + self.who.user.username
 
         return '/paging/tweet/' + str(self.tweet.id)

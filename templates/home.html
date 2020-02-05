@@ -4,6 +4,28 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'twitter/twitter.css' %}">
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* Create three equal columns that floats next to each other */
+        .column {
+            float: left;
+            width: 33.33%;
+            padding: 10px;
+            height: 300px; /* Should be removed. Only for demonstration */
+            background-color: transparent;
+            margin: 10px;
+        }
+
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+
         .new-account {
             color: #59608b;
             font-size: 20px;
@@ -149,36 +171,86 @@
 
     </div>
 
-    <h2 style="color: deepskyblue">Tweets of your followeds</h2>
-    <div class="followings-tweets-list">
-        {% for followings_tweet in followings_tweets %}
 
-            <a href="{% url 'view_tweet' followings_tweet.origin_id %}">
-                <div class="tw-block-parent">
-                    <div class="timeline-TweetList-tweet">
-                        <div class="timeline-Tweet">
-                            <div class="timeline-Tweet-brand">
-                                <div class="Icon Icon--twitter"></div>
-                            </div>
-                            <div class="timeline-Tweet-author">
-                                <div class="TweetAuthor">
-                                    <span class="TweetAuthor-name">{{ followings_tweet.name }}</span>
-                                    <span class="TweetAuthor-screenName">new post </span>
+
+
+
+
+    <div class="row">
+        <div class="column">
+            <div class="followings-tweets-list">
+                <h2 style="color: deepskyblue">Tweets of your followings</h2>
+                {% for followings_tweet in followings_tweets %}
+                    <div class="tw-block-parent">
+                        <div class="timeline-TweetList-tweet">
+                            <div class="timeline-Tweet">
+                                <div class="timeline-Tweet-brand">
+                                    <div class="Icon Icon--twitter"></div>
+                                </div>
+                                <div class="timeline-Tweet-author">
+                                    <div class="TweetAuthor">
+                                        <span class="TweetAuthor-name">{{ followings_tweet.name }}</span>
+                                        <span class="TweetAuthor-screenName">new post </span>
+                                    </div>
+                                </div>
+                                <div class="timeline-Tweet-text">
+                                    <a href="{% url 'view_tweet' followings_tweet.origin_id %}">
+                                        <p>
+                                            {{ followings_tweet.plain_text }}
+                                        </p>
+                                    </a>
+                                </div>
+
+                                <div class="timeline-Tweet-metadata"><span class="timeline-Tweet-timestamp">9h</span>
                                 </div>
                             </div>
-                            <div class="timeline-Tweet-text">
-                                <p>
-                                    {{ followings_tweet.plain_text }}
-                                </p>
-                            </div>
-                            <div class="timeline-Tweet-metadata"><span class="timeline-Tweet-timestamp">9h</span></div>
                         </div>
                     </div>
-                </div>
-            </a>
-            <br>
+                    <br>
 
-        {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="column">
+            <div class="most-liked-tweets-list">
+                <h2 style="color: deepskyblue">Most liked tweets of this month</h2>
+                {% for most_liked_tweet in most_liked_tweets %}
+
+                    <div class="tw-block-parent">
+                        <div class="timeline-TweetList-tweet">
+                            <div class="timeline-Tweet">
+                                <div class="timeline-Tweet-brand">
+                                    <div class="Icon Icon--twitter"></div>
+                                </div>
+                                <div class="timeline-Tweet-author">
+                                    <div class="TweetAuthor">
+                                        <span class="TweetAuthor-name">{{ most_liked_tweet.name }}</span>
+                                        <span class="TweetAuthor-screenName">liked by&nbsp;{{ most_liked_tweet.like_number }}&nbsp
+                                    <i class="heart red ui icon"></i></span>
+                                    </div>
+                                </div>
+                                <div class="timeline-Tweet-text">
+                                    <a href="{% url 'view_tweet' most_liked_tweet.origin_id %}">
+                                        <p>
+                                            {{ most_liked_tweet.plain_text }}
+                                        </p>
+                                    </a>
+                                </div>
+                                <div class="timeline-Tweet-metadata"><span class="timeline-Tweet-timestamp">9h</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                {% endfor %}
+            </div>
+        </div>
+        <div class="column">
+            <h2>Column 3</h2>
+            <p>Some text..</p>
+        </div>
     </div>
 
 {% endblock %}
