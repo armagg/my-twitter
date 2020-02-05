@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
@@ -34,3 +35,16 @@ def new_like_alert(sender, instance: Like, created: bool, **kwargs):
 def new_tweet_alert(sender, instance: Tweet, created: bool, **kwargs):
     if not created:
         return None
+    if instance.page:
+        follows = Follow.objects.filter(Q(followed=instance.author))
+        followers = []
+        for f in follows:
+            followers.append(f.follower)
+        for f in followers:
+            alert = Alert(
+                type=Alert.Type.NEW_POST,
+                who=instance.author,
+                account=f,
+                tweet=instance
+            )
+            alert.save()
