@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models import PROTECT, CASCADE
 
 from accounting.models import Account
+from liking.models import Dislike
 from paging.models import Page
 
 
@@ -35,9 +36,10 @@ class Tweet(models.Model):
     def get_like_number(self):
         from liking.models import Like
         like_number = Like.get_number_of_likes(self.id)
-        self.last_like_number = like_number
+        dislike_number = Dislike.get_number_of_dislikes(self.id)
+        self.last_like_number = like_number - dislike_number
         self.save()
-        return like_number
+        return like_number - dislike_number
 
     def get_tweet_front(self, editable: bool, with_replies):
         replies = []

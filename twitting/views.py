@@ -87,6 +87,7 @@ def new_post(request):
     return HttpResponse(status=404)
 
 
+
 @login_required
 def reply(request):
     if request.POST:
