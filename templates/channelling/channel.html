@@ -41,10 +41,10 @@
                 <div class="covwe-inn">
                     <div class="row no-margin">
                         <div class="col-md-3 img-c">
-                            <img src="{{ owner.account.profile_photo.url }}" alt="">
+                            {#                            <img src="{{ owner.account.profile_photo.url }}" alt="">#}
                         </div>
                         <div class="col-md-9 tit-det">
-                            <h2>{{ owner.account.name }}</h2>
+                            <h2>{{ channel.title }}</h2>
 
                         </div>
                     </div>
@@ -58,21 +58,23 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
-                       aria-controls="profile" aria-selected="false">Followers</a>
+                       aria-controls="profile" aria-selected="false">Admins</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#resume" role="tab"
                        aria-controls="profile"
-                       aria-selected="false">Following</a>
+                       aria-selected="false">Members</a>
                 </li>
+                {% if is_admin %}
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#gallery" role="tab"
-                       aria-controls="profile" aria-selected="false">Portfolio</a>
+                       aria-controls="profile" aria-selected="false">Edit</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab"
-                       aria-controls="contact" aria-selected="false">Contact</a>
+                       aria-controls="contact" aria-selected="false">Admin Manager</a>
                 </li>
+                {% endif %}
             </ul>
             <div class="tab-content" id="myTabContent">
                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -82,45 +84,47 @@
                             <h3 class="ltitle">Info</h3>
 
                             <div class="refer-cov">
-                                <p><b>username:</b> {{ owner.username }}</p>
+                                <p><b>title:</b> {{ channel.title }}</p>
                                 <br>
-                                <p><b>name:</b> {{ owner.account.name }}</p>
+                                <p><b>owner:</b> {{ channel.creator.name }}</p>
                                 <br>
-                                <p><b>location:</b> {{ owner.account.location }}</p>
+                                <p><b>description:</b> {{ channel.description }}</p>
                             </div>
                             <div class="refer-cov">
 
-                                <p><b>accessibility: </b> {% if owner.account.is_private %}Private{% else %}
-                                    Public{% endif %}</p>
+                                <p><b>accessibility: </b> {% if cahnnel.public %}Public{% else %}
+                                    Private{% endif %}</p>
                             </div>
 
                         </div>
                         <div class="col-md-8 home-dat">
-                            <h2 class="rit-titl"> Bio
+                            <a href="{% url 'view_page' channel.page_id %}">
+                                <button class="green ui toggle button">View page</button>
+                            </a>
+                            <br><br>
+                            <h2 class="rit-titl"> Description
                             </h2>
-                            <p>{{ owner.account.bio }}</p>
+                            <p>{{ channel.description }}</p>
                             <div class="links">
                                 <div class="row ">
                                     <div class="col-xl-6 col-md-12">
-                                        <ul class="btn-link">
-                                            <a href="{% url 'view_page' owner.username %}">
-                                                <button class="green ui toggle button">View page</button>
-                                            </a>
-                                            {% if request.user.is_authenticated %}
-                                                <button class="{% if followed %}red{% else %}green{% endif %} ui active button"
-                                                        onclick="follow_click()">
-                                                    <i class=" user icon"></i>{% if followed %}Unfollow{% else %}
-                                                    Follow{% endif %}
-                                                </button>
-                                            {% endif %}
-                                            {% if setting %}
-                                                <a href="{% url 'accounting:edit' %}">
-                                                    <button class="ui icon button">
-                                                        <i class=" cog white icon"></i>
-                                                    </button>
-                                                </a>
-                                            {% endif %}
-                                        </ul>
+                                        {#                                        <ul class="btn-link">#}
+
+                                        {#                                            {% if request.user.is_authenticated %}#}
+                                        {#                                                <button class="{% if followed %}red{% else %}green{% endif %} ui active button"#}
+                                        {#                                                        onclick="follow_click()">#}
+                                        {#                                                    <i class=" user icon"></i>{% if followed %}Unfollow{% else %}#}
+                                        {#                                                    Follow{% endif %}#}
+                                        {#                                                </button>#}
+                                        {#                                            {% endif %}#}
+                                        {#                                            {% if setting %}#}
+                                        {#                                                <a href="{% url 'accounting:edit' %}">#}
+                                        {#                                                    <button class="ui icon button">#}
+                                        {#                                                        <i class=" cog white icon"></i>#}
+                                        {#                                                    </button>#}
+                                        {#                                                </a>#}
+                                        {#                                            {% endif %}#}
+                                        {#                                        </ul>#}
                                     </div>
 
                                 </div>
@@ -132,14 +136,13 @@
                 <div class="tab-pane fade exp-cover" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                     <div class="data-box">
                         <div class="sec-title">
-                            <h2>Followers</h2>
+                            <h2>Admins</h2>
                         </div>
-                        {% for follower in followers %}
+                        {% for admin in admins %}
                             <div class="row exp-row">
-                                <h6>{{ follower.follower.name }}</h6>
-                                <a href="{% url 'accounting:profile' follower.follower.user.username %}"><span>{{ follower.follower.user.username }}</span></a>
-
-                                <p>{{ follower.follower.bio }}</p>
+                                <h6>{{ admin.name }}</h6>
+                                <a href="{% url 'accounting:profile' admin.user.username %}"><span>{{ admin.user.username }}</span></a>
+                                <p>{{ admin.bio }}</p>
                             </div>
                         {% endfor %}
                     </div>
@@ -161,54 +164,57 @@
                     </div>
 
 
-
                 </div>
-                <div class="tab-pane fade gallcoo" id="gallery" role="tabpanel" aria-labelledby="contact-tab">
-                    <div class="row no-margin gallery">
-
-
-                    </div>
-                </div>
-                <div class="tab-pane fade contact-tab" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-                    <div class="row no-margin">
-                        <div class="col-md-6 no-padding">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3176144.0450019627!2d-107.79423426090409!3d38.97644533805396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x874014749b1856b7%3A0xc75483314990a7ff!2sColorado%2C+USA!5e0!3m2!1sen!2sin!4v1547222354537"
-                                    frameborder="0" style="border:0" allowfullscreen></iframe>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="row cont-row no-margin">
-                                <div class="col-sm-6">
-                                    <input placeholder="Enter Full Name" type="text"
-                                           class="form-control form-control-sm">
+                {% if is_admin %}
+                    <div class="tab-pane fade gallcoo" id="gallery" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row no-margin gallery">
+                            <form class="ui form" method="post"
+                                  action="{% url 'channelling:edit-channel' channel.page_id %}">
+                                {% csrf_token %}
+                                <div class="field">
+                                    <label>Title</label>
+                                    <input type="text" name="title" placeholder="Title" value="{{ channel.title }}">
                                 </div>
-                                <div class="col-sm-6">
-                                    <input placeholder="Enter Email Address" type="text"
-                                           class="form-control form-control-sm">
+                                <div class="field">
+                                    <label>Description</label>
+                                    <input type="text" name="description" placeholder="Description"
+                                           value="{{ channel.description }}">
                                 </div>
-                            </div>
-                            <div class="row cont-row no-margin">
-                                <div class="col-sm-6">
-                                    <input placeholder="Enter Mobile Number" type="text"
-                                           class="form-control form-control-sm">
+                                <div class="field">
+                                    <div class="ui checkbox">
+                                        <input type="checkbox" tabindex="0">
+                                        <label>Public</label>
+                                    </div>
                                 </div>
-
-                            </div>
-                            <div class="row cont-row no-margin">
-                                <div class="col-sm-12">
-                                <textarea placeholder="Enter your Message" class="form-control form-control-sm"
-                                          rows="10"></textarea>
-                                </div>
-
-                            </div>
-                            <div class="row cont-row no-margin">
-                                <div class="col-sm-6">
-                                    <button class="btn btn-sm btn-primary">Send Message</button>
-                                </div>
-
-                            </div>
+                                <button class="ui button" type="submit">Submit</button>
+                            </form>
                         </div>
                     </div>
-                </div>
+                    <div class="tab-pane fade contact-tab" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="row no-margin">
+                            <form class="ui form" method="post"
+                                  action="{% url 'channelling:add-admin' channel.page_id %}">
+                                {% csrf_token %}
+                                <div class="field">
+                                    <label>Username</label>
+                                    <input type="text" name="username" placeholder="Username">
+                                </div>
+                                <button class="ui green button" type="submit">Add</button>
+                            </form>
+                            <p></p>
+                            <form class="ui form" method="post"
+                                  action="{% url 'channelling:remove-admin' channel.page_id %}">
+                                {% csrf_token %}
+                                <div class="field">
+                                    <label>Username</label>
+                                    <input type="text" name="username" placeholder="Username">
+                                </div>
+                                <button class="ui red button" type="submit">Remove</button>
+                            </form>
+
+                        </div>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

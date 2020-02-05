@@ -20,6 +20,9 @@ class Alert(models.Model):
     @staticmethod
     def get_alerts(user_id):
         alerts = Alert.objects.filter(Q(account__user_id=user_id) & Q(seen=False))
+        # for alert in alerts:
+            # alert.seen = True
+            # alert.save()
         return alerts
 
     def __str__(self):

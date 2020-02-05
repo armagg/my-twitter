@@ -44,9 +44,10 @@ class Tweet(models.Model):
             'like_number': self.get_like_number(),
             'editable': editable,
             'name': self.author.name,
-            'avatar': '',
+            'avatar': self.author.profile_photo.url,
             'content': self.document,
             'time': self.date_published.isoformat(),
             'replies': replies,
-            'id': 'tweet' + str(self.id)
+            'id': 'tweet' + str(self.id),
+            'username': self.author.user.username,
         }

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% load static %}
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title> Professionals Resume HTML Bootstrap Template | Smarteyeapps.com</title>
+
+    <link rel="shortcut icon" href="{% static 'profile-files/images/fav.jpg' %}">
+    <link rel="stylesheet" href="{% static 'profile-files/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'profile-files/css/fontawsom-all.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'profile-files/css/style.css' %}"/>
+
+    <style>
+        .background-image {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: -999;
+            background-image: url("{% static '9401.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    </style>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="background-image">
+    </div>
+
+    {% for alert in alerts %}
+
+    {% endfor %}
+    <div class="ui success message">
+        <i class="close icon"></i>
+        <div class="header">
+            Your user registration was successful.
+        </div>
+        <p>{{ alert }}</p>
+    </div>
+    {% load static %}
+
+    <script src="{% static 'profile-files/js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'profile-files/js/popper.min.js' %}"></script>
+    <script src="{% static 'profile-files/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'profile-files/js/script.js' %}"></script>
+
+
+    <script>
+        function follow_click() {
+            let url = '{% url 'follow' %}';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    username: '{{ owner.username }}',
+                    csrfmiddlewaretoken: csrf,
+                },
+                success: function (json) {
+                    location.reload();
+                    Swal.fire(
+                        'Send!',
+                        'your new post was sent.',
+                        'success'
+                    );
+                },
+                error: function (xhr, errmsg, err) {
+                    Swal.fire(
+                        'Error!',
+                        'you cant follow.',
+                        'error'
+                    );
+                }
+            });
+        }
+    </script>
+
+{% endblock %}
+
+

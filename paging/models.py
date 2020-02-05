@@ -11,6 +11,7 @@ class Page(models.Model):
     admins = models.ManyToManyField(Account, related_name='pages')
     personal_page = models.BooleanField()
     public = models.BooleanField(default=True)
+    description = models.CharField(max_length=1000, blank=True, default='')
 
     def get_all_admins(self):
         admins = self.admins.all()

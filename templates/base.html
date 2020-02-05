@@ -82,6 +82,7 @@
 
         <div class="icon-container">
             {% if request.user.is_authenticated %}
+                <a href="{% url 'channelling:new-channel' %}"><i class="plus icon"></i></a>
                 <a href="{% url 'accounting:my-profile' %}"><i class="link blue user icon large" title="Profile"></i></a>
             {% else %}
 
@@ -107,7 +108,7 @@
 
     <div class="top-bar-left top-bar-child">
         <div class="icon-container">
-            <i class="link blue bell outline icon large"></i>
+            <a href="{% url 'alerting:notifies' %}"><i class="link blue bell outline icon large"></i></a>
         </div>
 
         <div class="icon-container">

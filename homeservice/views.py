@@ -1,8 +1,13 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render
+
+from paging.models import Page
 
 
 def homepage(request):
-    return render(request, 'home.html')
+    users = User.objects.all()
+    channels = Page.objects.filter(personal_page=False)
+    return render(request, 'home.html', {'users': users, 'channels': channels})
 
 
 def new(request):
@@ -10,7 +15,3 @@ def new(request):
     if request.POST:
         print(request.POST)
     return render(request, 'home.html')
-
-
-def list(request):
-    return render(request, 'commentList/list.html', {'numbers': [None] * 10})

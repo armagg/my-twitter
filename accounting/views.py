@@ -6,6 +6,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
@@ -32,7 +33,7 @@ def login_view(request):
                 user = authenticate(request, username=username, password=password)
                 if user is not None:
                     login(request, user)
-                    return render(request, 'home.html')
+                    return redirect('homeservice:home')
                 else:
                     errors = {
                         'password': 'incorrect password'
@@ -98,8 +99,8 @@ def signup_view(request):
             message = render_to_string('accounting/activation_page.html', data)
             text_content = strip_tags(message)
             to_email = form.cleaned_data.get('email')
-            # send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
-            return render(request, 'accounting/activation_page.html', data)
+            send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
+            # return render(request, 'accounting/activation_page.html', data)
 
             return render(request, 'accounting/activation_sent.html')
         else:
@@ -115,16 +116,22 @@ def logout_view(request):
 
 
 def get_profile_page(request, owner):
+    print(owner.account.profile_photo.url)
     setting = request.user == owner
     followed = False
     if Follow.objects.filter(followed=owner.account, follower=request.user.account):
         followed = True
-    return render(request, 'accounting/profile.html', {'owner': owner, 'setting': setting, 'followed': followed})
+    followers = Follow.objects.filter(followed=owner.account)
+    followings = Follow.objects.filter(follower=owner.account)
+    return render(request, 'accounting/profile.html',
+                  {'owner': owner, 'setting': setting, 'followed': followed, 'followers': followers,
+                   'followings': followings})
 
 
 @login_required
 def my_profile(request):
     return get_profile_page(request, request.user)
+
 
 @login_required
 def profile(request, username):

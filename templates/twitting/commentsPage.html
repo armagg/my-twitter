@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="{% static 'twitting/css/twittPage.css' %}">
     <script src="{% static 'twitting/js/TwittingManager.js' %}"></script>
 
-{#    <link href="https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1/css/froala_editor.pkgd.min.css" rel="stylesheet"#}
-{#          type="text/css"/>#}
+    {#    <link href="https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1/css/froala_editor.pkgd.min.css" rel="stylesheet"#}
+    {#          type="text/css"/>#}
 
     <!-- forala -->
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/css/froala_editor.pkgd.min.css' rel='stylesheet'
           type='text/css'/>
-{#    <script type="text/javascript"#}
-{#            src="https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1//js/froala_editor.pkgd.min.js"></script>#}
+    {#    <script type="text/javascript"#}
+    {#            src="https://cdn.jsdelivr.net/npm/froala-editor@3.0.0-beta.1//js/froala_editor.pkgd.min.js"></script>#}
 
     <script type='text/javascript'
             src='https://cdn.jsdelivr.net/npm/froala-editor@3.1.0/js/froala_editor.pkgd.min.js'></script>
@@ -82,13 +82,15 @@
                     class="plus icon"></i>New
             </button>
         {% endif %}
-        <h1>{{ title }} <a href="{% url 'my_page' %}">my page</a></h1>
+        <h1>{{ title }}</h1>
         <ul id="comments-list" class="comments-list">
             {% for comment in comments %}
                 <li>
                     <div class="comment-main-level">
-                        <div class="comment-avatar"><img
-                                src="{{ comment.author.avatar }}" alt="">
+                        <div class="comment-avatar">
+                            <a href="{% url 'accounting:profile' comment.username %}">
+                                <img src="{{ comment.avatar }}" alt="">
+                            </a>
                         </div>
                         <div class="comment-box" id="{{ comment.id }}">
                         </div>
@@ -96,9 +98,13 @@
                     <ul class="comments-list reply-list">
                         {% for reply in comment.replies %}
                             <li>
-                                <div class="comment-avatar"><img
-                                        src="{{ reply.author.avatar }}"
-                                        alt={{ reply.author.name }}>
+                                <div class="comment-avatar">
+                                    <a href="{% url 'accounting:profile' comment.username %}">
+                                        <img
+                                                src="{{ reply.avatar }}"
+                                                alt={{ reply.author.name }}>
+                                    </a>
+
                                 </div>
                                 <div class="comment-box" id="{{ reply.id }}">
                                 </div>
@@ -108,12 +114,13 @@
                 </li>
             {% endfor %}
         </ul>
+        {{ description }}
     </div>
 
 
 
     <script>
-
+        window.page_id = '{{ page_id }}';
         let jsonObject = JSON.parse('{{ comments_json | escapejs }}');
         new TwittingManager(jsonObject, '{{ can_write }}');
 

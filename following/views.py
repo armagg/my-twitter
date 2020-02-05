@@ -15,5 +15,6 @@ def follow_request(request):
         if Follow.objects.filter(followed=followed, follower=follower):
             Follow.objects.get(followed=followed, follower=follower).delete()
         else:
-            Follow.objects.create(follower=follower, followed=followed)
+            follow = Follow(follower = follower, followed=followed)
+            follow.save()
     return HttpResponse(status=200)

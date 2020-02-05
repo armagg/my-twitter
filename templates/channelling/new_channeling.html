@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href={% static 'vendors/mdi/css/materialdesignicons.min.css' %}>
+    <link rel="stylesheet" href={% static 'vendors/base/vendor.bundle.base.css' %}>
+    <link rel="stylesheet" href={% static 'css/style.css' %}>
+
+    <style>
+        .background-image {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            z-index: 0;
+            background-image: url("{% static '9401.jpg' %}");
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="background-image">
+    </div>
+
+
+    <div class="container-scroller">
+
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="main-panel">
+                <div class="content-wrapper d-flex align-items-center auth px-0">
+                    <div class="row w-100 mx-0">
+                        <div class="col-lg-4 mx-auto">
+                            <div class="brand-logo">
+                            </div>
+                            <h4> Edit your profile here</h4>
+                            <form class="pt-3" method="post" enctype="multipart/form-data"
+                                  action="{% url 'channelling:new-channel' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-account-outline text-primary"></i>
+                      </span>
+                                        </div>
+                                        <input type="text" name="title"
+                                               class="form-control form-control-lg border-left-0"
+                                               placeholder="Title"
+                                               value="title">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>ID</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-account-outline text-primary"></i>
+                      </span>
+                                        </div>
+                                        <input type="text" name="id"
+                                               class="form-control form-control-lg border-left-0"
+                                               placeholder="ID"
+                                               value="id">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend bg-transparent">
+                      <span class="input-group-text bg-transparent border-right-0">
+                        <i class="mdi mdi-account-outline text-primary"></i>
+                      </span>
+                                        </div>
+                                        <input type="text" name="description"
+                                               class="form-control form-control-lg border-left-0"
+                                               placeholder="Description"
+                                               value="">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="ui form">
+                                        <div class="inline field">
+                                            <div class="ui toggle checkbox">
+                                                <input type="checkbox" tabindex="0" class="hidden" name="private">
+                                                <label>Private</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <button class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn">
+                                        EDIT YOUR PROFILE
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content-wrapper ends -->
+    </div>
+    <!-- page-body-wrapper ends -->
+    </div>
+
+    {{ user.username }}
+
+    <script src="{% static 'Errors.js' %}"></script>
+    <script>
+        let errors = JSON.parse('{{ errors | escapejs }}');
+        show_errors(errors);
+
+    </script>
+{% endblock %}
+
+

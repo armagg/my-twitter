@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'bookmarking',
     'liking',
     'froalaImaging',
+    'channelling',
 ]
 
 MIDDLEWARE = [

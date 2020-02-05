@@ -9,6 +9,7 @@ from django.shortcuts import render
 # Create your views here.
 from accounting.models import Account
 from paging.models import Page
+from paging.views import page
 from twitting.models import Tweet
 
 
@@ -63,14 +64,24 @@ def comments(request):
 
 @login_required
 def new_post(request):
-    print('new post')
     if request.POST:
         content = request.POST.get('content')
-        print(content)
-        personal_page = Page.objects.filter(Q(creator=request.user.account) & Q(personal_page=True)).first()
-        tweet = Tweet(document=content, author=request.user.account, parent_tweet=None, page=personal_page)
+        if not Page.objects.filter(page_id=request.POST.get('page_id')):
+            return HttpResponse(status=404)
+        page = Page.objects.get(page_id=request.POST.get('page_id'))
+        admins = page.admins.all()
+        is_admin = False
+        print('1')
+        for admin in admins:
+            if admin.id is request.user.account.id:
+                is_admin = True
+                break
+        if not is_admin:
+            return HttpResponse(status=404)
+        tweet = Tweet(document=content, author=request.user.account, parent_tweet=None, page=page)
         tweet.save()
-    return HttpResponse('success', status=200)
+        return HttpResponse('success', status=200)
+    return HttpResponse(status= 404)
 
 
 @login_required
@@ -121,4 +132,3 @@ def delete(request):
         tweet.delete()
 
     return HttpResponse('success', status=200)
-

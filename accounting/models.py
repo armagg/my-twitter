@@ -21,7 +21,6 @@ class Account(models.Model):
         return 'account of user by username: ' + self.user.username
 
 
-
 class Token(models.Model):
     username = models.TextField()
     code = models.TextField()

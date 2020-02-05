@@ -85,24 +85,67 @@
 
     </div>
 
-{#    repeated div. it most be deleted.#}
-    <div class="top-content">
-        <div class="big-name">
-            Twigger
-            <br>
-            <br>
-            <br>
-            <a class="new-account" href="{% url 'accounting:signup' %}">Create New Account</a>
-        </div>
-        <div class="description">
-            <h1 style="font-size: 40px">Twigger</h1>
-            <h2 style="line-height: 2">
-                Twigger is a cloud-based instant messaging and voice over IP service. Twigger client apps are available
-                for
-                Android, iOS, Windows Phone, Windows NT, macOS and Linux. Users can send messages and exchange photos,
-                videos, stickers, audio and files of any type.
-            </h2>
-        </div>
+
+    <h2>All users</h2>
+    <div class="ui link cards">
+        {% for user in users %}
+            <div class="card">
+                <div class="image">
+                    <a href="{% url 'accounting:profile' user.username %}">
+                        <img src="{{ user.account.profile_photo.url }}">
+                    </a>
+
+                </div>
+                <div class="content">
+                    <div class="header">{{ user.account.name }}</div>
+                    <div class="meta">
+                        <span>{{ user.username }}</span>
+                    </div>
+                </div>
+                <div class="extra content">
+      <span class="right floated">
+        Joined in 2013
+      </span>
+                    <span>
+        <i class="user icon"></i>
+        {{ user.account.bio }}
+      </span>
+                </div>
+            </div>
+        {% endfor %}
 
     </div>
+
+
+    <h2>All Channels</h2>
+    <div class="ui link cards">
+        {% for channel in channels %}
+            <div class="card">
+                <div class="image">
+                    <a href="{% url 'channelling:channel' channel.page_id %}">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTxZhR7oRk7coQZoOLmnMy_QZUfW6waEmvWj13jpLd4fxbQky4P">
+                    </a>
+
+                </div>
+                <div class="content">
+                    <div class="header">{{ channel.title }}</div>
+                    <div class="meta">
+                        {{ channel.description }}
+                    </div>
+                </div>
+                <div class="extra content">
+      <span class="right floated">
+        Joined in 2013
+      </span>
+                    <span>
+        <i class="user icon"></i>
+            {{ channel.description }}
+      </span>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+
 {% endblock %}

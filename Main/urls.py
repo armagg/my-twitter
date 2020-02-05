@@ -17,5 +17,7 @@ urlpatterns = [
                   url(r'^home/', include('homeservice.urls')),
                   url(r'^liking/', include('liking.urls')),
                   url(r'^following/', include('following.urls')),
+                  url(r'^channeling/', include('channelling.urls')),
+                  url(r'^alerting/', include('alerting.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL,
                                                                                          document_root=settings.STATIC_ROOT)

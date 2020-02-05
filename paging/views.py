@@ -18,12 +18,12 @@ def get_page(request, page):
     user = request.user
     comments = []
     for tweet in tweets:
-        editable = (user.account == tweet.author)  # todo: channeling model should add
+        editable = (user.account == tweet.author)
         comments.append(tweet.get_tweet_front(editable, True))
 
     can_write = user.account in page.get_all_admins()
-    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.creator.name,
-            'can_write': can_write}  # todo: check this shit!!!!
+    data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
+            'can_write': can_write, 'description': page.description, 'page_id': page.page_id}
     return render(request, './twitting/commentsPage.html', data)
 
 
@@ -41,4 +41,3 @@ def get_tweet_page(request, tweet_id):
             'title': 'replies of ' + tweet.author.name + 'posts',
             'can_write': False}  # todo: check this shit!!!!
     return render(request, './twitting/commentsPage.html', data)
-

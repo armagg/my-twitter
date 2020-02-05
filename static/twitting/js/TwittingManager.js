@@ -43,6 +43,7 @@ class TwittingManager {
             type: 'POST',
             url: url,
             data: {
+                page_id: window.page_id,
                 content: post_content,
                 csrfmiddlewaretoken: csrf,
             },
@@ -71,8 +72,7 @@ class TwittingManager {
 
     edit_post(content, post_id) {
         let url = location.origin + '/twitting/edit/';
-        console.log(content);
-        console.log(post_id);
+
         $.ajax({
             type: 'POST',
             url: url,
@@ -249,7 +249,7 @@ class CommentManager {
     init_content() {
         this.comment_content.id = this.comment.id + '-content';
         this.comment_content.onclick = this.click_comment_content.bind(this);
-        window.content = this.comment.content;
+        let content = this.comment.content;
         this.editor = new FroalaEditor('#' + this.comment_content.id, {
             attribution: false,
             charCounterCount: false,
