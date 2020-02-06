@@ -10,20 +10,27 @@ from twitting.models import Tweet
 
 @login_required
 def page(request, page_id):
-    page = Page.objects.get(page_id=page_id)
+    q = Page.objects.filter(page_id=page_id)
+    if not q.exist():
+        return HttpResponse(status=404)
+    page = q.get()
     return get_page(request, page)
 
 
 def get_page(request, page):
     tweets = Tweet.objects.filter(page=page, parent_tweet=None)
-    user = request.user
     comments = []
     for tweet in tweets:
-        editable = (user.account == tweet.author)
+        editable = False
+        if request.user:
+            user = request.user
+            editable = (user.account == tweet.author)
+            if page.creator.id is user.account.id:
+                editable = True
+
         comments.append(tweet.get_tweet_front(editable, True))
-
-
-    can_write = user.account in page.get_all_admins()
+    if request.user:
+        can_write = user.account in page.get_all_admins()
     data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
             'can_write': can_write, 'description': page.description, 'page_id': page.page_id}
     return render(request, './twitting/commentsPage.html', data)
@@ -36,9 +43,15 @@ def my_page(request):
 
 
 def get_tweet_page(request, tweet_id):
+    q = Tweet.objects.filter(id=tweet_id)
+    if not q.exist():
+        return HttpResponse(status=404)
     tweet = Tweet.objects.get(id=tweet_id)
-    user = request.user
-    comments = [tweet.get_tweet_front(user.account == tweet.author, True)]
+    editable = False
+    if request.user:
+        if user.account == tweet.author:
+            editable = True
+    comments = [tweet.get_tweet_front(editable, True)]
     data = {'comments': comments, 'comments_json': json.dumps(comments),
             'title': 'replies of ' + tweet.author.name + 'posts',
             'can_write': False}  # todo: check this shit!!!!

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'froalaImaging',
     'channelling',
     'searchengine',
+    'tokenManager'
 ]
 
 MIDDLEWARE = [

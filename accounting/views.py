@@ -8,6 +8,8 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
+
+from TokenManager.models import TokenManager
 from following.models import Follow
 from paging.models import Page
 from searchengine.models import DocIndex
@@ -96,7 +98,6 @@ def signup_view(request):
             text_content = strip_tags(message)
             to_email = form.cleaned_data.get('email')
             send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
-            # return render(request, 'accounting/activation_page.html', data)
 
             return render(request, 'accounting/activation_sent.html')
         else:
@@ -130,7 +131,7 @@ def my_profile(request):
 
 
 @login_required
-def profile(request, username):
+def profile_view(request, username):
     owner = User.objects.filter(username=username).first()
     if owner:
         return get_profile_page(request, owner)
@@ -138,45 +139,8 @@ def profile(request, username):
         return HttpResponse(status=404)
 
 
-def forget_password_view(request):
-    if request.POST:
-        username = request.POST.get('username')
-        if not User.objects.filter(username=username):
-            return HttpResponse(status=404)
-        user = User.objects.get(username=username)
-        token = create_new_token(request.user.username)
-        token.save()
-        mail_subject = 'forget password'
-        text = 'http://localhost:8000/accounting/reset/' + token.code
-        send_mail(mail_subject, text, 'joorabnakhi@gmail.com', [user.email])
-        return redirect('accounting:login')
-    return render(request, 'accounting/forgot_password.html')
-
-
-def reset_password_view(request, code):
-    if request.POST:
-        print('1')
-        pass1 = request.POST.get('password1')
-        pass2 = request.POST.get('password2')
-
-        if str(pass1) != str(pass2):
-            return HttpResponse(status=404)
-        if not Token.objects.filter(code=code):
-            return HttpResponse(status=404)
-        token = Token.objects.get(code=code)
-        print(token)
-        user = User.objects.get(username=token.username)
-        user.password = pass1
-        user.save()
-        code.delete()
-        return redirect('accounting:login')
-
-    return render(request, 'accounting/reset_password.html', {'token': code})
-
-
 @login_required
 def edit_profile(request):
-    print(request.user.account.profile_photo.url)
     errors = []
     if request.POST:
         if request.FILES:
@@ -185,7 +149,6 @@ def edit_profile(request):
                 request.user.account.save()
             except:
                 errors.append('cant load image!')
-
         try:
             username = request.POST.get('username')
             name = request.POST.get('name')
@@ -205,15 +168,43 @@ def edit_profile(request):
                     request.user.username = username
                     request.user.save()
 
-        if location:
-            request.user.account.location = location
-        if bio:
-            request.user.account.bio = bio
-        if email:
-            request.user.email = email
-        if name:
-            request.user.account.name = name
+        if location and bio and email and name:
+            request.user.account.update(email=email, name=name, bio=bio, location=location)
 
         request.user.save()
         request.user.account.save()
     return render(request, 'accounting/profile_edit.html', {'errors': json.dumps(errors)})
+
+
+def forget_password_view(request):
+    if request.POST:
+        username = request.POST.get('username')
+        if not User.objects.filter(username=username).exist():
+            return HttpResponse(status=404)
+        user = User.objects.get(username=username)
+        token = create_new_token(request.user.username)
+        token.save()
+        mail_subject = 'forget password'
+        text = 'http://localhost:8000/accounting/reset/' + token.code
+        send_mail(mail_subject, text, 'joorabnakhi@gmail.com', [user.email])
+        return redirect('accounting:login')
+    return render(request, 'accounting/forgot_password.html')
+
+
+def reset_password_view(request, code):
+    if request.POST:
+        pass1 = request.POST.get('password1')
+        pass2 = request.POST.get('password2')
+
+        if str(pass1) is not str(pass2):
+            return HttpResponse(status=404)
+        if not TokenManager.objects.filter(code=code).exist():
+            return HttpResponse(status=404)
+        token = TokenManager.objects.get(code=code)
+        user = User.objects.get(username=token.username)
+        user.password = pass1
+        user.save()
+        code.delete()
+        return redirect('accounting:login')
+
+    return render(request, 'accounting/reset_password.html', {'token': code})

@@ -177,7 +177,7 @@
         <div class="column">
             <div class="followings-tweets-list">
                 <h2 style="color: deepskyblue">Tweets of your followings</h2>
-                {% for followings_tweet in followings_tweets %}
+                {% for followings_user_tweet in followings_users_tweets %}
                     <div class="tw-block-parent">
                         <div class="timeline-TweetList-tweet">
                             <div class="timeline-Tweet">
@@ -186,14 +186,14 @@
                                 </div>
                                 <div class="timeline-Tweet-author">
                                     <div class="TweetAuthor">
-                                        <span class="TweetAuthor-name">{{ followings_tweet.name }}</span>
+                                        <span class="TweetAuthor-name">{{ followings_user_tweet.name }}</span>
                                         <span class="TweetAuthor-screenName">new post </span>
                                     </div>
                                 </div>
                                 <div class="timeline-Tweet-text">
-                                    <a href="{% url 'view_tweet' followings_tweet.origin_id %}">
+                                    <a href="{% url 'view_tweet' followings_user_tweet.origin_id %}">
                                         <p>
-                                            {{ followings_tweet.plain_text }}
+                                            {{ followings_user_tweet.plain_text }}
                                         </p>
                                     </a>
                                 </div>

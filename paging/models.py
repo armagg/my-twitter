@@ -16,3 +16,12 @@ class Page(models.Model):
     def get_all_admins(self):
         admins = self.admins.all()
         return admins
+
+    def is_this_admin(self, account_id):
+        is_admin = False
+        for admin in self.admins:
+            if admin.id is account_id:
+                is_admin = True
+                return True
+        if not is_admin:
+            return False

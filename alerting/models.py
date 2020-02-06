@@ -25,6 +25,8 @@ class Alert(models.Model):
             # alert.save()
         return alerts
 
+
+
     def __str__(self):
         temp_str = self.who.name + ' has '
         if self.type == self.Type.NEW_FOLLOWER:

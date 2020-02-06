@@ -18,7 +18,7 @@ def new_channel(request):
         title = request.POST.get('title')
         private = request.POST.get('private')
         description = request.POST.get('description')
-        if Page.objects.filter(page_id=id):
+        if Page.objects.filter(page_id=id).exist():
             errors.append('this id is token by others...')
         else:
             page = Page(title=title, page_id=id, description=description, personal_page=False,
@@ -31,14 +31,13 @@ def new_channel(request):
             DocIndex.add_doc(description, page.page_id, 'page')
 
             return redirect('channelling:channel', page.page_id)
-    print(errors)
     return render(request, 'channelling/new_channeling.html', {'errors': json.dumps(errors)})
 
 
 def channel_view(request, page_id):
-    channels = Page.objects.filter(page_id=page_id)
-    if channels:
-        channel = channels.first()
+    q = Page.objects.filter(page_id=page_id)
+    if q.exist():
+        channel = q.get()
         admins = channel.admins.all()
         is_admin = False
         for admin in admins:
@@ -57,15 +56,20 @@ def channel_view(request, page_id):
         return HttpResponse(status=404)
 
 
+@login_required
 def edit_chanel(request, page_id):
     if request.POST:
-        print('post')
-        print(request.POST)
-        page = Page.objects.get(page_id=page_id)
+        Page.objects.filter(page_id=page_id)
+        if not q.exist():
+            return HttpResponse(status=404)
+        page = q.get()
+
+        if not page.is_this_admin(request.user.account.id):
+            return HttpResponse(starus=404)
+
         title = request.POST.get('title')
         description = request.POST.get('description')
-        page.description = description
-        page.title = title
+        page.update(description=description, title=title)
         page.save()
         return channel_view(request, page_id)
     return HttpResponse(status=404)
@@ -73,25 +77,31 @@ def edit_chanel(request, page_id):
 
 @login_required()
 def add_admin(request, page_id):
-    username = request.POST.get('username')
-    page = Page.objects.get(page_id=page_id)
-    if page.creator.id is not request.user.account.id:
-        return HttpResponse(status=404)
-    if not User.objects.filter(username=username):
+    if request.POST:
+        username = request.POST.get('username')
+        page = Page.objects.get(page_id=page_id)
+        if page.creator.id is not request.user.account.id:
+            return HttpResponse(status=404)
+        if not User.objects.filter(username=username):
+            return redirect('channelling:channel', page_id)
+        user = User.objects.get(username=username)
+        page.admins.add(user.account)
         return redirect('channelling:channel', page_id)
-    user = User.objects.get(username=username)
-    page.admins.add(user.account)
-    return redirect('channelling:channel', page_id)
+    else:
+        return HttpResponse(status=404)
 
 
 @login_required()
 def remove_admin(request, page_id):
-    username = request.POST.get('username')
-    page = Page.objects.get(page_id=page_id)
-    if page.creator.id is not request.user.account.id:
-        return HttpResponse(status=404)
-    if not User.objects.filter(username=username):
+    if request.POST:
+        username = request.POST.get('username')
+        page = Page.objects.get(page_id=page_id)
+        if page.creator.id is not request.user.account.id:
+            return HttpResponse(status=404)
+        if not User.objects.filter(username=username):
+            return redirect('channelling:channel', page_id)
+        user = User.objects.get(username=username)
+        page.admins.remove(user.account)
         return redirect('channelling:channel', page_id)
-    user = User.objects.get(username=username)
-    page.admins.remove(user.account)
-    return redirect('channelling:channel', page_id)
+    else:
+        return HttpResponse(status=404)
