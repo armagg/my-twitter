@@ -3,13 +3,14 @@ import json
 from django.contrib.auth.models import User
 from django.shortcuts import render
 
+from accounting.models import Account
 from following.models import Follow, FollowPage
 from paging.models import Page
 from twitting.models import Tweet
 
 
 def homepage(request):
-    users = User.objects.all()
+    accounts = Account.objects.all()
     channels = Page.objects.filter(personal_page=False).all()
 
     followings_users_tweets = []
@@ -30,6 +31,6 @@ def homepage(request):
                 following_pages_tweets.append(tweet.get_tweet_front(False, False))
 
     return render(request, 'home.html',
-                  {'users': users, 'channels': channels, 'followings_users_tweets': followings_users_tweets,
+                  {'accounts': accounts, 'channels': channels, 'followings_users_tweets': followings_users_tweets,
                    'most_liked_tweets': most_liked_tweets, 'following_pages_tweets': following_pages_tweets})
 

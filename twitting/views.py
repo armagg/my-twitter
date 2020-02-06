@@ -2,6 +2,7 @@ import copy
 import json
 import html2text
 
+
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse

@@ -45,7 +45,6 @@ class Tweet(models.Model):
         if with_replies:
             for reply in Tweet.objects.filter(parent_tweet=self):
                 replies.append(reply.get_tweet_front(False, False))
-        print(self.get_like_number())
         return {
             'bookmark_state': False,
             'like_number': self.get_like_number(),

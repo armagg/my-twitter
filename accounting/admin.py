@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from TokenManager.models import TokenManager
+from tokenManager.models import TokenManager
 from accounting.models import Account
 
 

@@ -9,11 +9,12 @@ from django.shortcuts import render, redirect
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
-from TokenManager.models import TokenManager
+from tokenManager.models import TokenManager
 from following.models import Follow
 from paging.models import Page
 from searchengine.models import DocIndex
 from .forms import SignUpForm
+from .models import Account
 
 
 def login_view(request):
@@ -28,7 +29,7 @@ def login_view(request):
                 user = authenticate(request, username=username, password=password)
                 if user:
                     login(request, user)
-                    return redirect('home')
+                    return redirect('homeservice:home')
                 else:
                     errors = {
                         'password': 'incorrect password'
@@ -47,7 +48,7 @@ def login_view(request):
 
 
 def activate(request, username, code):
-    token = Token.objects.filter(username=username, code=code).first()
+    token = TokenManager.objects.filter(username=username, code=code, type='activate').first()
     if token is not None:
         user = User.objects.filter(username=username).first()
         user.is_active = True
@@ -87,7 +88,7 @@ def signup_view(request):
 
             current_site = get_current_site(request)
             mail_subject = 'Activate your account.'
-            token = create_new_token(username=user.username)
+            token = TokenManager.create_new_token(username=user.username, type='activate')
             token.save()
             data = {
                 'user': user,
@@ -169,7 +170,13 @@ def edit_profile(request):
                     request.user.save()
 
         if location and bio and email and name:
-            request.user.account.update(email=email, name=name, bio=bio, location=location)
+            account = request.user.account
+            account.bio = bio
+            request.user.email = email
+            account.location = location
+            account.name = name
+            account.save()
+            request.user.save()
 
         request.user.save()
         request.user.account.save()
@@ -182,7 +189,7 @@ def forget_password_view(request):
         if not User.objects.filter(username=username).exist():
             return HttpResponse(status=404)
         user = User.objects.get(username=username)
-        token = create_new_token(request.user.username)
+        token = TokenManager.create_new_token(request.user.username, 'reset')
         token.save()
         mail_subject = 'forget password'
         text = 'http://localhost:8000/accounting/reset/' + token.code
@@ -200,7 +207,7 @@ def reset_password_view(request, code):
             return HttpResponse(status=404)
         if not TokenManager.objects.filter(code=code).exist():
             return HttpResponse(status=404)
-        token = TokenManager.objects.get(code=code)
+        token = TokenManager.objects.get(code=code, type='reset')
         user = User.objects.get(username=token.username)
         user.password = pass1
         user.save()

@@ -110,20 +110,20 @@
     </div>
 
 
-    <h2 style="color: deepskyblue">All users</h2>
+    <h2 style="color: deepskyblue">All accounts</h2>
     <div class="ui link cards">
-        {% for user in users %}
+        {% for account in accounts %}
             <div class="card">
                 <div class="image">
-                    <a href="{% url 'accounting:profile' user.username %}">
-                        <img src="{{ user.account.profile_photo.url }}">
+                    <a href="{% url 'accounting:profile' account.user.username %}">
+                        <img src="{{ account.profile_photo.url }}">
                     </a>
 
                 </div>
                 <div class="content">
-                    <div class="header">{{ user.account.name }}</div>
+                    <div class="header">{{ account.name }}</div>
                     <div class="meta">
-                        <span>{{ user.username }}</span>
+                        <span>{{ account.user.username }}</span>
                     </div>
                 </div>
                 <div class="extra content">
@@ -132,7 +132,7 @@
       </span>
                     <span>
         <i class="user icon"></i>
-        {{ user.account.bio }}
+        {{ account.bio }}
       </span>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from following.models import FollowPage
@@ -12,6 +13,7 @@ from twitting.models import Tweet
 def page(request, page_id):
     q = Page.objects.filter(page_id=page_id)
     if not q.exist():
+        from django.http import HttpResponse
         return HttpResponse(status=404)
     page = q.get()
     return get_page(request, page)
@@ -30,7 +32,7 @@ def get_page(request, page):
 
         comments.append(tweet.get_tweet_front(editable, True))
     if request.user:
-        can_write = user.account in page.get_all_admins()
+        can_write = request.user.account in page.get_all_admins()
     data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
             'can_write': can_write, 'description': page.description, 'page_id': page.page_id}
     return render(request, './twitting/commentsPage.html', data)
@@ -49,7 +51,7 @@ def get_tweet_page(request, tweet_id):
     tweet = Tweet.objects.get(id=tweet_id)
     editable = False
     if request.user:
-        if user.account == tweet.author:
+        if request.user.account == tweet.author:
             editable = True
     comments = [tweet.get_tweet_front(editable, True)]
     data = {'comments': comments, 'comments_json': json.dumps(comments),
