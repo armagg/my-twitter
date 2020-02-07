@@ -1,5 +1,6 @@
 # account/urls.py
 from django.conf.urls import url
+from django.urls import path
 
 from twitting import views
 
@@ -11,4 +12,5 @@ urlpatterns = [
     url(r'^reply/$', views.reply, name='replypost'),
     url(r'^edit/$', views.edit, name='editpost'),
     url(r'^delete/$', views.delete, name='deletepost'),
+    path('info/<str:page_id>', views.info, name='info'),
 ]

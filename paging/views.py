@@ -9,7 +9,6 @@ from paging.models import Page
 from twitting.models import Tweet
 
 
-@login_required
 def page(request, page_id):
     q = Page.objects.filter(page_id=page_id)
     if not q.exists():
@@ -20,6 +19,8 @@ def page(request, page_id):
 
 
 def get_page(request, page):
+    if not page.can_view(request.user):
+        return HttpResponse(status=404)
     comments = []
     for tweet in Tweet.objects.filter(page=page, parent_tweet=None):
         editable = False
@@ -27,10 +28,10 @@ def get_page(request, page):
             editable = tweet.can_access(request.user.username)
         comments.append(tweet.get_tweet_front(editable, True))
     can_write = False
-    if request.user:
+    if request.user.is_authenticated:
         can_write = request.user.account in page.get_all_admins()
     data = {'comments': comments, 'comments_json': json.dumps(comments), 'title': page.title,
-            'can_write': can_write, 'description': page.description, 'page_id': page.page_id, 'type': 'page'}
+            'can_write': can_write, 'description': page.description, 'page_id': page.page_id}
     return render(request, './twitting/commentsPage.html', data)
 
 
@@ -56,5 +57,5 @@ def get_tweet_page(request, tweet_id):
     comments = [tweet.get_tweet_front(editable, True)]
     data = {'comments': comments, 'comments_json': json.dumps(comments),
             'title': 'replies of ' + tweet.author.name + ' posts',
-            'can_write': False, 'type': 'tweet'}
+            'can_write': False, 'type': 'tweet', 'page_id': tweet.page.page_id}
     return render(request, './twitting/commentsPage.html', data)

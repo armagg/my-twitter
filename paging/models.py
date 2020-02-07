@@ -22,3 +22,16 @@ class Page(models.Model):
             if admin.id is account.id:
                 return True
         return False
+
+    def can_view(self, user):
+        if self.public:
+            return True
+        if not user.is_authenticated:
+            return False
+        if self.is_this_admin(user.account):
+            return True
+        from following.models import FollowPage
+        q = FollowPage.objects.filter(followed=self, follower=user.account)
+        if q.exists():
+            return True
+        return False

@@ -10,7 +10,6 @@ class Account(models.Model):
     name = models.CharField(max_length=20, blank=False)
     location = models.TextField(max_length=60, default='iran!', null=True)
     bio = models.TextField(max_length=120, default='nothing until now')
-    is_private = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name

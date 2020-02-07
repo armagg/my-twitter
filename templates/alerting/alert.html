@@ -43,6 +43,7 @@
             <p>
                 <a href="{{ alert.get_link_for_alert }}">click to see</a>
             </p>
+            <a href="{% url 'alerting:seen' alert.id %}"><button class="ui green inverted button">seen</button></a>
         </div>
     {% endfor %}
 
@@ -53,35 +54,6 @@
     <script src="{% static 'profile-files/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'profile-files/js/script.js' %}"></script>
 
-
-    <script>
-        function follow_click() {
-            let url = '{% url 'follow' %}';
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    username: '{{ owner.username }}',
-                    csrfmiddlewaretoken: csrf,
-                },
-                success: function (json) {
-                    location.reload();
-                    Swal.fire(
-                        'Send!',
-                        'your new post was sent.',
-                        'success'
-                    );
-                },
-                error: function (xhr, errmsg, err) {
-                    Swal.fire(
-                        'Error!',
-                        'you cant follow.',
-                        'error'
-                    );
-                }
-            });
-        }
-    </script>
 
 {% endblock %}
 

@@ -132,17 +132,11 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label>Do you want to protect your tweegs?</label>
-                                    <br class="input-group">
-                                    <div class="input-group-prepend bg-transparent">
+                                <div class="inline field">
+                                    <div class="ui toggle checkbox">
+                                        <input type="checkbox" name="public" {% if public %}checked{% endif %}>
+                                        <label>Public account</label>
                                     </div>
-                                    <input type="radio" name="q1" VALUE="True" {% if user.account.is_private %}
-                                           checked {% endif %}>&nbsp;Yes (your page will be accessible just <b>by
-                                    your followers</b>)</br></br>
-                                    <input type="radio" name="access" VALUE="False" {% if not user.account.is_private %}
-                                           checked {% endif %}>&nbsp;No &nbsp;(your page will be accessible <b>by
-                                    all twigger users</b>)
                                 </div>
 
                                 <div class="mt-3">

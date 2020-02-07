@@ -103,15 +103,18 @@
                                 <div class="row ">
                                     <div class="col-xl-6 col-md-12">
                                         <ul class="btn-link">
-                                            <a href="{% url 'view_page' owner.username %}">
-                                                <button class="green ui toggle button">View page</button>
-                                            </a>
+                                            {% if can_view %}
+                                                <a href="{% url 'view_page' owner.username %}">
+                                                    <button class="green ui toggle button">View page</button>
+                                                </a>
+                                            {% endif %}
                                             {% if request.user.is_authenticated %}
-                                                <button class="{% if followed %}red{% else %}green{% endif %} ui active button"
-                                                        onclick="follow_click()">
-                                                    <i class=" user icon"></i>{% if followed %}Unfollow{% else %}
-                                                    Follow{% endif %}
-                                                </button>
+                                                <a href="{% url 'follow-page' owner.username %}">
+                                                    <button class="{% if followed %}red{% else %}green{% endif %} ui active button">
+                                                        <i class=" user icon"></i>{% if followed %}Unfollow{% else %}
+                                                        Follow{% endif %}
+                                                    </button>
+                                                </a>
                                             {% endif %}
                                             {% if setting %}
                                                 <a href="{% url 'accounting:edit' %}">
@@ -142,6 +145,30 @@
                                 <p>{{ follower.follower.bio }}</p>
                             </div>
                         {% endfor %}
+
+
+                        {% if is_owner %}
+                            <ul>
+                                {% for confirm_request in confirm_requests %}
+                                    <li>
+                                        <div class="ui compact message">
+                                            <p>{{ confirm_request.account.name }} want to follow this channel.</p>
+                                            <div class="ui buttons">
+                                                <a href="{% url 'decline' owner.username confirm_request.account.user.username %}">
+                                                    <button class="ui red button">Decline</button>
+                                                </a>
+                                                <div class="or"></div>
+                                                <a href="{% url 'confirm' owner.username confirm_request.account.user.username %}">
+                                                    <button class="ui positive button">Confirm</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+
                     </div>
                 </div>
                 <div class="tab-pane fade exp-cover" id="resume" role="tabpanel" aria-labelledby="contact-tab">
@@ -159,7 +186,6 @@
                             </div>
                         {% endfor %}
                     </div>
-
 
 
                 </div>
@@ -220,35 +246,6 @@
     <script src="{% static 'profile-files/js/bootstrap.min.js' %}"></script>
     <script src="{% static 'profile-files/js/script.js' %}"></script>
 
-
-    <script>
-        function follow_click() {
-            let url = '{% url 'follow' %}';
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    username: '{{ owner.username }}',
-                    csrfmiddlewaretoken: csrf,
-                },
-                success: function (json) {
-                    location.reload();
-                    Swal.fire(
-                        'Send!',
-                        'your new post was sent.',
-                        'success'
-                    );
-                },
-                error: function (xhr, errmsg, err) {
-                    Swal.fire(
-                        'Error!',
-                        'you cant follow.',
-                        'error'
-                    );
-                }
-            });
-        }
-    </script>
 
 {% endblock %}
 

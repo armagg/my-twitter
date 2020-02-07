@@ -14,10 +14,12 @@ class DocIndex(models.Model):
     def add_doc(doc: str, value, type):
         words = doc.split(' ')
         for word in words:
-            if word is not '':
-                new_doc = DocIndex(key=word, value=value, type=type)
-                new_doc.save()
+            if word != '':
+                for word2 in word.split('\n'):
+                    if word2 != '':
+                        new_doc = DocIndex(key=word2, value=value, type=type)
+                        new_doc.save()
 
     @staticmethod
     def search(word):
-        return DocIndex.objects.filter(Q(key=wo))
+        return DocIndex.objects.filter(Q(key=word))

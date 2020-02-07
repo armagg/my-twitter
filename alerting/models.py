@@ -17,9 +17,12 @@ class Alert(models.Model):
     who = models.ForeignKey(Account, on_delete=CASCADE, related_name='created_alerts')
     tweet = models.ForeignKey(Tweet, on_delete=CASCADE, related_name='tweet_alert', null=True)
 
+
     @staticmethod
-    def get_alerts(user_id):
-        alerts = Alert.objects.filter(Q(account__user_id=user_id) & Q(seen=False))
+    def get_alerts(username):
+        alerts = Alert.objects.filter(account__user__username=username)
+        # for alert in alerts:
+        #     print(alert.get_link_for_alert())
         # for alert in alerts:
             # alert.seen = True
             # alert.save()
@@ -38,5 +41,4 @@ class Alert(models.Model):
     def get_link_for_alert(self):
         if self.type == self.Type.NEW_FOLLOWER:
             return '/accounting/profile/' + self.who.user.username
-
         return '/paging/tweet/' + str(self.tweet.id)

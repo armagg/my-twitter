@@ -71,7 +71,7 @@
                     class="plus icon"></i>New
             </button>
         {% endif %}
-        <h1><a href="{% if type == 'page' %}{% url 'channelling:channel' page_id %}{% else %}{% url 'accounting:profile' request.user.username %}{% endif %}">{{ title }}</a></h1>
+        <a href="{% url 'twitting:info' page_id %}"><h1 style="color: darkblue">{{ title }}</h1></a>
         <ul id="comments-list" class="comments-list">
             {% for comment in comments %}
                 <li>

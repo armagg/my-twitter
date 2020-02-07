@@ -5,7 +5,7 @@ import html2text
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from accounting.models import Account
@@ -62,6 +62,7 @@ def reply(request):
             tweet = Tweet(author=acc, document=content, parent_tweet=parent_tweet,
                           page=parent_tweet.page, plain_text=plain_text)
             tweet.save()
+            DocIndex.add_doc(plain_text, tweet.id, 'tweet')
             return HttpResponse('success', status=200)
         except Exception as e:
             print(e)
@@ -122,3 +123,10 @@ def delete(request):
         tweet.delete()
 
     return HttpResponse('success', status=200)
+
+
+def info(request, page_id):
+    q = Account.objects.filter(user__username=page_id)
+    if q.exists():
+        return redirect('accounting:profile', page_id)
+    return redirect('channelling:channel', page_id)

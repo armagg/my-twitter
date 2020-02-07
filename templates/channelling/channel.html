@@ -54,7 +54,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                        aria-controls="home"
-                       aria-selected="true">Profile</a>
+                       aria-selected="true">Info</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
@@ -98,15 +98,20 @@
 
                         </div>
                         <div class="col-md-8 home-dat">
+
+                        {% if can_view %}
                             <a href="{% url 'view_page' channel.page_id %}">
                                 <button class="green ui toggle button">View page</button>
                             </a>
+                        {% endif %}
+
                             {% if request.user.is_authenticated %}
-                                <button class="{% if followed %}red{% else %}green{% endif %} ui active button"
-                                        onclick="follow_click()">
-                                    <i class=" user icon"></i>{% if followed %}Unfollow{% else %}
-                                    Follow{% endif %}
-                                </button>
+                                <a href="{% url 'follow-page' page_id %}">
+                                    <button class="{% if followed %}red{% else %}green{% endif %} ui active button">
+                                        <i class=" user icon"></i>{% if followed %}Unfollow{% else %}
+                                        Follow{% endif %}
+                                    </button>
+                                </a>
                             {% endif %}
 
                             <br><br>
@@ -142,16 +147,36 @@
 
                     <div class="data-box">
                         <div class="sec-title">
-                            <h2>Following</h2>
+                            <h2>Members</h2>
                         </div>
-                        {% for following in followings %}
+                        {% for follower in followers %}
                             <div class="row exp-row">
-                                <h6>{{ following.followed.name }}</h6>
-                                <a href="{% url 'accounting:profile' following.followed.user.username %}"><span>{{ following.followed.user.username }}</span></a>
+                                <h6>{{ follower.name }}</h6>
+                                <a href="{% url 'accounting:profile' follower.user.username %}"><span>{{ follower.user.username }}</span></a>
 
-                                <p>{{ following.followed.bio }}</p>
+                                <p>{{ follower.bio }}</p>
                             </div>
                         {% endfor %}
+                        {% if is_admin %}
+                            <ul>
+                                {% for confirm_request in confirm_requests %}
+                                    <li>
+                                        <div class="ui compact message">
+                                            <p>{{ confirm_request.account }} want to follow this channel.</p>
+                                            <div class="ui buttons">
+                                                <a href="{% url 'decline' page_id confirm_request.account.user.username %}">
+                                                    <button class="ui red button">Decline</button>
+                                                </a>
+                                                <div class="or"></div>
+                                                <a href="{% url 'confirm' page_id confirm_request.account.user.username %}">
+                                                    <button class="ui positive button">Confirm</button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
                     </div>
                 </div>
                 {% if is_admin %}
@@ -170,9 +195,11 @@
                                            value="{{ channel.description }}">
                                 </div>
                                 <div class="field">
-                                    <div class="ui checkbox">
-                                        <input type="checkbox" tabindex="0">
-                                        <label>Public</label>
+                                    <div class="inline field">
+                                        <div class="ui toggle checkbox">
+                                            <input type="checkbox" name="public" checked>
+                                            <label>Public channel</label>
+                                        </div>
                                     </div>
                                 </div>
                                 <button class="ui button" type="submit">Submit</button>
@@ -200,7 +227,6 @@
                                 </div>
                                 <button class="ui red button" type="submit">Remove</button>
                             </form>
-
                         </div>
                     </div>
                 {% endif %}
@@ -216,36 +242,5 @@
     <script src="{% static 'profile-files/js/script.js' %}"></script>
 
 
-    <script>
-        function follow_click() {
-            let url = '{% url 'follow-page' %}';
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: {
-                    page_id: '{{ page_id }}',
-                    username: '{{ request.user.username }}',
-                    csrfmiddlewaretoken: csrf,
-                },
-                success: function (json) {
-                    location.reload();
-                    Swal.fire(
-                        'Send!',
-                        'your new post was sent.',
-                        'success'
-                    );
-                },
-                error: function (xhr, errmsg, err) {
-                    Swal.fire(
-                        'Error!',
-                        'you cant follow.',
-                        'error'
-                    );
-                }
-            });
-        }
-    </script>
 
 {% endblock %}
-
-
