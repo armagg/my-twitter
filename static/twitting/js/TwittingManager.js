@@ -53,6 +53,7 @@ class TwittingManager {
                     'your new post was sent.',
                     'success'
                 );
+                location.reload();
             },
             error: function (xhr, errmsg, err) {
                 Swal.fire(
@@ -140,6 +141,7 @@ class TwittingManager {
                     'tweet was liked',
                     'success'
                 );
+                location.reload()
             },
             error: function (xhr, errmsg, err) {
                 Swal.fire(
@@ -167,6 +169,7 @@ class TwittingManager {
                     'tweet was disliked',
                     'success'
                 );
+                location.reload()
             },
             error: function (xhr, errmsg, err) {
                 Swal.fire(
@@ -195,6 +198,7 @@ class TwittingManager {
                     'your reply was sent.',
                     'success'
                 );
+                location.reload();
             },
             error: function (xhr, errmsg, err) {
                 Swal.fire(

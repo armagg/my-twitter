@@ -18,7 +18,7 @@ def new_channel(request):
         title = request.POST.get('title')
         private = request.POST.get('private')
         description = request.POST.get('description')
-        if Page.objects.filter(page_id=id).exist():
+        if Page.objects.filter(page_id=id).exists():
             errors.append('this id is token by others...')
         else:
             page = Page(title=title, page_id=id, description=description, personal_page=False,
@@ -36,7 +36,7 @@ def new_channel(request):
 
 def channel_view(request, page_id):
     q = Page.objects.filter(page_id=page_id)
-    if q.exist():
+    if q.exists():
         channel = q.get()
         admins = channel.admins.all()
         is_admin = False
@@ -59,17 +59,18 @@ def channel_view(request, page_id):
 @login_required
 def edit_chanel(request, page_id):
     if request.POST:
-        Page.objects.filter(page_id=page_id)
-        if not q.exist():
+        q = Page.objects.filter(page_id=page_id)
+        if not q.exists():
             return HttpResponse(status=404)
         page = q.get()
 
-        if not page.is_this_admin(request.user.account.id):
+        if not page.is_this_admin(request.user.account):
             return HttpResponse(starus=404)
 
         title = request.POST.get('title')
         description = request.POST.get('description')
-        page.update(description=description, title=title)
+        page.description = description
+        page.title = title
         page.save()
         return channel_view(request, page_id)
     return HttpResponse(status=404)

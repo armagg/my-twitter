@@ -17,11 +17,8 @@ class Page(models.Model):
         admins = self.admins.all()
         return admins
 
-    def is_this_admin(self, account_id):
-        is_admin = False
-        for admin in self.admins:
-            if admin.id is account_id:
-                is_admin = True
+    def is_this_admin(self, account):
+        for admin in self.admins.all():
+            if admin.id is account.id:
                 return True
-        if not is_admin:
-            return False
+        return False

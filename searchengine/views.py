@@ -6,7 +6,6 @@ from searchengine.models import DocIndex
 
 def search(request):
     if request.POST:
-        print(request.POST)
         words = str(request.POST.get('words')).split(' ')
         results = []
         print('words')

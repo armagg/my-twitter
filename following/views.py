@@ -18,7 +18,7 @@ def follow_user_request(request):
         followed = User.objects.get(username=followed_username).account
         follower = request.user.account
         q = Follow.objects.filter(followed=followed, follower=follower)
-        if q.exist():
+        if q.exists():
             q.delete()
         else:
             follow = Follow(follower=follower, followed=followed)
@@ -32,12 +32,12 @@ def follow_user_request(request):
 def follow_page_request(request):
     if request.POST:
         q = Page.objects.filter(page_id=request.POST.get('page_id'))
-        if not q.exist():
+        if not q.exists():
             return HttpResponse(status=404)
         page = q.get()
         follower = request.user.account
         q = FollowPage.objects.filter(followed=page, follower=follower)
-        if q.exist():
+        if q.exists():
             q.delete()
         else:
             follow = FollowPage(follower=follower, followed=page)

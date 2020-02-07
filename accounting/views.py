@@ -96,6 +96,7 @@ def signup_view(request):
                 'token': token.code,
             }
             message = render_to_string('accounting/activation_page.html', data)
+            print(message)
             text_content = strip_tags(message)
             to_email = form.cleaned_data.get('email')
             send_mail(mail_subject, text_content, 'joorabnakhi@gmail.com', [to_email])
@@ -186,7 +187,7 @@ def edit_profile(request):
 def forget_password_view(request):
     if request.POST:
         username = request.POST.get('username')
-        if not User.objects.filter(username=username).exist():
+        if not User.objects.filter(username=username).exists():
             return HttpResponse(status=404)
         user = User.objects.get(username=username)
         token = TokenManager.create_new_token(request.user.username, 'reset')
@@ -205,7 +206,7 @@ def reset_password_view(request, code):
 
         if str(pass1) is not str(pass2):
             return HttpResponse(status=404)
-        if not TokenManager.objects.filter(code=code).exist():
+        if not TokenManager.objects.filter(code=code).exists():
             return HttpResponse(status=404)
         token = TokenManager.objects.get(code=code, type='reset')
         user = User.objects.get(username=token.username)

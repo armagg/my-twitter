@@ -14,31 +14,31 @@ class Tweet(models.Model):
     parent_tweet = models.ForeignKey("self", blank=True, on_delete=CASCADE, related_name='comment', null=True,
                                      default=None)
     date_published = models.DateTimeField(auto_now=True, blank=False)
-    contributors = models.ManyToManyField(Account, related_name='contributors', blank=True)
-    last_like_number = models.IntegerField(blank=True, default=0)
     plain_text = models.TextField(blank=True, null=True, default='')
+    last_like_number = models.IntegerField(default=0)
 
-    class Meta:
-        verbose_name = 'توییت'
+    def can_access(self, username):
+        if str(self.author.user.username) == str(username):
+            return True
+        if self.parent_tweet:
+            return False
+        for admin in self.page.admins.all():
+            if str(admin.user.username) == str(username):
+                return True
+        return False
+
     def __str__(self):
         return self.plain_text
 
-    def get_contributors(self):
-        objects = [self.author]
-        for obj in self.contributors.all():
-            objects.append(obj)
-        return objects
-
-    def get_username(self):
-        return self.author.user.username
-
     def get_like_number(self):
         from liking.models import Like, Dislike
-        like_number = Like.get_number_of_likes(self.id)
-        dislike_number = Dislike.get_number_of_dislikes(self.id)
-        self.last_like_number = like_number - dislike_number
-        self.save()
+        like_number = Like.objects.filter(tweet=self).count()
+        dislike_number = Dislike.objects.filter(tweet=self).count()
         return like_number - dislike_number
+
+    def update_like_number(self):
+        self.last_like_number = self.get_like_number()
+        self.save()
 
     def get_tweet_front(self, editable: bool, with_replies):
         replies = []
@@ -47,7 +47,7 @@ class Tweet(models.Model):
                 replies.append(reply.get_tweet_front(False, False))
         return {
             'bookmark_state': False,
-            'like_number': self.get_like_number(),
+            'like_number': self.last_like_number,
             'editable': editable,
             'name': self.author.name,
             'avatar': self.author.profile_photo.url,
@@ -65,4 +65,3 @@ class Tweet(models.Model):
         tweets = Tweet.objects.filter(date_published__gt=datetime.today() - timedelta(days=30)).order_by(
             '-last_like_number')[:5]
         return tweets
-

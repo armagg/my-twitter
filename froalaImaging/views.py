@@ -35,8 +35,6 @@ def file_upload(request):
 
 @csrf_exempt
 def upload_image_validation(request):
-    print('validation')
-
     def validation(filePath, mimetype):
         with wand.image.Image(filename=filePath) as img:
             if img.width != img.height:
