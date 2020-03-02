@@ -6,7 +6,7 @@ from django.db.models import Q
 
 
 class DocIndex(models.Model):
-    key = models.CharField(max_length=100)
+    key = models.CharField(max_length=100, db_index=True)
     value = models.CharField(max_length=100)
     type = models.CharField(max_length=100)
 
