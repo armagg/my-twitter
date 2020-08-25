@@ -6,7 +6,7 @@ from django.db import models
 
 class TokenManager(models.Model):
     username = models.TextField()
-    code = models.TextField()
+    code = models.TextField(db_index=True)
     type = models.TextField()
 
     @staticmethod
